@@ -1,4 +1,5 @@
 const db = require('./index.js');
+const assoc = require('./associations.js');
 
 const Company = require('./Models/Company');
 const User = require('./Models/User');
@@ -7,6 +8,8 @@ const Article = require('./Models/Article');
 
 const bcrypt = require('bcrypt-nodejs');
 
+// This creates the tables in the database and their relationsships. 
+assoc();
 
 var dbHelpers = {
 
