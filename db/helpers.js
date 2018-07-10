@@ -1,12 +1,7 @@
 const db = require('./index.js');
-
-const Company = require('./Models/Company');
-const User = require('./Models/User');
-const Category = require('./Models/Category');
-const Article = require('./Models/Article');
+const { Company, User, Category, Article } = require('./associations.js');
 
 const bcrypt = require('bcrypt-nodejs');
-
 
 var dbHelpers = {
 

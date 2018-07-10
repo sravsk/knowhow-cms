@@ -34,3 +34,10 @@ Article.belongsTo(Category, {
 })
 
 Company.sync().then(() => User.sync().then(() => Category.sync().then(() => Article.sync())));
+
+module.exports = {
+  Company,
+  User,
+  Category,
+  Article
+}
