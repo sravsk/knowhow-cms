@@ -1,6 +1,7 @@
 import React from 'react';
+import axios from 'axios';
 import { Button, Form, Grid, Header, Message, Segment } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
 class SignupPage extends React.Component {
   constructor(props) {
@@ -9,8 +10,10 @@ class SignupPage extends React.Component {
       name: '',
       email: '',
       password: '',
+      passwordMatch: '',
       company: '',
-      domain: ''
+      domain: '',
+      onDashboardPage: false
     }
   }
 
@@ -20,7 +23,35 @@ class SignupPage extends React.Component {
     })
   }
 
+  signupUser() {
+    console.log('in signup')
+    if (this.state.name === '' || this.state.email === '' || this.state.password === '' || this.state.passwordMatch === '' || this.state.company === '' || this.state.company === '') {
+      alert('Name, Email, Password, Company and Domain fields cannot be empty. Enter new values.');
+    }
+    else if (this.state.password !== this.state.passwordMatch) {
+      alert('Passwords do not match. Try again.');
+    } else {
+      // all fields have values and passwords match
+      var data = {
+        name: this.state.name,
+        email: this.state.email,
+        password: this.state.email,
+        company: this.state.company,
+        domain: this.state.domain
+      };
+      axios.post('/signupuser', data)
+        .then(result => {
+          // TODO - redirect to dashboard after successful signup
+        })
+    }
+  }
+
   render() {
+    if (this.state.onDashboardPage) {
+      return (
+        <Redirect to='/dashboard' />
+      )
+    }
     return (
       <div className='signup-form'>
         <style>{`
@@ -39,7 +70,7 @@ class SignupPage extends React.Component {
             <Header as='h2' color='blue' textAlign='center'>
               Create an account
             </Header>
-            <Form size='large'>
+            <Form size='large' onSubmit={this.signupUser.bind(this)}>
               <Segment.Group>
                 <Segment raised>
                   <Form.Input
@@ -68,6 +99,16 @@ class SignupPage extends React.Component {
                     type='password'
                     name='password'
                     value={this.state.password}
+                    onChange={this.handleChange.bind(this)}
+                  />
+                  <Form.Input
+                    fluid
+                    icon='lock'
+                    iconPosition='left'
+                    placeholder='Reenter Password'
+                    type='password'
+                    name='passwordMatch'
+                    value={this.state.passwordMatch}
                     onChange={this.handleChange.bind(this)}
                   />
                 </Segment>
