@@ -8,6 +8,7 @@ const Article = require('./Models/Article');
 
 const bcrypt = require('bcrypt-nodejs');
 
+
 // This creates the tables in the database and their relationsships. 
 assoc();
 
