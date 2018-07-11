@@ -1,13 +1,12 @@
 const db = require('./index.js');
-
 const assoc = require('./associations.js');
-
 const Company = require('./Models/Company');
 const User = require('./Models/User');
 const Category = require('./Models/Category');
 const Article = require('./Models/Article');
 
 const bcrypt = require('bcrypt-nodejs');
+
 
 
 // This creates the tables in the database and their relationships.
