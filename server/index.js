@@ -106,6 +106,23 @@ app.post('/loginuser', (req, res) => {
   });
 });
 
+// if user is authenticated, redirect to dashboard if they try accessing signup/login pages
+app.get('/signup', (req, res) => {
+  if (req.isAuthenticated()) {
+    res.redirect('/dashboard');
+  } else {
+    res.sendFile(path.join(__dirname, '/../client/dist/index.html'));
+  }
+});
+
+app.get('/login', (req, res) => {
+    if (req.isAuthenticated()) {
+    res.redirect('/dashboard');
+  } else {
+    res.sendFile(path.join(__dirname, '/../client/dist/index.html'));
+  }
+});
+
 app.get('/user', (req, res) => {
   res.send(req.user);
 });
