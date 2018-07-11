@@ -68,6 +68,16 @@ var dbHelpers = {
   // updating a user's password, during forgot pw or after invitation
   updateUser: (obj) => {},
 
+  // find a user and pass it to the callback function
+  findUser: ({email}, cb) => {
+    User.findOne({
+      where: {email: email}
+    })
+    .then(result => {
+      cb(result)
+    })
+  },
+
 
   /////////////////////
   //    COMPANIES    //
