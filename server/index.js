@@ -40,7 +40,25 @@ app.post('/signupuser', (req, res) => {
       });
     }
   });
+});
 
+app.post('/loginuser', (req, res) => {
+  db.findUser({
+    email: req.body.email
+  }, function(user) {
+    if (user !== null) {
+      let hash = user.password;
+      bcrypt.compare(req.body.password, hash, function(err, result) {
+        let data = {
+          found: result,
+          name: user.name
+        }
+        res.send(data);
+      });
+    } else {
+      res.send('no user');
+    }
+  });
 });
 
 app.listen(process.env.PORT !== undefined ? process.env.PORT : PORT, () => {
