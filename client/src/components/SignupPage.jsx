@@ -41,7 +41,16 @@ class SignupPage extends React.Component {
       };
       axios.post('/signupuser', data)
         .then(result => {
-          // TODO - redirect to dashboard after successful signup
+          console.log(result.data)
+          if (result.data === 'user created') {
+            this.setState({
+              onDashboardPage: true
+            });
+          } else if (result.data === 'duplicate email') {
+            alert('User with given email already exists.');
+          } else {
+            alert('An admin user already exists for this company. Contact admin to sign up.');
+          }
         })
     }
   }
