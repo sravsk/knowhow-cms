@@ -30,7 +30,9 @@ app.post('/signupuser', (req, res) => {
         company: req.body.company,
         domain: req.body.domain
       }, function(userCreated, error) {
-        if (userCreated) {
+        if (error) {
+          res.send('duplicate email');
+        } else if (userCreated) {
           res.send('user created');
         } else {
           res.send('user already exists for this company');
