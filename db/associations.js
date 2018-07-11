@@ -33,4 +33,9 @@ Article.belongsTo(Category, {
   allowNull: false
 })
 
-Company.sync().then(() => User.sync().then(() => Category.sync().then(() => Article.sync())));
+var assoc = () => {
+  Company.sync().then(() => User.sync().then(() => Category.sync().then(() => Article.sync())))
+};
+
+
+module.exports = assoc;
