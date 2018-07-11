@@ -32,7 +32,7 @@ app.use(passport.session());
 // authenticate user with an email and password stored in the database (using Passport local strategy)
 passport.use(new LocalStrategy(
   function(email, password, done) {
-    db.authenticateUser(email, password, function(matched, user_id) {
+    db.authenticateUser(email, password, function(matched) {
       if (matched) {
         return done(null, email)
       } else {
@@ -68,8 +68,9 @@ app.post('/signupuser', (req, res) => {
         if (error) {
           res.send('duplicate email');
         } else if (userCreated) {
-          //login comes from passport and creates a session and a cookie for the user
-          req.login(req.body.email, function(err) {
+          // login comes from passport and creates a session and a cookie for the user
+          // make passport store req.body.name in req.user
+          req.login(req.body.name, function(err) {
             if (err) {
               console.log(err);
               res.sendStatus(404);
@@ -103,6 +104,10 @@ app.post('/loginuser', (req, res) => {
       res.send('no user');
     }
   });
+});
+
+app.get('/user', (req, res) => {
+  res.send(req.user);
 });
 
 app.get('*', (req, res) => {
