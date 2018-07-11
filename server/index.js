@@ -110,6 +110,15 @@ app.get('/user', (req, res) => {
   res.send(req.user);
 });
 
+app.get('/logout', function(req, res) {
+  // req.logout is a function available from passport
+  req.logout();
+  // destroy session for the user that has been logged out
+  req.session.destroy();
+  // logout user
+  res.send('logged out')
+});
+
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '/../client/dist/index.html'));
 });
