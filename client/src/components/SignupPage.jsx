@@ -24,7 +24,6 @@ class SignupPage extends React.Component {
   }
 
   signupUser() {
-    console.log('in signup')
     if (this.state.name === '' || this.state.email === '' || this.state.password === '' || this.state.passwordMatch === '' || this.state.company === '' || this.state.company === '') {
       alert('Name, Email, Password, Company and Domain fields cannot be empty. Enter new values.');
     }
@@ -41,7 +40,7 @@ class SignupPage extends React.Component {
       };
       axios.post('/signupuser', data)
         .then(result => {
-          console.log(result.data)
+          // console.log(result.data)
           if (result.data === 'user created') {
             this.setState({
               onDashboardPage: true
