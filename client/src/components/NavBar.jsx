@@ -76,10 +76,10 @@ class NavBar extends React.Component {
               Hello {this.state.user}
             </Menu.Item>
             <Menu.Item position='right'>
-              <Button><NavLink to='/home'>Go Home</NavLink></Button>
+              <Button><Link style={{ color: 'black' }} to='/home'>Go Home</Link></Button>
             </Menu.Item>
             <Menu.Item>
-              <Button floated='right' onClick={this.handleLogout.bind(this)}>Log out</Button>
+              <Button style={{ color: 'black' }} onClick={this.handleLogout.bind(this)}>Log out</Button>
             </Menu.Item>
           </Menu>
         </Container>
