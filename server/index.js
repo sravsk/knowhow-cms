@@ -169,6 +169,31 @@ app.get('/logout', function(req, res) {
   res.send('logged out')
 });
 
+//////////////////////////
+//    DB dev routes     //
+//////////////////////////
+
+app.get('/db/testfill', (req, res) => {
+  db.dummyData();
+  res.end('Test data added to DB');
+})
+
+app.get('/db/clear', (req, res) => {
+  db.clearTables();
+  res.end('All tables cleared');
+})
+
+app.get('/db/drop', (req, res) => {
+  db.dropTables();
+  res.end('All tables dropped. Rebuild DB or refresh server to continue');
+})
+
+app.get('/db/rebuild', (req, res) => {
+  db.recreateDB();
+  res.end('DB is rebuilt')
+})
+
+
 // protect all routes other than landing, login, and signup pages
 app.get('*', authMiddleware(), (req, res) => {
   res.sendFile(path.join(__dirname, '/../client/dist/index.html'));

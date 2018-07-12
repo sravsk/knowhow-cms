@@ -9,17 +9,19 @@ import NavBar from '../components/NavBar.jsx';
 import LoginPage from '../components/LoginPage.jsx';
 import SignupPage from '../components/SignupPage.jsx';
 import Home from '../components/home.jsx';
+import devAdminPage from '../components/devAdminPage.jsx';
 
 const AppRouter =() => (
   <BrowserRouter>
     <Container>
-    <NavBar />
-    <Switch>
-      <Route exact path='/' component={LandingPage} />
-      <Route exact path='/login' component={LoginPage} />
-      <Route exact path='/signup' component={SignupPage} />
-      <Route exact path='/home' component={Home} />
-    </Switch>
+      <NavBar />
+      <Switch>
+        <Route exact path='/' component={LandingPage} />
+        <Route exact path='/login' component={LoginPage} />
+        <Route exact path='/signup' component={SignupPage} />
+        <Route exact path='/home' component={Home} />
+        <Route exact path='/devadminpage' component={devAdminPage} />
+      </Switch>
     </Container>
   </BrowserRouter>
 );
