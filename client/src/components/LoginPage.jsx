@@ -9,7 +9,7 @@ class LoginPage extends React.Component {
     this.state = {
       email: '',
       password: '',
-      onDashboardPage: false
+      onHome: false
     }
   }
 
@@ -34,9 +34,9 @@ class LoginPage extends React.Component {
         } else if (result.data.found) {
           // correct username and password
           alert(`${result.data.name} is logged in`);
-          // redirect to dashboard
+          // redirect to home
           this.setState({
-            onDashboardPage: true
+            onHome: true
           })
         } else {
           // incorrect password
@@ -47,9 +47,9 @@ class LoginPage extends React.Component {
   }
 
   render() {
-    if (this.state.onDashboardPage) {
+    if (this.state.onHome) {
       return (
-        <Redirect to='/dashboard' />
+        <Redirect to='/home' />
       )
     }
     return (

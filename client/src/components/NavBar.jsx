@@ -57,10 +57,10 @@ class NavBar extends React.Component {
             <Header as='h1' color ='blue' textAlign='center'>Know-how</Header>
           </Menu.Item>
           <Menu.Item position='right'>
-            <Button floated='right'><NavLink to='/signup'>Signup</NavLink></Button>
+            <Button><NavLink to='/signup'>Signup</NavLink></Button>
           </Menu.Item>
           <Menu.Item>
-            <Button floated='right'><NavLink to='/login'>Login</NavLink></Button>
+            <Button><NavLink to='/login'>Login</NavLink></Button>
           </Menu.Item>
         </Menu>
         </Container>
@@ -76,6 +76,9 @@ class NavBar extends React.Component {
               Hello {this.state.user}
             </Menu.Item>
             <Menu.Item position='right'>
+              <Button><NavLink to='/home'>Go Home</NavLink></Button>
+            </Menu.Item>
+            <Menu.Item>
               <Button floated='right' onClick={this.handleLogout.bind(this)}>Log out</Button>
             </Menu.Item>
           </Menu>
