@@ -146,7 +146,12 @@ var dbHelpers = {
   //    TEST DATA FUNCTIONS   //
   //////////////////////////////
 
-  clearTables: () => {},
+  clearTables: () => {
+    Article.findAll().then(articles => articles.forEach(event => article.destroy()));
+    Category.findAll().then(categories => categories.forEach(category => category.destroy()));
+    User.findAll().then(users => users.forEach(user => user.destroy()));
+    Company.findAll().then(companies => companies.forEach(company => company.destroy()));
+  },
 
   dropTables: () => {
     db.drop();
@@ -154,6 +159,56 @@ var dbHelpers = {
 
   recreateDB: () => {
     Company.sync().then(() => User.sync().then(() => Category.sync().then(() => Article.sync())));
+  },
+
+  dummyData: () => {
+    //create company first
+    let testCompany = Company.build({
+      name: 'Test Company', domain: 'testcompany.com'
+    })
+
+    testCompany.save().then(company => {
+      // create user after companyId
+      let testUser = User.build({
+        email: 'test1',
+        role: 'admin',
+        // password is same as email
+        password: '',
+        name: 'Test Account'
+      })
+
+      // associate user with company
+      testUser.setCompany(company, {save: false});
+
+      // save user
+      testUser.save();
+
+      // create category after company
+      let testCategory = Category.build({
+        name: 'Test Category',
+        description: 'Test Description'
+      });
+
+      // associate category with company
+      testCategory.setCompany(company, {save: false});
+
+      // save category
+      testCategory.save().then(category => {
+
+        let testArticle = Article.build({
+          title: 'Test Article',
+          description: 'Test Article Description',
+          content: 'Test Content yada yada yada'
+        });
+
+        // associate article with category
+        testArticle.setCategory(category, {save: false});
+
+        // save article and all is done
+        testArticle.save();
+      })
+
+    })
   }
 }
 
