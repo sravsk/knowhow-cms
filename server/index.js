@@ -56,6 +56,17 @@ passport.deserializeUser(function(name, done) {
   done(null, name);
 });
 
+// middleware to check if user is logged in
+var authMiddleware = function () {
+  return (req, res, next) => {
+    // console.log(`req.session.passport.user: ${req.session.passport}`);
+    if (req.isAuthenticated()) {
+      return next();
+    }
+    res.redirect('/');
+  }
+};
+
 app.post('/signupuser', (req, res) => {
   // TODO - validate email, password
   let password = req.body.password;
@@ -158,7 +169,8 @@ app.get('/logout', function(req, res) {
   res.send('logged out')
 });
 
-app.get('*', (req, res) => {
+// protect all routes other than landing, login, and signup pages
+app.get('*', authMiddleware(), (req, res) => {
   res.sendFile(path.join(__dirname, '/../client/dist/index.html'));
 });
 
