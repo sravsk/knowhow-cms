@@ -13,7 +13,7 @@ class SignupPage extends React.Component {
       passwordMatch: '',
       company: '',
       domain: '',
-      onDashboardPage: false
+      onHome: false
     }
   }
 
@@ -40,10 +40,10 @@ class SignupPage extends React.Component {
       };
       axios.post('/signupuser', data)
         .then(result => {
-          // console.log(result.data)
+          console.log(result.data)
           if (result.data === 'user created') {
             this.setState({
-              onDashboardPage: true
+              onHome: true
             });
           } else if (result.data === 'duplicate email') {
             alert('User with given email already exists.');
@@ -55,9 +55,9 @@ class SignupPage extends React.Component {
   }
 
   render() {
-    if (this.state.onDashboardPage) {
+    if (this.state.onHome) {
       return (
-        <Redirect to='/dashboard' />
+        <Redirect to='/home' />
       )
     }
     return (
