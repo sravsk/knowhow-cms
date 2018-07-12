@@ -173,7 +173,7 @@ var dbHelpers = {
         email: 'test1',
         role: 'admin',
         // password is same as email
-        password: '',
+        password: '$2b$10$SUgVljzdjCwkN9XEMQkSmOINmikU88HMdfz1SIQydAy3ttFwwS8Nm',
         name: 'Test Account'
       })
 
