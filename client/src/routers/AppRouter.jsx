@@ -13,13 +13,13 @@ import Home from '../components/home.jsx';
 const AppRouter =() => (
   <BrowserRouter>
     <Container>
-    <NavBar />
-    <Switch>
-      <Route exact path='/' component={LandingPage} />
-      <Route exact path='/login' component={LoginPage} />
-      <Route exact path='/signup' component={SignupPage} />
-      <Route exact path='/home' component={Home} />
-    </Switch>
+      <NavBar />
+      <Switch>
+        <Route exact path='/' component={LandingPage} />
+        <Route exact path='/login' component={LoginPage} />
+        <Route exact path='/signup' component={SignupPage} />
+        <Route exact path='/home' component={Home} />
+      </Switch>
     </Container>
   </BrowserRouter>
 );
