@@ -1,11 +1,10 @@
 import React from 'react';
 import { Container, Grid, Button, Header } from 'semantic-ui-react';
-import NavBar from './NavBar.jsx';
+// import NavBar from './NavBar.jsx';
 
 const Home = () => {
   return (
     <Container>
-      <NavBar />
       <Header as='h2'>Home</Header>
       <Grid container celled style={{height: '80vh'}} >
         <Grid.Column width={4}>
