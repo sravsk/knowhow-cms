@@ -3,6 +3,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
 const session = require('express-session');
+const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 
@@ -29,27 +30,42 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// authenticate user with an email and password stored in the database (using Passport local strategy)
+// authenticate user with an email and password stored in the database (using Passport local strategy) and return name
 passport.use(new LocalStrategy(
   function(email, password, done) {
-    db.authenticateUser(email, password, function(matched, user_id) {
+    // console.log('in passportlocalstrategy')
+    db.authenticateUser({ email: email, password: password } , function(matched, name) {
+      console.log('after user authentication')
       if (matched) {
-        return done(null, email)
+        // credentials are valid
+        // verify callback invokes done to suppy Passport with the user that authenticated
+        return done(null, name);
       } else {
-        return done(null, false)
+        return done(null, false);
       }
     })
   }
 ));
 
 // Passport will maintain persistent login sessions. In order for persistent sessions to work, the authenticated user must be serialized to the session, and deserialized when subsequent requests are made.
-passport.serializeUser(function(email, done) {
-  done(null, email);
+passport.serializeUser(function(name, done) {
+  done(null, name);
 });
 
-passport.deserializeUser(function(email, done) {
-  done(null, email);
+passport.deserializeUser(function(name, done) {
+  done(null, name);
 });
+
+// middleware to check if user is logged in
+var authMiddleware = function () {
+  return (req, res, next) => {
+    // console.log(`req.session.passport.user: ${req.session.passport}`);
+    if (req.isAuthenticated()) {
+      return next();
+    }
+    res.redirect('/');
+  }
+};
 
 app.post('/signupuser', (req, res) => {
   // TODO - validate email, password
@@ -68,8 +84,9 @@ app.post('/signupuser', (req, res) => {
         if (error) {
           res.send('duplicate email');
         } else if (userCreated) {
-          //login comes from passport and creates a session and a cookie for the user
-          req.login(req.body.email, function(err) {
+          // login comes from passport and creates a session and a cookie for the user
+          // make passport store req.body.name in req.user
+          req.login(req.body.name, function(err) {
             if (err) {
               console.log(err);
               res.sendStatus(404);
@@ -92,12 +109,24 @@ app.post('/loginuser', (req, res) => {
   }, function(user) {
     if (user !== null) {
       let hash = user.password;
-      bcrypt.compare(req.body.password, hash, function(err, result) {
-        let data = {
-          found: result,
-          name: user.name
-        }
-        res.send(data);
+      let comparePassword = req.body.password;
+      let name = user.name;
+      bcrypt.compare(comparePassword, hash, function(err, result) {
+        // console.log('result of hash compare', hash, comparePassword, result, err)
+        // login comes from passport and creates a session and a cookie for the user
+        // make passport store req.body.name in req.user
+        req.login(name, function(err) {
+          if (err) {
+            console.log(err);
+            res.sendStatus(404);
+          } else {
+            let data = {
+              found: result,
+              name: name
+            }
+            res.send(data);
+          }
+        });
       });
     } else {
       res.send('no user');
@@ -105,7 +134,43 @@ app.post('/loginuser', (req, res) => {
   });
 });
 
-app.get('*', (req, res) => {
+// app.post('/loginuser', passport.authenticate('local'), (req, res) => {
+//   console.log('user authenticated')
+//   res.send(req.user);
+// });
+
+// if user is authenticated, redirect to dashboard if they try accessing signup/login pages
+app.get('/signup', (req, res) => {
+  if (req.isAuthenticated()) {
+    res.redirect('/dashboard');
+  } else {
+    res.sendFile(path.join(__dirname, '/../client/dist/index.html'));
+  }
+});
+
+app.get('/login', (req, res) => {
+    if (req.isAuthenticated()) {
+    res.redirect('/dashboard');
+  } else {
+    res.sendFile(path.join(__dirname, '/../client/dist/index.html'));
+  }
+});
+
+app.get('/user', (req, res) => {
+  res.send(req.user);
+});
+
+app.get('/logout', function(req, res) {
+  // req.logout is a function available from passport
+  req.logout();
+  // destroy session for the user that has been logged out
+  req.session.destroy();
+  // logout user
+  res.send('logged out')
+});
+
+// protect all routes other than landing, login, and signup pages
+app.get('*', authMiddleware(), (req, res) => {
   res.sendFile(path.join(__dirname, '/../client/dist/index.html'));
 });
 

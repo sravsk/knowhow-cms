@@ -11,8 +11,6 @@ class LandingPage extends React.Component {
   render() {
     return (
       <Container>
-        <Button floated='right'><Link to='/signup'>Signup</Link></Button>
-        <Button floated='right'><Link to='/login'>Login</Link></Button>
         <p>Knowledge base app description..... </p>
       </Container>
     );
