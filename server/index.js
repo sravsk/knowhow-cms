@@ -134,11 +134,21 @@ app.post('/loginuser', (req, res) => {
   });
 });
 
-app.get('/:companyId/categoriesdata', function(req, res) {
-  var companyId = req.params.companyId;
+// get all categories for a given company id
+app.get('/:companyId/categoriesdata', (req, res) => {
+  let companyId = req.params.companyId;
   db.fetchCategoriesByCompany(companyId, function(categories) {
     res.send(categories);
   })
+});
+
+// get all articles for a given company id and category id
+app.get('/:companyId/categories/:categoryId/articlesdata', (req, res) => {
+  let companyId = req.params.companyId;
+  let categoryId = req.params.categoryId;
+  db.fetchArticles({companyId, categoryId}, function(articles) {
+    res.send(articles);
+  });
 });
 
 // app.post('/loginuser', passport.authenticate('local'), (req, res) => {
