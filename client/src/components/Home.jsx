@@ -1,8 +1,6 @@
 import React from 'react';
-import { Container, Grid, Button, Header } from 'semantic-ui-react';
 
 import Editor from './Editor.jsx';
-
 import { Link } from 'react-router-dom';
 import { Container, Grid, Button, Header, Segment } from 'semantic-ui-react';
 
