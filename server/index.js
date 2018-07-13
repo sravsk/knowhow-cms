@@ -156,6 +156,14 @@ app.get('/:companyId/categories/:categoryId/articlesdata', (req, res) => {
   });
 });
 
+// get all articles for a given company id
+app.get('/:companyId/articlesdata', (req, res) => {
+  let companyId = req.params.companyId;
+  db.fetchCompanyArticles({companyId}, function(articles) {
+    res.send(articles);
+  });
+});
+
 // app.post('/loginuser', passport.authenticate('local'), (req, res) => {
 //   console.log('user authenticated')
 //   res.send(req.user);

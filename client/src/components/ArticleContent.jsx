@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Item } from 'semantic-ui-react';
+import { Container, Item, Button } from 'semantic-ui-react';
 
 const ArticleContent = (props) => {
   let articleId = props.match.params;
@@ -7,6 +7,7 @@ const ArticleContent = (props) => {
   return (
     <Container>
       <Item>
+        <Button floated='right'>Edit Article</Button>
         <Item.Header as='h3'>
           {article.title}
         </Item.Header>

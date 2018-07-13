@@ -13,7 +13,7 @@ const Home = () => {
       <Grid container celled style={{height: '80vh'}} >
         <Grid.Column width={4}>
           <Segment>
-            <Header as='h4'><Link to='/articles'>Articles</Link></Header>
+            <Header as='h4'><Link to='/companyarticles'>Articles</Link></Header>
           </Segment>
           <Segment>
             <Header as='h4'><Link to='/categories'>Categories</Link></Header>

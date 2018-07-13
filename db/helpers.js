@@ -171,6 +171,19 @@ var dbHelpers = {
     })
   },
 
+  // fetch all articles for a given companyId
+  fetchCompanyArticles: ({companyId}, cb) => {
+    Article.findAll({
+      where: {
+        companyId: companyId
+      },
+      attributes: ['id', 'title', 'description', 'content', 'categoryId', 'companyId']
+    })
+    .then(results => {
+      cb(results);
+    })
+  },
+
   //////////////////////////////
   //    TEST DATA FUNCTIONS   //
   //////////////////////////////
