@@ -1,7 +1,8 @@
 import React from 'react';
-import { Container, Grid, Button, Header } from 'semantic-ui-react';
+
 import Editor from './Editor.jsx';
-// import NavBar from './NavBar.jsx';
+import { Link } from 'react-router-dom';
+import { Container, Grid, Button, Header, Segment } from 'semantic-ui-react';
 
 const Home = () => {
   return (
@@ -9,12 +10,12 @@ const Home = () => {
       <Header as='h2'>Home</Header>
       <Grid container celled style={{height: '80vh'}} >
         <Grid.Column width={4}>
-          <Grid.Row>
-            <Header as='h4'>Categories</Header>
-          </Grid.Row>
-          <Grid.Row>
-            <Header as='h4'>Articles</Header>
-          </Grid.Row>
+          <Segment>
+            <Header as='h4'><Link to='/articles'>Articles</Link></Header>
+          </Segment>
+          <Segment>
+            <Header as='h4'><Link to='/categories'>Categories</Link></Header>
+          </Segment>
         </Grid.Column>
         <Grid.Column width={12}>
           Corresponding info....
