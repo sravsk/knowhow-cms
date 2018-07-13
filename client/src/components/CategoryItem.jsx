@@ -2,7 +2,7 @@ import React from 'react';
 import { Segment, Grid, Item } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
-class CategoryPage extends React.Component {
+class CategoryItem extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -21,4 +21,4 @@ class CategoryPage extends React.Component {
   }
 }
 
-export default CategoryPage;
+export default CategoryItem;

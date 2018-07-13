@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Grid, Header, Container, Button, Item } from 'semantic-ui-react';
 import axios from 'axios';
-import CategoryPage from './CategoryPage.jsx';
+import CategoryItem from './CategoryItem.jsx';
 
 class CategoriesPage extends React.Component {
   constructor(props) {
@@ -29,7 +29,7 @@ class CategoriesPage extends React.Component {
 
   render() {
     let renderCategories = this.state.categories.map(category => {
-      return (<div key={category.id}><CategoryPage category={category} /></div>);
+      return (<div key={category.id}><CategoryItem category={category} /></div>);
     });
     return (
       <Container>
