@@ -35,6 +35,10 @@ class Editor extends React.Component {
 
   typeText(html) {
     this.setState({editorHtml: html})
+    var title = this.state.editorHtml.match(/<p>(.*)<\/p><p><br><\/p>/)
+    if(title[1]) {
+      this.setState({title: title[1]})
+    }
   }
 
   render() {
