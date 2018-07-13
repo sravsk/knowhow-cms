@@ -127,6 +127,15 @@ var dbHelpers = {
   // removing a category
   deleteCategory: (obj) => {},
 
+  // fetch all categories for the given company id
+  fetchCategoriesByCompany: (companyId, cb) => {
+    Category.findAll({
+      attributes: ['id', 'name', 'description']
+    })
+    .then(results => {
+      cb(results);
+    })
+  },
 
   /////////////////////
   //     ARTICLES    //

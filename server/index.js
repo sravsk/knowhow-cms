@@ -134,6 +134,13 @@ app.post('/loginuser', (req, res) => {
   });
 });
 
+app.get('/:companyId/categoriesdata', function(req, res) {
+  var companyId = req.params.companyId;
+  db.fetchCategoriesByCompany(companyId, function(categories) {
+    res.send(categories);
+  })
+});
+
 // app.post('/loginuser', passport.authenticate('local'), (req, res) => {
 //   console.log('user authenticated')
 //   res.send(req.user);
@@ -194,7 +201,7 @@ app.get('/db/rebuild', (req, res) => {
 })
 
 
-// protect all routes other than landing, login, and signup pages
+// protect all routes except the ones above
 app.get('*', authMiddleware(), (req, res) => {
   res.sendFile(path.join(__dirname, '/../client/dist/index.html'));
 });
