@@ -33,6 +33,16 @@ Article.belongsTo(Category, {
   allowNull: false
 })
 
+Article.belongsTo(Company, {
+  allowNull: false
+})
+
+Company.hasMany(Article, {
+  foreignKey: {
+    allowNull: false
+  }
+})
+
 var assoc = () => {
   Company.sync().then(() => User.sync().then(() => Category.sync().then(() => Article.sync())))
 };
