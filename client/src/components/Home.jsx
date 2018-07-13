@@ -1,5 +1,6 @@
 import React from 'react';
 import { Container, Grid, Button, Header } from 'semantic-ui-react';
+import Editor from './Editor.jsx';
 // import NavBar from './NavBar.jsx';
 
 const Home = () => {
