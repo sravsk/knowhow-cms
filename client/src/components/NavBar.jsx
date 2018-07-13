@@ -15,15 +15,19 @@ class NavBar extends React.Component {
 
   componentDidMount() {
     // check if a user is logged in
-    // if yes, get name of user
+    // if yes, get userInfo (name and companyId of user)
     axios.get('/user')
       .then(result => {
-        let user = result.data;
-        if (user) {
-          this.setState({
-            isLoggedIn: true,
-            user: user
-          });
+        if (result.data) {
+          let name = result.data.name;
+          let companyId = result.data.companyId;
+          // console.log(result, name, companyId)
+          if (name) {
+            this.setState({
+              isLoggedIn: true,
+              user: name
+            });
+          }
         }
       })
   }
