@@ -77,7 +77,11 @@ var dbHelpers = {
       where: {email: email}
     })
     .then(result => {
-      cb(result.dataValues)
+      if (result === null){
+        cb(result)
+      } else {
+        cb(result.dataValues)
+      }
     })
   },
 
