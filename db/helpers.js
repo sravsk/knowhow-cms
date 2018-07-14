@@ -126,8 +126,15 @@ var dbHelpers = {
   //    CATEGORIES   //
   /////////////////////
 
-  // create a Category for Articles
-  addCategory: (obj) => {},
+  // create a category
+  addCategory: ({name, description, companyId}, cb) => {
+    Category.findOrCreate({
+      where: {name: name, companyId: companyId}, defaults: {description: description}
+    })
+    .spread((user, created) => {
+      cb(created);
+    })
+  },
 
   // update a Category's name or description
   updateCategory: (obj) => {},
