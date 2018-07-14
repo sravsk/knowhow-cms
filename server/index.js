@@ -48,11 +48,11 @@ app.use(passport.session());
 // ));
 
 // Passport will maintain persistent login sessions. In order for persistent sessions to work, the authenticated user must be serialized to the session, and deserialized when subsequent requests are made.
-passport.serializeUser(function(name, done) {
+passport.serializeUser((name, done) => {
   done(null, name);
 });
 
-passport.deserializeUser(function(name, done) {
+passport.deserializeUser((name, done) => {
   done(null, name);
 });
 
@@ -71,7 +71,7 @@ app.post('/signupuser', (req, res) => {
   // TODO - validate email, password
   let password = req.body.password;
   // hash the password by auto-gen a salt and hash
-  bcrypt.hash(password, saltRounds, function(err, hash) {
+  bcrypt.hash(password, saltRounds, (err, hash) => {
     // store hash in database
     if (hash) {
       db.addUser({
@@ -80,13 +80,13 @@ app.post('/signupuser', (req, res) => {
         password: hash,
         company: req.body.company,
         domain: req.body.domain
-      }, function(isUserCreated, userInfo, error) {
+      }, (isUserCreated, userInfo, error) => {
         if (error) {
           res.send('duplicate email');
         } else if (isUserCreated) {
           // login comes from passport and creates a session and a cookie for the user
           // make passport store userInfo in req.user
-          req.login(userInfo, function(err) {
+          req.login(userInfo, (err) => {
             if (err) {
               console.log(err);
               res.sendStatus(404);
@@ -106,12 +106,12 @@ app.post('/signupuser', (req, res) => {
 app.post('/loginuser', (req, res) => {
   db.findUser({
     email: req.body.email
-  }, function(user) {
+  }, (user) => {
     if (user !== null) {
       let hash = user.password;
       let comparePassword = req.body.password;
       let name = user.name;
-      bcrypt.compare(comparePassword, hash, function(err, result) {
+      bcrypt.compare(comparePassword, hash, (err, result) => {
         // console.log('result of hash compare', hash, comparePassword, result, err)
         // login comes from passport and creates a session and a cookie for the user
         // make passport store userInfo in req.user
@@ -119,7 +119,7 @@ app.post('/loginuser', (req, res) => {
           name: user.name,
           companyId: user.companyId
         };
-        req.login(userInfo, function(err) {
+        req.login(userInfo, (err) => {
           if (err) {
             console.log(err);
             res.sendStatus(404);
@@ -142,7 +142,7 @@ app.post('/loginuser', (req, res) => {
 // get all categories for a given company id
 app.get('/:companyId/categoriesdata', (req, res) => {
   let companyId = req.params.companyId;
-  db.fetchCategoriesByCompany(companyId, function(categories) {
+  db.fetchCategoriesByCompany(companyId, (categories) => {
     res.send(categories);
   })
 });
@@ -151,7 +151,7 @@ app.get('/:companyId/categoriesdata', (req, res) => {
 app.get('/:companyId/categories/:categoryId/articlesdata', (req, res) => {
   let companyId = req.params.companyId;
   let categoryId = req.params.categoryId;
-  db.fetchArticles({companyId, categoryId}, function(articles) {
+  db.fetchArticles({companyId, categoryId}, (articles) => {
     res.send(articles);
   });
 });
@@ -159,7 +159,7 @@ app.get('/:companyId/categories/:categoryId/articlesdata', (req, res) => {
 // get all articles for a given company id
 app.get('/:companyId/articlesdata', (req, res) => {
   let companyId = req.params.companyId;
-  db.fetchCompanyArticles({companyId}, function(articles) {
+  db.fetchCompanyArticles({companyId}, (articles) => {
     res.send(articles);
   });
 });
@@ -191,7 +191,7 @@ app.get('/user', (req, res) => {
   res.send(req.user);
 });
 
-app.get('/logout', function(req, res) {
+app.get('/logout', (req, res) => {
   // req.logout is a function available from passport
   req.logout();
   // destroy session for the user that has been logged out
