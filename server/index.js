@@ -31,21 +31,21 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // authenticate user with an email and password stored in the database (using Passport local strategy) and return name
-passport.use(new LocalStrategy(
-  function(email, password, done) {
-    // console.log('in passportlocalstrategy')
-    db.authenticateUser({ email: email, password: password } , function(matched, name) {
-      console.log('after user authentication')
-      if (matched) {
-        // credentials are valid
-        // verify callback invokes done to suppy Passport with the user that authenticated
-        return done(null, name);
-      } else {
-        return done(null, false);
-      }
-    })
-  }
-));
+// passport.use(new LocalStrategy(
+//   function(email, password, done) {
+//     // console.log('in passportlocalstrategy')
+//     db.authenticateUser({ email: email, password: password } , function(matched, name) {
+//       console.log('after user authentication')
+//       if (matched) {
+//         // credentials are valid
+//         // verify callback invokes done to suppy Passport with the user that authenticated
+//         return done(null, name);
+//       } else {
+//         return done(null, false);
+//       }
+//     })
+//   }
+// ));
 
 // Passport will maintain persistent login sessions. In order for persistent sessions to work, the authenticated user must be serialized to the session, and deserialized when subsequent requests are made.
 passport.serializeUser(function(name, done) {
@@ -80,22 +80,22 @@ app.post('/signupuser', (req, res) => {
         password: hash,
         company: req.body.company,
         domain: req.body.domain
-      }, function(userCreated, error) {
+      }, function(isUserCreated, userInfo, error) {
         if (error) {
           res.send('duplicate email');
-        } else if (userCreated) {
+        } else if (isUserCreated) {
           // login comes from passport and creates a session and a cookie for the user
-          // make passport store req.body.name in req.user
-          req.login(req.body.name, function(err) {
+          // make passport store userInfo in req.user
+          req.login(userInfo, function(err) {
             if (err) {
               console.log(err);
               res.sendStatus(404);
             } else {
-              res.send('user created');
+              res.send(userInfo);
             }
           });
         } else {
-          res.send('user already exists for this company');
+          res.send('user exists');
         }
       });
     }
@@ -114,17 +114,22 @@ app.post('/loginuser', (req, res) => {
       bcrypt.compare(comparePassword, hash, function(err, result) {
         // console.log('result of hash compare', hash, comparePassword, result, err)
         // login comes from passport and creates a session and a cookie for the user
-        // make passport store req.body.name in req.user
-        req.login(name, function(err) {
+        // make passport store userInfo in req.user
+        let userInfo = {
+          name: user.name,
+          companyId: user.companyId
+        };
+        req.login(userInfo, function(err) {
           if (err) {
             console.log(err);
             res.sendStatus(404);
           } else {
-            let data = {
-              found: result,
-              name: name
+            let response = {
+              name: user.name,
+              companyId: user.companyId,
+              found: true
             }
-            res.send(data);
+            res.send(response);
           }
         });
       });
@@ -151,6 +156,14 @@ app.get('/:companyId/categories/:categoryId/articlesdata', (req, res) => {
   });
 });
 
+// get all articles for a given company id
+app.get('/:companyId/articlesdata', (req, res) => {
+  let companyId = req.params.companyId;
+  db.fetchCompanyArticles({companyId}, function(articles) {
+    res.send(articles);
+  });
+});
+
 // app.post('/loginuser', passport.authenticate('local'), (req, res) => {
 //   console.log('user authenticated')
 //   res.send(req.user);
@@ -173,6 +186,7 @@ app.get('/login', (req, res) => {
   }
 });
 
+// to get name and companyId of logged in user
 app.get('/user', (req, res) => {
   res.send(req.user);
 });
@@ -215,6 +229,8 @@ app.get('/db/rebuild', (req, res) => {
 app.get('*', authMiddleware(), (req, res) => {
   res.sendFile(path.join(__dirname, '/../client/dist/index.html'));
 });
+
+// TODO - protect all server routes except login, signup, logout, /user after we figure out how to authenticate user in external app and use that info in know-how app
 
 app.listen(process.env.PORT !== undefined ? process.env.PORT : PORT, () => {
   console.log(`listening on port ${PORT}`);

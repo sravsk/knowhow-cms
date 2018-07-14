@@ -28,7 +28,7 @@ var dbHelpers = {
     .then(result => {
       if (result !== null) {
         // a user already exists with this email
-        cb(email, true)
+        cb(false, email, true)
       } else {
         // email is unique
         Company.findOne({
@@ -52,12 +52,16 @@ var dbHelpers = {
                 companyId: companyId
               })
               .then(user => {
-                cb(true, null);
+                let userInfo = {
+                  name: user.name,
+                  companyId: user.companyId
+                }
+                cb(true, userInfo, null);
               })
             })
           } else {
             // an admin user exists for the given company
-            cb(false, null);
+            cb(false, null, null);
           }
         })
       }
@@ -73,37 +77,37 @@ var dbHelpers = {
       where: {email: email}
     })
     .then(result => {
-      cb(result)
+      cb(result.dataValues)
     })
   },
 
-  authenticateUser: ({email, password}, cb) => {
-    // console.log('in authenticateUser function')
-    User.findOne({
-      where: {email: email}
-    })
-    .then(result => {
-      if (result === null) {
-        // no user exists with given email
-        cb(false);
-      } else {
-        let hash = result.password;
-        let name = result.name;
-        bcrypt.compare(password, hash, function(err, response) {
-          if (response === true) {
-            // password matches
-            cb(true, name);
-          } else {
-            // password doesn't match
-            cb(false);
-          }
-        });
-      }
-    })
-    .catch(err => {
-      cb(false);
-    })
-  },
+  // authenticateUser: ({email, password}, cb) => {
+  //   // console.log('in authenticateUser function')
+  //   User.findOne({
+  //     where: {email: email}
+  //   })
+  //   .then(result => {
+  //     if (result === null) {
+  //       // no user exists with given email
+  //       cb(false);
+  //     } else {
+  //       let hash = result.password;
+  //       let name = result.name;
+  //       bcrypt.compare(password, hash, function(err, response) {
+  //         if (response === true) {
+  //           // password matches
+  //           cb(true, name);
+  //         } else {
+  //           // password doesn't match
+  //           cb(false);
+  //         }
+  //       });
+  //     }
+  //   })
+  //   .catch(err => {
+  //     cb(false);
+  //   })
+  // },
 
 
   /////////////////////
@@ -133,7 +137,7 @@ var dbHelpers = {
       where: {
         companyId: companyId
       },
-      attributes: ['id', 'name', 'description']
+      attributes: ['id', 'name', 'description', 'companyId']
     })
     .then(results => {
       cb(results);
@@ -160,7 +164,20 @@ var dbHelpers = {
         companyId: companyId,
         categoryId: categoryId
       },
-      attributes: ['id', 'title', 'description', 'content']
+      attributes: ['id', 'title', 'description', 'content', 'categoryId', 'companyId']
+    })
+    .then(results => {
+      cb(results);
+    })
+  },
+
+  // fetch all articles for a given companyId
+  fetchCompanyArticles: ({companyId}, cb) => {
+    Article.findAll({
+      where: {
+        companyId: companyId
+      },
+      attributes: ['id', 'title', 'description', 'content', 'categoryId', 'companyId']
     })
     .then(results => {
       cb(results);

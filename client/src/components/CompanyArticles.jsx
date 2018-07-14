@@ -4,7 +4,7 @@ import { Grid, Header, Container, Button, Item } from 'semantic-ui-react';
 import axios from 'axios';
 import ArticleItem from './ArticleItem.jsx';
 
-class ArticlesPage extends React.Component {
+class CompanyArticles extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -13,14 +13,18 @@ class ArticlesPage extends React.Component {
   }
 
   componentDidMount() {
-    let categoryId = this.props.match.params.categoryId;
-    let companyId = this.props.match.params.companyId;
-    // fetch all articles for the given category and company
-    axios.get(`/${companyId}/categories/${categoryId}/articlesdata`)
+    console.log('in company articles page')
+    // get info about logged in user
+    axios.get('/user')
       .then(result => {
-        this.setState({
-          articles: result.data
-        });
+        let companyId = result.data.companyId;
+        // get all articles for given companyId
+        axios.get(`/${companyId}/articlesdata`)
+          .then(result => {
+            this.setState({
+              articles: result.data
+            });
+          })
       })
   }
 
@@ -50,4 +54,6 @@ class ArticlesPage extends React.Component {
   }
 }
 
-export default ArticlesPage;
+export default CompanyArticles;
+
+// all articles for given company id
