@@ -139,6 +139,16 @@ app.post('/loginuser', (req, res) => {
   });
 });
 
+// add a new category
+app.post('/addCategory', (req, res) => {
+  let name = req.body.categoryName;
+  let description = req.body.categoryDescription;
+  let companyId = req.user.companyId;
+  db.addCategory({name, description, companyId}, (created) => {
+    res.send(created);
+  });
+});
+
 // get all categories for a given company id
 app.get('/:companyId/categoriesdata', (req, res) => {
   let companyId = req.params.companyId;

@@ -24,9 +24,16 @@ class NewCategory extends React.Component {
     };
     axios.post('/addCategory', data)
       .then(result => {
+        console.log('in add new category', result)
         if (result.data) {
-          alert(`${this.state.categoryName} has been added`);
+          alert(`${this.state.categoryName} has been added.`);
+        } else {
+          alert(`${this.state.categoryName} already exists.`)
         }
+        this.setState({
+          categoryName: '',
+          categoryDescription: ''
+        })
       })
   }
 
