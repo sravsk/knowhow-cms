@@ -10,7 +10,7 @@ const Home = () => {
     <Container>
       <NavBar />
       <Button floated='right'><Link to='/editor'>Add New Article</Link></Button>
-      <Button floated='right'>Add New Category</Button>
+      <Button floated='right'><Link to='/addcategory'>Add New Category</Link></Button>
       <br /><br />
       <Grid container celled style={{height: '80vh'}} >
         <Grid.Column width={4}>

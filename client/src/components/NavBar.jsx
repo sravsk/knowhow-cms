@@ -21,13 +21,10 @@ class NavBar extends React.Component {
         if (result.data) {
           let name = result.data.name;
           let companyId = result.data.companyId;
-          // console.log(result, name, companyId)
-          if (name) {
-            this.setState({
-              isLoggedIn: true,
-              user: name
-            });
-          }
+          this.setState({
+            isLoggedIn: true,
+            user: name
+          });
         }
       })
   }
