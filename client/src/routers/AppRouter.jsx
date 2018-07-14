@@ -14,6 +14,7 @@ import CategoriesPage from '../components/CategoriesPage.jsx';
 import CompanyArticles from '../components/CompanyArticles.jsx';
 import ArticlesPage from '../components/ArticlesPage.jsx';
 import ArticleContent from '../components/ArticleContent.jsx';
+import NewArticle from '../components/NewArticle.jsx';
 
 const AppRouter =() => (
   <BrowserRouter>
@@ -30,10 +31,10 @@ const AppRouter =() => (
         <Route exact path='/:companyId/categories/:categoryId/articles' component={ArticlesPage} />
         <Route exact path='/articles/:articleId' component={ArticleContent} />
         <Route exact path='/devadminpage' component={devAdminPage} />
+        <Route exact path='/newarticle' component={NewArticle} />
       </Switch>
     </Container>
   </BrowserRouter>
 );
 
 export default AppRouter;
-
