@@ -127,6 +127,18 @@ var dbHelpers = {
   // removing a category
   deleteCategory: (obj) => {},
 
+  // fetch all categories for the given company id
+  fetchCategoriesByCompany: (companyId, cb) => {
+    Category.findAll({
+      where: {
+        companyId: companyId
+      },
+      attributes: ['id', 'name', 'description']
+    })
+    .then(results => {
+      cb(results);
+    })
+  },
 
   /////////////////////
   //     ARTICLES    //
@@ -141,6 +153,19 @@ var dbHelpers = {
   // delete an article
   updateArticle: (obj) => {},
 
+  // fetch all articles for a given companyId and categoryId
+  fetchArticles: ({companyId, categoryId}, cb) => {
+    Article.findAll({
+      where: {
+        companyId: companyId,
+        categoryId: categoryId
+      },
+      attributes: ['id', 'title', 'description', 'content']
+    })
+    .then(results => {
+      cb(results);
+    })
+  },
 
   //////////////////////////////
   //    TEST DATA FUNCTIONS   //
@@ -203,6 +228,8 @@ var dbHelpers = {
 
         // associate article with category
         testArticle.setCategory(category, {save: false});
+        // associate article with company
+        testArticle.setCompany(company, {save: false});
 
         // save article and all is done
         testArticle.save();
