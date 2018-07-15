@@ -39,7 +39,7 @@ class CategoriesPage extends React.Component {
               <Header as='h2'>Categories</Header>
             </Grid.Column>
             <Grid.Column floated='right' width={10}>
-            <Button floated='right'>Add New Category</Button>
+            <Button floated='right'><Link to='/addcategory'>Add New Category</Link></Button>
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>

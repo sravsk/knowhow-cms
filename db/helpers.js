@@ -126,8 +126,15 @@ var dbHelpers = {
   //    CATEGORIES   //
   /////////////////////
 
-  // create a Category for Articles
-  addCategory: (obj) => {},
+  // create a category
+  addCategory: ({name, description, companyId}, cb) => {
+    Category.findOrCreate({
+      where: {name: name, companyId: companyId}, defaults: {description: description}
+    })
+    .spread((user, created) => {
+      cb(created);
+    })
+  },
 
   // update a Category's name or description
   updateCategory: (obj) => {},
@@ -241,32 +248,39 @@ var dbHelpers = {
       // save user
       testUser.save();
 
-      // create category after company
-      let testCategory = Category.build({
-        name: 'Test Category',
-        description: 'Test Description'
-      });
+      for (var i = 0; i < 5; i++) {
 
-      // associate category with company
-      testCategory.setCompany(company, {save: false});
-
-      // save category
-      testCategory.save().then(category => {
-
-        let testArticle = Article.build({
-          title: 'Test Article',
-          description: 'Test Article Description',
-          content: 'Test Content yada yada yada'
+        // create category after company
+        let testCategory = Category.build({
+          name: `Test Category${i+1}`,
+          description: `Test Description${i+1}`
         });
 
-        // associate article with category
-        testArticle.setCategory(category, {save: false});
-        // associate article with company
-        testArticle.setCompany(company, {save: false});
+        // associate category with company
+        testCategory.setCompany(company, {save: false});
 
-        // save article and all is done
-        testArticle.save();
-      })
+        // save category
+        testCategory.save().then(category => {
+
+          for (var j = 0; j < 10; j++) {
+            let testArticle = Article.build({
+              title: `Test Article${category.id}-${j}`,
+              description: `Test Article Description${category.id}-${j}`,
+              content: `Test Content yada yada yada${category.id}-${j}.
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum`
+            });
+
+            // associate article with category
+            testArticle.setCategory(category, {save: false});
+            // associate article with company
+            testArticle.setCompany(company, {save: false});
+
+            // save article and all is done
+            testArticle.save();
+          }
+
+        })
+      }
 
     })
   }

@@ -31,3 +31,5 @@ bower_components/
 package-lock.json
 
 config.js
+
+.DS_Store
