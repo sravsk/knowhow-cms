@@ -164,6 +164,13 @@ app.get('/:companyId/articlesdata', (req, res) => {
   });
 });
 
+app.post('/article', (req, res) => {
+  let data = req.body;
+  db.addArticle(data.categoryId, data, (response) => {
+    res.end(response)
+  })
+})
+
 // app.post('/loginuser', passport.authenticate('local'), (req, res) => {
 //   console.log('user authenticated')
 //   res.send(req.user);

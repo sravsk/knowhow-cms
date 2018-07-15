@@ -141,7 +141,7 @@ var dbHelpers = {
       where: {
         companyId: companyId
       },
-      attributes: ['id', 'name', 'description', 'companyId']
+      attributes: ['id', 'name', 'description']
     })
     .then(results => {
       cb(results);
@@ -153,13 +153,25 @@ var dbHelpers = {
   /////////////////////
 
   // create an article with content
-  addArticle: (obj) => {},
+  addArticle: (catId, obj, cb) => {
+    Category.findOne({where: {id: catId}}).then(foundCat => {
+      let newArt = Article.build({
+        title: obj.title,
+        description: obj.description,
+        content: obj.content
+      })
+
+      newArt.setCategory(foundCat, {save: false});
+      newArt.save().then(() => cb('success'))
+
+    })
+  },
 
   // update an article
   updateArticle: (obj) => {},
 
   // delete an article
-  updateArticle: (obj) => {},
+  deleteArticle: (obj) => {},
 
   // fetch all articles for a given companyId and categoryId
   fetchArticles: ({companyId, categoryId}, cb) => {
