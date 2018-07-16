@@ -15,6 +15,7 @@ import CompanyArticles from '../components/CompanyArticles.jsx';
 import ArticlesPage from '../components/ArticlesPage.jsx';
 import Editor from '../components/Editor.jsx';
 import ArticleContent from '../components/ArticleContent.jsx';
+import NewArticle from '../components/NewArticle.jsx';
 import NewCategory from '../components/NewCategory.jsx';
 
 const AppRouter =() => (
@@ -34,10 +35,10 @@ const AppRouter =() => (
         <Route exact path='/:companyId/categories/:categoryId/articles' component={ArticlesPage} />
         <Route exact path='/articles/:articleId' component={ArticleContent} />
         <Route exact path='/devadminpage' component={devAdminPage} />
+        <Route exact path='/newarticle' component={NewArticle} />
       </Switch>
     </Container>
   </BrowserRouter>
 );
 
 export default AppRouter;
-
