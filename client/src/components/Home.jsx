@@ -9,8 +9,8 @@ const Home = () => {
   return (
     <Container>
       <NavBar />
-      <Button floated='right'><Link to='/editor'>Add New Article</Link></Button>
       <Button floated='right'><Link to='/addcategory'>Add New Category</Link></Button>
+      <Button floated='right'><Link to='/newarticle'>Add New Article</Link></Button>
       <br /><br />
       <Grid container celled style={{height: '80vh'}} >
         <Grid.Column width={4}>
