@@ -121,6 +121,18 @@ var dbHelpers = {
   // creating a company
   addCompany: (obj) => {},
 
+  fetchCompanyData: (companyId, cb) => {
+    Company.findAll({
+      where: {
+        id: companyId
+      },
+      attributes: ['id', 'name', 'domain']
+    })
+    .then(results => {
+      cb(results);
+    })
+  },
+
 
   /////////////////////
   //    CATEGORIES   //
