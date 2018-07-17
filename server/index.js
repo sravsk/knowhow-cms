@@ -181,6 +181,17 @@ app.post('/article', (req, res) => {
   })
 })
 
+//////////////////////////
+//    API routes     //
+//////////////////////////
+app.get('/api/:companyId', (req, res) => {
+  let companyId = req.params.companyId;
+  db.fetchCompanyData(companyId, (data) => {
+    res.send(data);
+  });
+});
+
+
 // app.post('/loginuser', passport.authenticate('local'), (req, res) => {
 //   console.log('user authenticated')
 //   res.send(req.user);
