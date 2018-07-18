@@ -160,7 +160,7 @@ var dbHelpers = {
       where: {
         companyId: companyId
       },
-      attributes: ['id', 'name', 'description']
+      attributes: ['id', 'name', 'description', 'companyId']
     })
     .then(results => {
       cb(results);

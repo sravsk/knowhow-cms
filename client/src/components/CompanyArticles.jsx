@@ -13,7 +13,6 @@ class CompanyArticles extends React.Component {
   }
 
   componentDidMount() {
-    console.log('in company articles page')
     // get info about logged in user
     axios.get('/user')
       .then(result => {
