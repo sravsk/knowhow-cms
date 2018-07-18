@@ -5,21 +5,19 @@ const ArticleContent = (props) => {
   let articleId = props.match.params;
   let article = props.location.state.article;
   return (
-    <Container>
-      <br /><br />
+    <Segment>
+      <br />
       <Button floated='right'>Edit Article</Button>
-      <Segment style={{ 'marginTop': '7vh' }}>
-        <Header as='h3'>
-          {article.title}
-        </Header>
-        <Item.Description as='h5'>
-          {article.description}
-        </Item.Description>
-        <Item.Extra>
-          {article.content}
-        </Item.Extra>
+      <Header as='h2' attached='top' style={{'marginTop': '7vh'}} >
+        {article.title}
+      </Header>
+      <Header as='h3' attached='top, bottom'>
+        {article.description}
+      </Header>
+      <Segment>
+        {article.content}
       </Segment>
-    </Container>
+    </Segment>
   );
 }
 
