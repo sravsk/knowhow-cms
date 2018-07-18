@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Grid, Header, Container, Button, Item } from 'semantic-ui-react';
+import { Grid, Header, Container, Button, Segment } from 'semantic-ui-react';
 import axios from 'axios';
 import ArticleItem from './ArticleItem.jsx';
 
@@ -26,11 +26,11 @@ class ArticlesPage extends React.Component {
 
   render() {
     let renderArticles = this.state.articles.map(article => {
-      return (<div key={article.id}><ArticleItem article={article} /></div>);
+      return (<Segment key={article.id}><ArticleItem article={article} /></Segment>);
     })
     return (
       <Container>
-        <Grid>
+        <Grid  style = {{ marginLeft: '5vw', marginRight: '5vw' }}>
           <Grid.Row>
             <Grid.Column floated='left'>
               <Header as='h2'>Articles</Header>
@@ -40,9 +40,9 @@ class ArticlesPage extends React.Component {
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
-            <Item.Group divided>
+            <Segment.Group style={{ width: '100%' }} >
               {renderArticles}
-            </Item.Group>
+            </Segment.Group>
           </Grid.Row>
         </Grid>
       </Container>
