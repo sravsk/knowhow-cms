@@ -172,12 +172,13 @@ var dbHelpers = {
   /////////////////////
 
   // create an article with content
-  addArticle: (catId, obj, cb) => {
+  addArticle: (catId, obj, coId, cb) => {
     Category.findOne({where: {id: catId}}).then(foundCat => {
       let newArt = Article.build({
         title: obj.title,
         description: obj.description,
-        content: obj.content
+        content: obj.content,
+        companyId: coId
       })
 
       newArt.setCategory(foundCat, {save: false});

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container, Form } from 'semantic-ui-react';
 import ReactQuill from 'react-quill';
+import axios from 'axios';
 import 'react-quill/dist/quill.snow.css';
 
 class Editor extends React.Component {
@@ -10,8 +11,8 @@ class Editor extends React.Component {
       editorHtml: '',
       categories:
         [
-          { key: '1', text: 'hardcoded1', value: 'hardcoded1' },
-          { key: '2', text: 'hardcoded2', value: 'hardcoded2' },
+          { key: '1', text: 'valhardcoded1', value: 'hardcoded1' },
+          { key: '2', text: 'valhardcoded2', value: 'hardcoded2' },
         ],
       title: '',
       description: '',
@@ -52,13 +53,19 @@ class Editor extends React.Component {
       category: this.state.category,
       content: this.state.content,
     }
+    axios.post('/article', article)
+    .then(res => JSON.stringify(res))
+    .then(jres => console.log(jres))
+    .catch(err => console.error(err))
+    this.setState({ title: '', description: '', category: '', editorHtml: '' });
+    alert(`${article.title} has been added to articles`);
   }
 
   handleChange(e) {
     this.setState({ [e.target.name]: e.target.value })
   }
 
-  handleCategory(e) {
+  handleCategory(e, { value, key, text }) {
     this.setState({ category: e.target.innerText })
   }
 
@@ -79,7 +86,7 @@ class Editor extends React.Component {
             <label>Description</label>
             <input placeholder="Description" name="description" value={this.state.description} onChange={this.handleChange} />
           </Form.Field>
-          <Form.Select label="Category" options={this.state.categories} name="category" placeholder="Category" onChange={this.handleCategory}>
+          <Form.Select label="Category" options={this.state.categories} name="category" placeholder="Category" value={this.state.category} onChange={this.handleCategory}>
           </Form.Select>
           <Form.Field required>
             <label>Content</label>

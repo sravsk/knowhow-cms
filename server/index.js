@@ -176,7 +176,8 @@ app.get('/:companyId/articlesdata', (req, res) => {
 
 app.post('/article', (req, res) => {
   let data = req.body;
-  db.addArticle(data.categoryId, data, (response) => {
+  let companyId = req.session.passport.user.companyId;
+  db.addArticle(data.categoryId, data, companyId, (response) => {
     res.end(response)
   })
 })

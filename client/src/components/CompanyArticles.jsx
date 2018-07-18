@@ -40,7 +40,7 @@ class CompanyArticles extends React.Component {
               <Header as='h2'>Articles</Header>
             </Grid.Column>
             <Grid.Column floated='right' width={10}>
-            <Button floated='right'>Add New Article</Button>
+            <Button floated='right'><Link to='/newarticle'>Add New Article</Link></Button>
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
