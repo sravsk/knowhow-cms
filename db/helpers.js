@@ -191,7 +191,14 @@ var dbHelpers = {
   updateArticle: (obj) => {},
 
   // delete an article
-  deleteArticle: (obj) => {},
+  deleteArticle: (id, cb) => {
+    Article.destroy({
+      where: {
+        id: id
+      }
+    })
+    .then(response => cb(response))
+  },
 
   // fetch all articles for a given companyId and categoryId
   fetchArticles: ({companyId, categoryId}, cb) => {

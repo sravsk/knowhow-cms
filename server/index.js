@@ -182,6 +182,10 @@ app.post('/article', (req, res) => {
   })
 })
 
+app.post('/deleteArticle', (req, res) => {
+  db.deleteArticle(req.body.articleId, () => res.redirect('/home'));
+})
+
 //////////////////////////
 //    API routes     //
 //////////////////////////
