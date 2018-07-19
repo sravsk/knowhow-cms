@@ -44,6 +44,15 @@ class NewArticle extends React.Component{
   }
 
   componentDidMount() {
+    if(this.props.location.state) {
+        this.setState({
+        title: this.props.location.state.title,
+        description: this.props.location.state.description,
+        content: this.props.location.state.content,
+        category: this.props.location.state.category,
+        id: this.props.location.state.id,
+      })
+    }
     axios.get('/user').then(res => {
       let compId = res.data.companyId;
       axios.get(`/${compId}/categoriesdata`).then(res2 => {
@@ -90,10 +99,9 @@ class NewArticle extends React.Component{
       title: this.state.title,
       description: this.state.description,
       content: this.state.content,
-      categoryId: this.state.category
+      categoryId: this.state.category,
+      id: this.state.id
     };
-
-    console.log(obj)
     axios.post('/article',obj).then(res => {
       alert(res.data);
     });
@@ -102,7 +110,7 @@ class NewArticle extends React.Component{
   render() {
     return (
       <Container>
-        <h1>New Article</h1>
+        <h1>{this.props.location.state ? 'Edit Article' : 'New Article'}</h1>
         <Dropdown
           button
           search
@@ -122,6 +130,7 @@ class NewArticle extends React.Component{
           <Input
             placeholder='New Article Title'
             onChange={this.handleTitleChange}
+            value={this.state.title}
           />
           <br />
           <br />
@@ -131,6 +140,7 @@ class NewArticle extends React.Component{
             placeholder='Article description'
             onChange={this.handleDescriptionChange}
             fluid
+            value={this.state.description}
           />
           <br />
 
