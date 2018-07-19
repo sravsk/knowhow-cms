@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Button, Container } from 'semantic-ui-react';
+import { Container, Header } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 class LandingPage extends React.Component {
@@ -10,8 +10,8 @@ class LandingPage extends React.Component {
 
   render() {
     return (
-      <Container>
-        <p>Knowledge base app description..... </p>
+      <Container className='content-main'>
+        <Header as='h3' style={{ 'textAlign': 'center', 'marginTop': '5em' }} color='blue'>A self-serve online library of information about your product or service.</Header>
       </Container>
     );
   }
