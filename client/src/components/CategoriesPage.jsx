@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Grid, Header, Container, Button, Item } from 'semantic-ui-react';
+import { Grid, Header, Container, Button, Segment } from 'semantic-ui-react';
 import axios from 'axios';
 import CategoryItem from './CategoryItem.jsx';
 
@@ -29,23 +29,20 @@ class CategoriesPage extends React.Component {
 
   render() {
     let renderCategories = this.state.categories.map(category => {
-      return (<div key={category.id}><CategoryItem category={category} /></div>);
+      return (<Segment key={category.id}><CategoryItem category={category} /></Segment>);
     });
     return (
       <Container>
-        <Grid>
+        <Grid  style = {{ marginLeft: '2vw', marginRight: '2vw' }}>
           <Grid.Row>
             <Grid.Column floated='left'>
               <Header as='h2'>Categories</Header>
             </Grid.Column>
-            <Grid.Column floated='right' width={10}>
-            <Button floated='right'><Link to='/addcategory'>Add New Category</Link></Button>
-            </Grid.Column>
           </Grid.Row>
           <Grid.Row>
-            <Item.Group divided>
+            <Segment.Group style={{ width: '100%', 'minHeight': '70vh' }} >
               {renderCategories}
-            </Item.Group>
+            </Segment.Group>
           </Grid.Row>
         </Grid>
       </Container>

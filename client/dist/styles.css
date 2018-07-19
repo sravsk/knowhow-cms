@@ -1,3 +1,10 @@
 .navbar {
   margin-bottom: 7em;
 }
+
+.content-main {
+  height: 100vh;
+  background: url(https://www.smta.org/images/knowledgebase-LAPTOP-smta-600.png) no-repeat center;
+  background-size: 100vh;
+  border: none;
+ }

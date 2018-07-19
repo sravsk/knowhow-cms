@@ -1,24 +1,23 @@
 import React from 'react';
-import { Container, Item, Button } from 'semantic-ui-react';
+import { Container, Item, Button, Segment, Header } from 'semantic-ui-react';
 
 const ArticleContent = (props) => {
   let articleId = props.match.params;
   let article = props.location.state.article;
   return (
-    <Container>
-      <Item>
-        <Button floated='right'>Edit Article</Button>
-        <Item.Header as='h3'>
-          {article.title}
-        </Item.Header>
-        <Item.Description as='h5'>
-          {article.description}
-        </Item.Description>
-        <Item.Extra>
-          {article.content}
-        </Item.Extra>
-      </Item>
-    </Container>
+    <Segment style={{ 'minHeight': '70vh' }}>
+      <br />
+      <Button floated='right'>Edit Article</Button>
+      <Header as='h2' attached='top' style={{'marginTop': '7vh'}} >
+        {article.title}
+      </Header>
+      <Header as='h3' attached='top, bottom'>
+        {article.description}
+      </Header>
+      <Segment style={{ 'minHeight': '60vh' }}>
+        {article.content}
+      </Segment>
+    </Segment>
   );
 }
 
