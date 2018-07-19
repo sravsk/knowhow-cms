@@ -1,5 +1,13 @@
 .navbar {
-  margin-bottom: 7em;
+  margin-bottom: 5em;
+}
+
+.nav-button {
+  color: white;
+}
+
+.button :hover {
+  color: white;
 }
 
 .content-main {

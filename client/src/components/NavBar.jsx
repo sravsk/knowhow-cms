@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink, Link, Redirect } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { Container, Menu, Header, Button } from 'semantic-ui-react';
 import axios from 'axios';
 
@@ -42,7 +42,7 @@ class NavBar extends React.Component {
   }
 
   render () {
-    // Redirect to LandingPage after use is logged out
+    // Redirect to LandingPage after user is logged out
     if (this.state.onLandingPage) {
       return (
         <Redirect to='/' />
@@ -58,10 +58,10 @@ class NavBar extends React.Component {
             <Link to='/home'><Header as='h1' color ='blue'>Know-how</Header></Link>
           </Menu.Item>
           <Menu.Item position='right'>
-            <Button><NavLink to='/signup'>Signup</NavLink></Button>
+           <Button primary><Link className='nav-button' to='/signup'>Signup</Link></Button>
           </Menu.Item>
           <Menu.Item>
-            <Button><NavLink to='/login'>Login</NavLink></Button>
+            <Button primary><Link className='nav-button' to='/login'>Login</Link></Button>
           </Menu.Item>
         </Menu>
         </Container>
@@ -74,9 +74,8 @@ class NavBar extends React.Component {
               <Link to='/home'><Header as='h1' color ='blue'>Know-how</Header></Link>
             </Menu.Item>
             <Menu.Item position='right'>
-              Hello {this.state.user}
+              <p>Hello {this.state.user}</p>
             </Menu.Item>
-
             <Menu.Item>
               <Button primary onClick={this.handleLogout.bind(this)}>Log out</Button>
             </Menu.Item>
