@@ -15,7 +15,7 @@ const ArticleContent = (props) => {
         {article.description}
       </Header>
       <Segment style={{ 'minHeight': '60vh' }}>
-        {article.content}
+        <div dangerouslySetInnerHTML={{__html: article.content}}></div>
       </Segment>
     </Segment>
   );
