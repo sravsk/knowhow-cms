@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container, Item, Button, Segment, Header, Icon, Modal } from 'semantic-ui-react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 class ArticleContent extends React.Component {
   constructor(props) {
@@ -42,7 +43,20 @@ class ArticleContent extends React.Component {
             </Button>
           </Modal.Actions>
         </Modal>
-        <Button floated='right'>Edit Article</Button>
+        <Button floated='right'>
+
+          <Link to={{
+            pathname: '/newarticle',
+            state: {
+              title: article.title,
+              description: article.description,
+              content: article.content,
+              category: article.categoryId,
+              id: article.id
+            }
+          }} >Edit Article</Link>
+
+        </Button>
         <Header as='h2' attached='top' style={{'marginTop': '7vh'}} >
           {article.title}
         </Header>

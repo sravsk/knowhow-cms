@@ -177,6 +177,10 @@ app.get('/:companyId/articlesdata', (req, res) => {
 app.post('/article', (req, res) => {
   let data = req.body;
   let companyId = req.session.passport.user.companyId;
+  //update if exists
+  if(req.body.id) {
+    db.updateArticle(JSON.stringify(req.body), result => console.log('result from update ', result) )
+  }
   db.addArticle(data.categoryId, data, companyId, (response) => {
     res.end(response)
   })

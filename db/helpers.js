@@ -188,7 +188,23 @@ var dbHelpers = {
   },
 
   // update an article
-  updateArticle: (obj) => {},
+  updateArticle: (article, cb) => {
+    Article.findById(article.id)
+    .then(record => {
+      if (record === null){
+        cb(record)
+      } else {
+        record.update({
+          title: article.title,
+          description: article.description,
+          content: article.content,
+          categoryId: article.categoryId
+        })
+        .then(response => cb(response))
+        cb(result.dataValues)
+      }
+    })
+  },
 
   // delete an article
   deleteArticle: (id, cb) => {
@@ -219,6 +235,18 @@ var dbHelpers = {
     Article.findAll({
       where: {
         companyId: companyId
+      },
+      attributes: ['id', 'title', 'description', 'content', 'categoryId', 'companyId']
+    })
+    .then(results => {
+      cb(results);
+    })
+  },
+
+  fetchOneArticle: (id, cb) => {
+    Article.findAll({
+      where: {
+        id: id,
       },
       attributes: ['id', 'title', 'description', 'content', 'categoryId', 'companyId']
     })
