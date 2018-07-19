@@ -5,7 +5,7 @@ const ArticleContent = (props) => {
   let articleId = props.match.params;
   let article = props.location.state.article;
   return (
-    <Segment>
+    <Segment style={{ 'minHeight': '70vh' }}>
       <br />
       <Button floated='right'>Edit Article</Button>
       <Header as='h2' attached='top' style={{'marginTop': '7vh'}} >
@@ -14,7 +14,7 @@ const ArticleContent = (props) => {
       <Header as='h3' attached='top, bottom'>
         {article.description}
       </Header>
-      <Segment>
+      <Segment style={{ 'minHeight': '60vh' }}>
         {article.content}
       </Segment>
     </Segment>

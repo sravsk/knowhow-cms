@@ -33,14 +33,14 @@ class CompanyArticles extends React.Component {
     })
     return (
       <Container >
-        <Grid  style = {{ marginLeft: '5vw', marginRight: '5vw' }}>
+        <Grid  style = {{ marginLeft: '2vw', marginRight: '2vw' }}>
           <Grid.Row>
             <Grid.Column floated='left'>
               <Header as='h2'>Articles</Header>
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
-            <Segment.Group style={{ width: '100%' }} >
+            <Segment.Group style={{ width: '100%', 'minHeight': '70vh' }} >
               {renderArticles}
             </Segment.Group>
           </Grid.Row>

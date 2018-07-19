@@ -43,15 +43,15 @@ class Home extends React.Component {
         <Button floated='right'><Link to='/newarticle'>Add New Article</Link></Button>
         <br /><br />
         <Grid container celled>
-          <Grid.Column width={4}>
+          <Grid.Column width={3}>
             <Segment>
-              <Header as='h4' onClick={this.showArticles.bind(this)}>Articles</Header>
+              <Header as='h3' onClick={this.showArticles.bind(this)}>Articles</Header>
             </Segment>
             <Segment>
-              <Header as='h4' onClick={this.showCategories.bind(this)}>Categories</Header>
+              <Header as='h3' onClick={this.showCategories.bind(this)}>Categories</Header>
             </Segment>
           </Grid.Column>
-          <Grid.Column width={12}>
+          <Grid.Column width={13}>
             {info}
           </Grid.Column>
         </Grid>
