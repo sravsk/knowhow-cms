@@ -155,6 +155,12 @@ app.post('/updatecategory', (req, res) => {
   })
 });
 
+app.post('/deletecategory', (req, res) => {
+  db.deleteCategory(req.body, categories => {
+    res.end(JSON.stringify(categories));
+  })
+})
+
 // get all categories for a given company id
 app.get('/:companyId/categoriesdata', (req, res) => {
   //enable CORS for this route
