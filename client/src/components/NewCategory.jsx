@@ -31,12 +31,12 @@ class NewCategory extends React.Component {
 
   updateCategory() {
     let data = {
+      id: this.state.id,
       name: this.state.categoryName,
-      description: this.state.categoryDescription,
-      id: this.state.id
+      description: this.state.categoryDescription
     }
 
-    axios.post('/updatecategory', data).then(res => console.log(res));
+    axios.post('/updatecategory', data).then(() => this.props.history.push('/home'));
   }
 
   addCategory() {
@@ -55,7 +55,7 @@ class NewCategory extends React.Component {
           categoryName: '',
           categoryDescription: ''
         })
-      })
+      }).then(() => this.props.history.push('/home'))
   }
 
   render() {
