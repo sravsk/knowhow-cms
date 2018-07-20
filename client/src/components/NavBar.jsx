@@ -19,7 +19,6 @@ class NavBar extends React.Component {
     axios.get('/user')
       .then(result => {
         if (result.data) {
-          console.log('in navbar', result.data)
           let name = result.data.name;
           let companyId = result.data.companyId;
           this.setState({
