@@ -61,17 +61,20 @@ class NewCategory extends React.Component {
 
   render() {
     return (
-      <Segment raised  style={{ 'marginTop': '-5em', 'height': '100vh'}}>
+      <Segment raised style={{ 'margin': '-7vh -5vw 0 -5vw', 'height': '100vh' }}>
         <NavBar />
         <br/>
         <Grid verticalAlign='center'>
-          <Grid.Column style={{ maxWidth: '60%' }}>
+          <Grid.Column celled style={{ maxWidth: '80%', 'backgroundColor': 'rgba(240, 240, 240, 0.5)' }}>
             <Header as='h2' textAlign='center'>
               {(this.props.location.data) ? 'Update Category' :
-              'Add a new category for your company'}
+              'New Category'}
             </Header>
+            <br />
             <Form size='large' onSubmit={this.state.id === '' ? this.addCategory.bind(this) : this.updateCategory.bind(this)}>
               <Segment raised>
+                <br />
+                <h3>Category Name</h3>
                 <Form.Input
                   name='categoryName'
                   value={this.state.categoryName}
@@ -79,6 +82,8 @@ class NewCategory extends React.Component {
                   placeholder='Category Name'
                   onChange={this.handleChange.bind(this)}
                 />
+                <br />
+                <h3>Category Description</h3>
                 <Form.Input
                   name='categoryDescription'
                   value={this.state.categoryDescription}
@@ -86,7 +91,8 @@ class NewCategory extends React.Component {
                   placeholder='Category Description'
                   onChange={this.handleChange.bind(this)}
                 />
-                <Form.Button content='Submit' style={{ 'color': '#2185d0'}}/>
+                <br />
+                <Form.Button content='Save Category' style={{ 'color': '#2185d0'}}/>
               </Segment>
             </Form>
           </Grid.Column>

@@ -35,7 +35,7 @@ const AppRouter =() => (
         <Route exact path='/:companyId/categories/:categoryId/articles' component={ArticlesPage} />
         <Route exact path='/articles/:articleId' component={ArticleContent} />
         <Route exact path='/devadminpage' component={devAdminPage} />
-        <Route exact path='/newarticle' component={NewArticle} />
+        <Route exact path='/addarticle' component={NewArticle} />
       </Switch>
     </Container>
   </BrowserRouter>

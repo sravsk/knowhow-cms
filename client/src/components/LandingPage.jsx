@@ -11,8 +11,7 @@ class LandingPage extends React.Component {
   render() {
     return (
       <Container className='content-main'>
-        <NavBar />
-        <Header as='h3' style={{ 'textAlign': 'center', 'marginTop': '5em' }} color='blue'>A self-serve online library of information about your product or service.</Header>
+        <Header as='h3' style={{ 'textAlign': 'center', 'marginTop': '15vh', 'paddingBottom': '-100vh' }} color='blue'>A self-serve online library of information about your product or service.</Header>
       </Container>
     );
   }
