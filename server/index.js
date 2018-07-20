@@ -149,6 +149,12 @@ app.post('/addCategory', (req, res) => {
   });
 });
 
+app.post('/updatecategory', (req, res) => {
+  db.updateCategory(req.body, updated => {
+    res.end(updated);
+  })
+});
+
 // get all categories for a given company id
 app.get('/:companyId/categoriesdata', (req, res) => {
   let companyId = req.params.companyId;

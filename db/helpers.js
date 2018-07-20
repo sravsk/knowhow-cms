@@ -149,10 +149,17 @@ var dbHelpers = {
   },
 
   // update a Category's name or description
-  updateCategory: (obj) => {},
+  updateCategory: (obj, cb) => {
+    Category.findOne({where: {id: obj.id}}).then(cat => {
+      cat.update({
+        name: obj.name,
+        description: obj.description
+      }).then(() => cb(cat));
+    })
+  },
 
   // removing a category
-  deleteCategory: (obj) => {},
+  deleteCategory: (obj, cb) => {},
 
   // fetch all categories for the given company id
   fetchCategoriesByCompany: (companyId, cb) => {
