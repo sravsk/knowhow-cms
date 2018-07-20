@@ -196,6 +196,13 @@ app.post('/article', (req, res) => {
   db.addArticle(data.categoryId, data, companyId, (response) => {
     res.end(response)
   })
+});
+
+app.get('/company', (req, res) => {
+  let companyId = req.user.companyId;
+  db.fetchCompanyData(companyId, (data) => {
+    res.send(data[0].name);
+  })
 })
 
 app.post('/deleteArticle', (req, res) => {

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Container, Item, Button, Segment, Header, Icon, Modal } from 'semantic-ui-react';
+import NavBar from './NavBar.jsx';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
@@ -26,7 +27,7 @@ class ArticleContent extends React.Component {
     let articleId = this.props.match.params;
     let article = this.props.location.state.article;
     return (
-      <Segment style={{ 'minHeight': '70vh' }}>
+      <Segment raised  style={{ minHeight': '100vh'}}>
         <br />
         <Modal open={this.state.open} trigger={<Button floated='right' onClick={this.toggleModal}>Delete Article</Button>} basic size='small'>
           <Modal.Content>
@@ -44,7 +45,6 @@ class ArticleContent extends React.Component {
           </Modal.Actions>
         </Modal>
         <Button floated='right'>
-
           <Link to={{
             pathname: '/newarticle',
             state: {
@@ -55,7 +55,6 @@ class ArticleContent extends React.Component {
               id: article.id
             }
           }} >Edit Article</Link>
-
         </Button>
         <Header as='h2' attached='top' style={{'marginTop': '7vh'}} >
           {article.title}
