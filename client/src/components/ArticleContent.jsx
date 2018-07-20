@@ -27,7 +27,7 @@ class ArticleContent extends React.Component {
     let articleId = this.props.match.params;
     let article = this.props.location.state.article;
     return (
-      <Segment raised  style={{ minHeight': '100vh'}}>
+      <Segment raised  style={{ 'minHeight': '100vh'}}>
         <br />
         <Modal open={this.state.open} trigger={<Button floated='right' onClick={this.toggleModal}>Delete Article</Button>} basic size='small'>
           <Modal.Content>

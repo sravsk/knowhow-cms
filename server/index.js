@@ -151,7 +151,7 @@ app.post('/addCategory', (req, res) => {
 
 // get all categories for a given company id
 app.get('/:companyId/categoriesdata', (req, res) => {
-  //enable CORS for this route 
+  //enable CORS for this route
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, HEAD');
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -163,7 +163,7 @@ app.get('/:companyId/categoriesdata', (req, res) => {
 
 // get all articles for a given company id and category id
 app.get('/:companyId/categories/:categoryId/articlesdata', (req, res) => {
-  //enable CORS for this route 
+  //enable CORS for this route
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, HEAD');
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -176,7 +176,7 @@ app.get('/:companyId/categories/:categoryId/articlesdata', (req, res) => {
 
 // get all articles for a given company id
 app.get('/:companyId/articlesdata', (req, res) => {
-  //enable CORS for this route 
+  //enable CORS for this route
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, HEAD');
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -213,7 +213,7 @@ app.post('/deleteArticle', (req, res) => {
 //    API routes     //
 //////////////////////////
 app.get('/api/:companyId', (req, res) => {
-  //enable CORS for this route 
+  //enable CORS for this route
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, HEAD');
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -263,6 +263,11 @@ app.get('/logout', (req, res) => {
 //////////////////////////
 //    DB dev routes     //
 //////////////////////////
+
+// unprotect /devadminpage
+app.get('/devadminpage', (req, res) => {
+  res.sendFile(path.join(__dirname, '/../client/dist/index.html'));
+});
 
 app.get('/db/testfill', (req, res) => {
   db.dummyData();
