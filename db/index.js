@@ -18,7 +18,7 @@ var db = new Sequelize(connection.DBNAME, connection.DBUSERNAME, connection.DBPA
 //     protocol: 'mysql',
 //     logging:  true
 //   })
-
+//
 // } else {
 //   var db = new Sequelize('knowhow', 'root', '', {
 //     host: 'localhost',

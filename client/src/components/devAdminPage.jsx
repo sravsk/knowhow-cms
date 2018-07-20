@@ -20,12 +20,6 @@ class devAdminPage extends React.Component {
     })
   }
 
-  dropDatabase() {
-    axios.get('/db/drop').then(result => {
-      alert(result.data);
-    })
-  }
-
   rebuildDatabase() {
     axios.get('/db/rebuild').then(result => {
       alert(result.data);
@@ -40,8 +34,7 @@ class devAdminPage extends React.Component {
           <Grid.Row>
             <Button onClick={this.fillTestData} content='Fill test data' color='yellow'/>
             <Button onClick={this.clearDatabase} content='Empty database' color='purple'/>
-            <Button onClick={this.dropDatabase} content='Drop database' color='red'/>
-            <Button onClick={this.rebuildDatabase} content='Rebuild database' color='red'/>
+            <Button onClick={this.rebuildDatabase} content='Drop & Rebuild database' color='red'/>
           </Grid.Row>
         </Grid>
       </Container>

@@ -27,9 +27,14 @@ class CategoriesPage extends React.Component {
       })
   }
 
+  handleDelete(obj) {
+      axios.post('/deletecategory', {id: obj.id, coId: obj.companyId})
+      .then(res => this.setState({categories: res.data}, () => this.forceUpdate()))
+  }
+
   render() {
     let renderCategories = this.state.categories.map(category => {
-      return (<Segment raised key={category.id}><CategoryItem category={category} /></Segment>);
+      return (<Segment raised key={category.id}><CategoryItem category={category} handleDelete={this.handleDelete.bind(this)}/></Segment>);
     });
     return (
       <Segment raised>

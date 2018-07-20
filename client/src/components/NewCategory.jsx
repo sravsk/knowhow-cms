@@ -66,7 +66,7 @@ class NewCategory extends React.Component {
         <br/>
         <Grid verticalAlign='center'>
           <Grid.Column style={{ maxWidth: '60%' }}>
-            <<Header as='h2' textAlign='center'>
+            <Header as='h2' textAlign='center'>
               {(this.props.location.data) ? 'Update Category' :
               'Add a new category for your company'}
             </Header>

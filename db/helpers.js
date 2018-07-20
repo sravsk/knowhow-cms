@@ -159,7 +159,17 @@ var dbHelpers = {
   },
 
   // removing a category
-  deleteCategory: (obj, cb) => {},
+  deleteCategory: (obj, cb) => {
+    Article.findAll({where: {id: obj.id}})
+    .then(articles => {
+      articles.forEach(article => article.update({companyId: null}))
+    })
+    .then(() => {Category.findOne({where: {id: obj.id}})
+      .then(category => {category.destroy()})
+      .then(() => Category.findAll({where: {companyId: obj.coId}})
+        .then(categories => {cb(categories);}))
+    })
+  },
 
   // fetch all categories for the given company id
   fetchCategoriesByCompany: (companyId, cb) => {

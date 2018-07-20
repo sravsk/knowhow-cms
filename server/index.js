@@ -155,6 +155,12 @@ app.post('/updatecategory', (req, res) => {
   })
 });
 
+app.post('/deletecategory', (req, res) => {
+  db.deleteCategory(req.body, categories => {
+    res.end(JSON.stringify(categories));
+  })
+})
+
 // get all categories for a given company id
 app.get('/:companyId/categoriesdata', (req, res) => {
   //enable CORS for this route
@@ -283,11 +289,6 @@ app.get('/db/testfill', (req, res) => {
 app.get('/db/clear', (req, res) => {
   db.clearTables();
   res.end('All tables cleared');
-})
-
-app.get('/db/drop', (req, res) => {
-  db.dropTables();
-  res.end('All tables dropped. Rebuild DB or refresh server to continue');
 })
 
 app.get('/db/rebuild', (req, res) => {
