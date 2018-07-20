@@ -151,7 +151,7 @@ app.post('/addCategory', (req, res) => {
 
 app.post('/updatecategory', (req, res) => {
   db.updateCategory(req.body, updated => {
-    res.end(updated);
+    res.end(JSON.stringify(updated));
   })
 });
 

@@ -154,7 +154,7 @@ var dbHelpers = {
       cat.update({
         name: obj.name,
         description: obj.description
-      }).then(() => cb(cat));
+      }).then(cat => cb(cat));
     })
   },
 
