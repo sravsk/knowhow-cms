@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Grid, Header, Container, Button, Segment } from 'semantic-ui-react';
 import axios from 'axios';
 import ArticleItem from './ArticleItem.jsx';
+import NavBar from './NavBar.jsx';
 
 class ArticlesPage extends React.Component {
   constructor(props) {
@@ -29,7 +30,8 @@ class ArticlesPage extends React.Component {
       return (<Segment key={article.id}><ArticleItem article={article} /></Segment>);
     })
     return (
-      <Container>
+      <Segment raised  style={{ 'marginTop': '-5em'}}>
+        <NavBar />
         <Grid style = {{ marginLeft: '2vw', marginRight: '2vw' }} >
           <Grid.Row>
             <Grid.Column floated='left'>
@@ -45,7 +47,7 @@ class ArticlesPage extends React.Component {
             </Segment.Group>
           </Grid.Row>
         </Grid>
-      </Container>
+      </Segment>
     );
   }
 }

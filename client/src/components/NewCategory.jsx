@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container, Grid, Header, Form, Message, Segment } from 'semantic-ui-react';
 import axios from 'axios';
+import NavBar from './NavBar.jsx';
 
 class NewCategory extends React.Component {
   constructor(props) {
@@ -60,23 +61,13 @@ class NewCategory extends React.Component {
 
   render() {
     return (
-      <div className='login-form'>
-        <style>{`
-          body > div,
-          body > div > div,
-          body > div > div > div.login-form {
-            height: 100%;
-          }
-        `}</style>
-        <Grid
-          textAlign='center'
-          style={{ height: '75%' }}
-          verticalAlign='middle'
-        >
-          <Grid.Column style={{ maxWidth: 500 }}>
-            <Header as='h2' color='blue' textAlign='center'>
-              {(this.props.location.data) ? 'Update Category' :
-              'Add a new category for your company'}
+      <Segment raised  style={{ 'marginTop': '-5em', 'height': '100vh'}}>
+        <NavBar />
+        <br/>
+        <Grid verticalAlign='center'>
+          <Grid.Column style={{ maxWidth: '60%' }}>
+            <Header as='h2' textAlign='center'>
+              Add a new category for your company
             </Header>
             <Form size='large' onSubmit={this.state.id === '' ? this.addCategory.bind(this) : this.updateCategory.bind(this)}>
               <Segment raised>
@@ -94,12 +85,12 @@ class NewCategory extends React.Component {
                   placeholder='Category Description'
                   onChange={this.handleChange.bind(this)}
                 />
-                <Form.Button content='Submit' primary />
+                <Form.Button content='Submit' style={{ 'color': '#2185d0'}}/>
               </Segment>
             </Form>
           </Grid.Column>
         </Grid>
-      </div>
+      </Segment>
     );
   }
 }

@@ -157,6 +157,10 @@ app.post('/updatecategory', (req, res) => {
 
 // get all categories for a given company id
 app.get('/:companyId/categoriesdata', (req, res) => {
+  //enable CORS for this route
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, HEAD');
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   let companyId = req.params.companyId;
   db.fetchCategoriesByCompany(companyId, (categories) => {
     res.send(categories);
@@ -165,6 +169,10 @@ app.get('/:companyId/categoriesdata', (req, res) => {
 
 // get all articles for a given company id and category id
 app.get('/:companyId/categories/:categoryId/articlesdata', (req, res) => {
+  //enable CORS for this route
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, HEAD');
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   let companyId = req.params.companyId;
   let categoryId = req.params.categoryId;
   db.fetchArticles({companyId, categoryId}, (articles) => {
@@ -174,6 +182,10 @@ app.get('/:companyId/categories/:categoryId/articlesdata', (req, res) => {
 
 // get all articles for a given company id
 app.get('/:companyId/articlesdata', (req, res) => {
+  //enable CORS for this route
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, HEAD');
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   let companyId = req.params.companyId;
   db.fetchCompanyArticles({companyId}, (articles) => {
     res.send(articles);
@@ -190,6 +202,13 @@ app.post('/article', (req, res) => {
   db.addArticle(data.categoryId, data, companyId, (response) => {
     res.end(response)
   })
+});
+
+app.get('/company', (req, res) => {
+  let companyId = req.user.companyId;
+  db.fetchCompanyData(companyId, (data) => {
+    res.send(data[0].name);
+  })
 })
 
 app.post('/deleteArticle', (req, res) => {
@@ -200,6 +219,10 @@ app.post('/deleteArticle', (req, res) => {
 //    API routes     //
 //////////////////////////
 app.get('/api/:companyId', (req, res) => {
+  //enable CORS for this route
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, HEAD');
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   let companyId = req.params.companyId;
   db.fetchCompanyData(companyId, (data) => {
     res.send(data);
@@ -246,6 +269,11 @@ app.get('/logout', (req, res) => {
 //////////////////////////
 //    DB dev routes     //
 //////////////////////////
+
+// unprotect /devadminpage
+app.get('/devadminpage', (req, res) => {
+  res.sendFile(path.join(__dirname, '/../client/dist/index.html'));
+});
 
 app.get('/db/testfill', (req, res) => {
   db.dummyData();
