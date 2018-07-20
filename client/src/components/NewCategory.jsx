@@ -8,7 +8,19 @@ class NewCategory extends React.Component {
     super(props);
     this.state = {
       categoryName: '',
-      categoryDescription: ''
+      categoryDescription: '',
+      id: ''
+    }
+  }
+
+  componentDidMount() {
+    if (this.props.location.data) {
+      this.setState({
+        categoryDescription: this.props.location.data.description,
+        categoryName: this.props.location.data.name,
+        id: this.props.location.data.id
+      })
+      // console.log(this.props.location.data);
     }
   }
 
@@ -16,6 +28,16 @@ class NewCategory extends React.Component {
     this.setState({
       [event.target.name]: event.target.value
     });
+  }
+
+  updateCategory() {
+    let data = {
+      id: this.state.id,
+      name: this.state.categoryName,
+      description: this.state.categoryDescription
+    }
+
+    axios.post('/updatecategory', data).then(() => this.props.history.push('/home'));
   }
 
   addCategory() {
@@ -34,7 +56,7 @@ class NewCategory extends React.Component {
           categoryName: '',
           categoryDescription: ''
         })
-      })
+      }).then(() => this.props.history.push('/home'))
   }
 
   render() {
@@ -44,10 +66,11 @@ class NewCategory extends React.Component {
         <br/>
         <Grid verticalAlign='center'>
           <Grid.Column style={{ maxWidth: '60%' }}>
-            <Header as='h2' textAlign='center'>
-              Add a new category for your company
+            <<Header as='h2' textAlign='center'>
+              {(this.props.location.data) ? 'Update Category' :
+              'Add a new category for your company'}
             </Header>
-            <Form size='large' onSubmit={this.addCategory.bind(this)}>
+            <Form size='large' onSubmit={this.state.id === '' ? this.addCategory.bind(this) : this.updateCategory.bind(this)}>
               <Segment raised>
                 <Form.Input
                   name='categoryName'
