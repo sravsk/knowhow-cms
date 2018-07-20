@@ -29,27 +29,24 @@ class CompanyArticles extends React.Component {
 
   render() {
     let renderArticles = this.state.articles.map(article => {
-      return (<Segment key={article.id}><ArticleItem article={article} /></Segment>);
+      return (<Segment raised key={article.id}><ArticleItem article={article} /></Segment>);
     })
     return (
-      <Container >
-        <Grid  style = {{ marginLeft: '2vw', marginRight: '2vw' }}>
+      <Segment raised >
+        <Header as='h2' textAlign='center'>
+          Articles
+        </Header>
+        <Grid  style = {{ marginLeft: '2vw', marginRight: '2vw', 'border': 'none' }}>
           <Grid.Row>
-            <Grid.Column floated='left'>
-              <Header as='h2'>Articles</Header>
-            </Grid.Column>
-          </Grid.Row>
-          <Grid.Row>
-            <Segment.Group style={{ width: '100%', 'minHeight': '70vh' }} >
+            <Segment.Group className='background' style={{ width: '100%', 'minHeight': '70vh', 'border': 'none' }} >
               {renderArticles}
             </Segment.Group>
           </Grid.Row>
         </Grid>
-      </Container>
+      </Segment>
     );
   }
 }
 
 export default CompanyArticles;
 
-// all articles for given company id

@@ -50,9 +50,9 @@ class Home extends React.Component {
     return (
       <Segment raised  style={{ 'marginTop': '-5em'}}>
         <NavBar />
-        <Button floated='left' style={{'width': '40%'}}><Link to='#' style={{'color': '#2185d0'}}>{this.state.company}</Link></Button>
-        <Button floated='right'><Link to='/addcategory' style={{'color': '#2185d0'}}>Add New Category</Link></Button>
-        <Button floated='right' ><Link to='/newarticle' style={{ 'color': '#2185d0'}}>Add New Article</Link></Button>
+        <Button floated='left' style={{'width': '40%'}}><Link to='#' className='button-text-color'>{this.state.company}</Link></Button>
+        <Button floated='right'><Link to='/addcategory' className='button-text-color'>Add New Category</Link></Button>
+        <Button floated='right' ><Link to='/newarticle' className='button-text-color'>Add New Article</Link></Button>
         <br /><br />
         <Grid container celled>
           <Grid.Column width={3} className='background'>

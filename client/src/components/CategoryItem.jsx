@@ -9,7 +9,7 @@ class CategoryItem extends React.Component {
 
   render() {
     return (
-      <Item>
+      <Item className='background item'>
         <Item.Header style={{ fontSize: '1.2em', paddingBottom: '0.5em' }} >
           <Link to={`/${this.props.category.companyId}/categories/${this.props.category.id}/articles`}>{this.props.category.name}</Link>
         </Item.Header>

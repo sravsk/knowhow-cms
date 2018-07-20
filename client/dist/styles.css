@@ -18,5 +18,13 @@
  }
 
  .background {
-  background-color: rgba(242, 242, 242, 0.4);
+  background-color: rgba(240, 240, 240, 0.5);
+ }
+
+ .item {
+  padding: 0.5em 0 0.5em 2em;
+ }
+
+ .button-text-color {
+  color: '#2185d0';
  }

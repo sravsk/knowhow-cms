@@ -10,7 +10,7 @@ class ArticleItem extends React.Component {
 
   render() {
     return (
-      <Item>
+      <Item className='background item'>
         <Item.Header style={{ fontSize: '1.2em', paddingBottom: '0.5em' }} >
           <Link to={{
             pathname: `/articles/${this.props.article.id}`,
