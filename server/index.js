@@ -291,11 +291,6 @@ app.get('/db/clear', (req, res) => {
   res.end('All tables cleared');
 })
 
-app.get('/db/drop', (req, res) => {
-  db.dropTables();
-  res.end('All tables dropped. Rebuild DB or refresh server to continue');
-})
-
 app.get('/db/rebuild', (req, res) => {
   db.recreateDB();
   res.end('DB is rebuilt')
