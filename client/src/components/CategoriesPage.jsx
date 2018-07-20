@@ -29,23 +29,21 @@ class CategoriesPage extends React.Component {
 
   render() {
     let renderCategories = this.state.categories.map(category => {
-      return (<Segment key={category.id}><CategoryItem category={category} /></Segment>);
+      return (<Segment raised key={category.id}><CategoryItem category={category} /></Segment>);
     });
     return (
-      <Container>
-        <Grid  style = {{ marginLeft: '2vw', marginRight: '2vw' }}>
+      <Segment raised>
+        <Header as='h2' textAlign='center'>
+          Categories
+        </Header>
+        <Grid  style={{ marginLeft: '2vw', marginRight: '2vw', 'border': 'none' }}>
           <Grid.Row>
-            <Grid.Column floated='left'>
-              <Header as='h2'>Categories</Header>
-            </Grid.Column>
-          </Grid.Row>
-          <Grid.Row>
-            <Segment.Group style={{ width: '100%', 'minHeight': '70vh' }} >
+            <Segment.Group className='background' style={{ width: '100%', 'minHeight': '70vh', 'border': 'none' }} >
               {renderCategories}
             </Segment.Group>
           </Grid.Row>
         </Grid>
-      </Container>
+      </Segment>
     );
   }
 }

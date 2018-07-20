@@ -1,12 +1,12 @@
 # Project Name
 
-> Pithy project description
+> Know-how: A knowledge base app.
 
 ## Team
 
-  - __Product Owner__: teamMember
-  - __Scrum Master__: teamMember
-  - __Development Team Members__: teamMember, teamMember
+  - __Product Owner__: Amena Kauser Syeda
+  - __Scrum Master__: Sravanthi Karanam
+  - __Development Team Members__: Adelle Housker, Ted Green, Sravanthi Karanam, Amena Kauser Syeda
 
 ## Table of Contents
 
@@ -20,22 +20,36 @@
 
 ## Usage
 
-> Create a local MySQL database. Create a config.js file in the root directory and add the following code in the file.
+> Create a config.js file in the root directory
+
+Create a local MySQL database and add the following code in the file.
 
 module.exports = {
   DBNAME: 'your-database-name',
   DBUSERNAME: 'your-username',
   DBPASSWORD: 'your-password',
-  DBHOST: 'your-host-url or localhost'
+  DBHOST: 'localhost'
+};
+
+or
+
+Create a DB instance on Amazon RDS and add the following code in the file.
+
+module.exports = {
+  DBNAME: 'database-name',
+  DBUSERNAME: 'username',
+  DBPASSWORD: 'password',
+  DBHOST: 'amazonrdsdb-hostname',
+  DBPORT: 'rds-instance-port-number'
 };
 
 ## Requirements
 
-- Node 0.10.x
-- Redis 2.6.x
-- Postgresql 9.1.x
-- etc
-- etc
+Node
+MySQL
+React
+Sequelize
+Express
 
 ## Development
 
@@ -43,11 +57,7 @@ module.exports = {
 
 From within the root directory:
 
-```sh
-sudo npm install -g bower
 npm install
-bower install
-```
 
 ### Roadmap
 

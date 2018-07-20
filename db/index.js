@@ -1,18 +1,30 @@
 const Sequelize = require('sequelize');
 
-if (process.env.DATABASE_URL !== undefined) {
-  var db = new Sequelize(process.env.DATABASE_URL, {
-    dialect: 'mysql',
-    protocol: 'mysql',
-    logging:  true
-  })
+var connection = require('../config.js');
 
-} else {
-  var db = new Sequelize('knowhow', 'root', '', {
-    host: 'localhost',
-    dialect: 'mysql'
-  })
-}
+var db = new Sequelize(connection.DBNAME, connection.DBUSERNAME, connection.DBPASSWORD, {
+  host: connection.DBHOST,
+  port: connection.DBPORT,
+  dialect: 'mysql',
+  dialectOptions: {
+    ssl: 'Amazon RDS'
+  }
+});
+
+
+// if (process.env.DATABASE_URL !== undefined) {
+//   var db = new Sequelize(process.env.DATABASE_URL, {
+//     dialect: 'mysql',
+//     protocol: 'mysql',
+//     logging:  true
+//   })
+
+// } else {
+//   var db = new Sequelize('knowhow', 'root', '', {
+//     host: 'localhost',
+//     dialect: 'mysql'
+//   })
+// }
 
 db
   .authenticate()

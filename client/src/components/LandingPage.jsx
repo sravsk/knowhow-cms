@@ -1,7 +1,7 @@
 import React from 'react';
-
 import { Container, Header } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
+import NavBar from './NavBar.jsx';
 
 class LandingPage extends React.Component {
   constructor(props) {
@@ -11,6 +11,7 @@ class LandingPage extends React.Component {
   render() {
     return (
       <Container className='content-main'>
+        <NavBar />
         <Header as='h3' style={{ 'textAlign': 'center', 'marginTop': '5em' }} color='blue'>A self-serve online library of information about your product or service.</Header>
       </Container>
     );
