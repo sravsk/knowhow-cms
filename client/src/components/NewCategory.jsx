@@ -67,7 +67,8 @@ class NewCategory extends React.Component {
         <Grid verticalAlign='center'>
           <Grid.Column style={{ maxWidth: '60%' }}>
             <Header as='h2' textAlign='center'>
-              Add a new category for your company
+              {(this.props.location.data) ? 'Update Category' :
+              'Add a new category for your company'}
             </Header>
             <Form size='large' onSubmit={this.state.id === '' ? this.addCategory.bind(this) : this.updateCategory.bind(this)}>
               <Segment raised>
