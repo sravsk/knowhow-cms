@@ -25,12 +25,12 @@ Category.belongsTo(Company, {
 
 Category.hasMany(Article, {
   foreignKey: {
-    allowNull: false
+    allowNull: true
   }
 })
 
 Article.belongsTo(Category, {
-  allowNull: false
+  allowNull: true
 })
 
 Article.belongsTo(Company, {
@@ -48,6 +48,3 @@ var assoc = () => {
 };
 
 module.exports = assoc;
-
-
-
