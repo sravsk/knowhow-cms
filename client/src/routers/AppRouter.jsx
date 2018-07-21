@@ -17,6 +17,8 @@ import Editor from '../components/Editor.jsx';
 import ArticleContent from '../components/ArticleContent.jsx';
 import NewArticle from '../components/NewArticle.jsx';
 import NewCategory from '../components/NewCategory.jsx';
+import InviteUser from '../components/InviteUser.jsx';
+import SignupForCompany from '../components/SignupForCompany.jsx';
 
 const AppRouter =() => (
   <BrowserRouter>
@@ -36,6 +38,9 @@ const AppRouter =() => (
         <Route exact path='/articles/:articleId' component={ArticleContent} />
         <Route exact path='/devadminpage' component={devAdminPage} />
         <Route exact path='/addarticle' component={NewArticle} />
+        <Route exact path='/inviteuser' component={InviteUser} />
+        <Route exact path='/signupforcompany' component={SignupForCompany} />
+
       </Switch>
     </Container>
   </BrowserRouter>

@@ -144,6 +144,16 @@ app.post('/signupuser', (req, res) => {
   }
 });
 
+// send an invitation email to invite additional user for a company
+app.post('/inviteuser', (req, res) => {
+  var companyId = req.user.companyId;
+  var email = req.body.email;
+  console.log('in inviteuser', companyId, email)
+  db.inviteUser({companyId, email}, (invitationSent) => {
+    res.send(invitationSent);
+  });
+});
+
 // TODO - loginuser using passport local strategy
 app.post('/loginuser', (req, res) => {
   db.findUser({

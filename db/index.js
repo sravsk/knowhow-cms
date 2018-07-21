@@ -3,12 +3,12 @@ const Sequelize = require('sequelize');
 var connection = require('../config.js');
 
 var db = new Sequelize(connection.DBNAME, connection.DBUSERNAME, connection.DBPASSWORD, {
-  host: connection.DBHOST,
+  // host: connection.DBHOST,
   port: connection.DBPORT,
   dialect: 'mysql',
-  dialectOptions: {
-    ssl: 'Amazon RDS'
-  }
+  // dialectOptions: {
+  //   ssl: 'Amazon RDS'
+  // }
 });
 
 
