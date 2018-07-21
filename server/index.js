@@ -154,26 +154,32 @@ app.post('/loginuser', (req, res) => {
       let comparePassword = req.body.password;
       let name = user.name;
       bcrypt.compare(comparePassword, hash, (err, result) => {
-        // console.log('result of hash compare', hash, comparePassword, result, err)
-        // login comes from passport and creates a session and a cookie for the user
-        // make passport store userInfo in req.user
-        let userInfo = {
-          name: user.name,
-          companyId: user.companyId
-        };
-        req.login(userInfo, (err) => {
-          if (err) {
-            console.log(err);
-            res.sendStatus(404);
-          } else {
-            let response = {
-              name: user.name,
-              companyId: user.companyId,
-              found: true
+        if (result) { // valid user
+          let userInfo = {
+            name: user.name,
+            companyId: user.companyId
+          };
+          // login comes from passport and creates a session and a cookie for the user
+          // make passport store userInfo in req.user
+          req.login(userInfo, (err) => {
+            if (err) {
+              console.log(err);
+              res.sendStatus(404);
+            } else {
+              let response = {
+                name: user.name,
+                companyId: user.companyId,
+                found: true
+              }
+              res.send(response);
             }
-            res.send(response);
-          }
-        });
+          });
+        } else { // invalid user
+          let response = {
+            found: false
+          };
+          res.send(response);
+        }
       });
     } else {
       res.send('no user');
