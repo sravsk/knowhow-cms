@@ -37,3 +37,8 @@
  .segment-style {
   margin: -7vh -5vw 0 -5vw;
  }
+
+ .password-info {
+  margin-top: -1em;
+  color: red;
+ }

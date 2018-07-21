@@ -300,7 +300,7 @@ var dbHelpers = {
     testCompany.save().then(company => {
       // create user after companyId
       let testUser = User.build({
-        email: 'test1',
+        email: 'tester@gmail.com',
         role: 'admin',
         // password is same as email
         password: '$2b$10$SUgVljzdjCwkN9XEMQkSmOINmikU88HMdfz1SIQydAy3ttFwwS8Nm',

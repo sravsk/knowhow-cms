@@ -6,6 +6,7 @@ const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
+const expressValidator = require('express-validator');
 
 const db = require('../db/helpers.js');
 const sessionStore = require('./../db/models/session.js');
@@ -14,8 +15,9 @@ const app = express();
 const PORT = 3000;
 const saltRounds = 10;
 
-app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(expressValidator()); // this line must be immediately after any of the bodyParser middlewares
 
 app.use(express.static(path.resolve(__dirname, '../client/dist')));
 
@@ -67,39 +69,79 @@ var authMiddleware = function () {
   }
 };
 
+// if user is authenticated, redirect to homepage if they try accessing signup/login pages
+app.get('/signup', (req, res) => {
+  if (req.isAuthenticated()) {
+    res.redirect('/home');
+  } else {
+    res.sendFile(path.join(__dirname, '/../client/dist/index.html'));
+  }
+});
+
+app.get('/login', (req, res) => {
+  if (req.isAuthenticated()) {
+    res.redirect('/home');
+  } else {
+    res.sendFile(path.join(__dirname, '/../client/dist/index.html'));
+  }
+});
+
 app.post('/signupuser', (req, res) => {
-  // TODO - validate email, password
-  let password = req.body.password;
-  // hash the password by auto-gen a salt and hash
-  bcrypt.hash(password, saltRounds, (err, hash) => {
-    // store hash in database
-    if (hash) {
-      db.addUser({
-        name: req.body.name,
-        email: req.body.email,
-        password: hash,
-        company: req.body.company,
-        domain: req.body.domain
-      }, (isUserCreated, userInfo, error) => {
-        if (error) {
-          res.send('duplicate email');
-        } else if (isUserCreated) {
-          // login comes from passport and creates a session and a cookie for the user
-          // make passport store userInfo in req.user
-          req.login(userInfo, (err) => {
-            if (err) {
-              console.log(err);
-              res.sendStatus(404);
-            } else {
-              res.send(userInfo);
-            }
-          });
-        } else {
-          res.send('user exists');
-        }
-      });
-    }
-  });
+  // data validation using express-validator
+  req.checkBody('email', 'The email you entered is invalid. Please try again.').isEmail();
+  req.checkBody('password', 'Password must be between 8-100 characters long.').len(8, 100);
+  var errors = req.validationErrors();
+  if (errors) {
+    let data = {
+      signup: false,
+      errors: errors
+    };
+    res.send(data);
+  } else {
+    let password = req.body.password;
+    // hash the password by auto-gen a salt and hash
+    bcrypt.hash(password, saltRounds, (err, hash) => {
+      // store hash in database
+      if (hash) {
+        db.addUser({
+          name: req.body.name,
+          email: req.body.email,
+          password: hash,
+          company: req.body.company,
+          domain: req.body.domain
+        }, (isUserCreated, userInfo, error) => {
+          if (error) {
+            let data = {
+              signup: false,
+              message: 'duplicate email'
+            };
+            res.send(data);
+          } else if (isUserCreated) {
+            // login comes from passport and creates a session and a cookie for the user
+            // make passport store userInfo in req.user
+            req.login(userInfo, (err) => {
+              if (err) {
+                console.log(err);
+                res.sendStatus(404);
+              } else {
+                let data = {
+                  signup: true,
+                  userInfo: userInfo
+                };
+                res.send(data);
+              }
+            });
+          } else {
+            let data = {
+              signup: false,
+              message: 'user exists'
+            };
+            res.send(data);
+          }
+        });
+      }
+    });
+  }
 });
 
 // TODO - loginuser using passport local strategy
@@ -241,22 +283,6 @@ app.get('/api/:companyId', (req, res) => {
 //   res.send(req.user);
 // });
 
-// if user is authenticated, redirect to homepage if they try accessing signup/login pages
-app.get('/signup', (req, res) => {
-  if (req.isAuthenticated()) {
-    res.redirect('/home');
-  } else {
-    res.sendFile(path.join(__dirname, '/../client/dist/index.html'));
-  }
-});
-
-app.get('/login', (req, res) => {
-    if (req.isAuthenticated()) {
-    res.redirect('/home');
-  } else {
-    res.sendFile(path.join(__dirname, '/../client/dist/index.html'));
-  }
-});
 
 // to get name and companyId of logged in user
 app.get('/user', (req, res) => {
