@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import { Container, Menu, Header, Button, Input } from 'semantic-ui-react';
+import { Container, Menu, Header, Button, Input, Search } from 'semantic-ui-react';
 import axios from 'axios';
 
 class NavBar extends React.Component {
@@ -77,7 +77,7 @@ class NavBar extends React.Component {
               <p>Hello {this.state.user}</p>
             </Menu.Item>
             <Menu.Item>
-              <Input placeholder='Search docs'></Input>
+              <Search placeholder='Search docs'/>
             </Menu.Item>
             <Menu.Item>
               <Button primary onClick={this.handleLogout.bind(this)}>Log out</Button>

@@ -61,7 +61,7 @@ class NewCategory extends React.Component {
 
   render() {
     return (
-      <Segment raised style={{ 'margin': '-7vh -5vw 0 -5vw', 'height': '100vh' }}>
+      <Segment raised style={{ 'marginTop': '-7vh', 'height': '100vh' }}>
         <NavBar />
         <br/>
         <Grid centered>
