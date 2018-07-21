@@ -125,7 +125,7 @@ class NewArticle extends React.Component{
                 floating
                 className='icon'
                 icon='bars'
-                text='Select Category'
+                placeholder='Select Category'
                 options={this.state.categories}
                 value={this.state.category}
                 onChange={this.handleSelectCategory}
