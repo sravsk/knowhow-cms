@@ -55,7 +55,7 @@ class NavBar extends React.Component {
         <Container className='navbar'>
         <Menu fixed='top' inverted>
           <Menu.Item>
-            <Link to='/home'><Header as='h1' color ='blue'>Know-how</Header></Link>
+            <Link to='/home'><Header as='h1' style={{ 'color': '#61dafb' }}>Know-how</Header></Link>
           </Menu.Item>
           <Menu.Item position='right'>
            <Button primary><Link className='nav-button' to='/signup'>Signup</Link></Button>
@@ -71,7 +71,7 @@ class NavBar extends React.Component {
         <Container className='navbar'>
           <Menu fixed='top' inverted>
             <Menu.Item>
-              <Link to='/home'><Header as='h1' color ='blue'>Know-how</Header></Link>
+              <Link to='/home'><Header as='h1' style={{ 'color': '#61dafb' }}>Know-how</Header></Link>
             </Menu.Item>
             <Menu.Item  position='right'>
               <p>Hello {this.state.user}</p>

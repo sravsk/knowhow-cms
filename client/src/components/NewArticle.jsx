@@ -1,5 +1,5 @@
 import React from 'react';
-import { Segment, Form, Button, Input, Dropdown, Grid } from 'semantic-ui-react';
+import { Segment, Form, Button, Input, Dropdown, Grid, Header } from 'semantic-ui-react';
 import Editor from './Editor.jsx';
 import NavBar from './NavBar.jsx';
 import ReactQuill from 'react-quill';
@@ -132,25 +132,23 @@ class NewArticle extends React.Component{
               />
               <br />
               <Form>
-                <h3>Article Title</h3>
+                <Header as='h3' textAlign='left'>Article Title</Header>
                 <Input
                   fluid
                   placeholder='New Article Title'
                   onChange={this.handleTitleChange}
                   value={this.state.title}
                 />
-                <br />
 
-                <h3>Article Description</h3>
+                <Header as='h3' textAlign='left'>Article Description</Header>
                 <Input
                   placeholder='Article description'
                   onChange={this.handleDescriptionChange}
                   fluid
                   value={this.state.description}
                 />
-                <br />
 
-                <h3>Article Content</h3>
+                <Header as='h3' textAlign='left'>Article Content</Header>
                 <ReactQuill
                   className="editor"
                   placeholder={"Contribute content . . . "}
@@ -164,7 +162,6 @@ class NewArticle extends React.Component{
                   value={this.state.content}
                   style={{ 'minHeight': '15vh' }}
                 />
-                <br />
 
                 <Button
                   content='Save Article'

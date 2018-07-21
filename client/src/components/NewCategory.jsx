@@ -74,7 +74,7 @@ class NewCategory extends React.Component {
             <Form size='large' onSubmit={this.state.id === '' ? this.addCategory.bind(this) : this.updateCategory.bind(this)}>
               <Segment raised>
                 <br />
-                <h3>Category Name</h3>
+                <Header as='h3' textAlign='left'>Category Name</Header>
                 <Form.Input
                   name='categoryName'
                   value={this.state.categoryName}
@@ -82,8 +82,7 @@ class NewCategory extends React.Component {
                   placeholder='Category Name'
                   onChange={this.handleChange.bind(this)}
                 />
-                <br />
-                <h3>Category Description</h3>
+                <Header as='h3' textAlign='left'>Category Description</Header>
                 <Form.Input
                   name='categoryDescription'
                   value={this.state.categoryDescription}
