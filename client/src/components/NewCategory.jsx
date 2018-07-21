@@ -64,8 +64,8 @@ class NewCategory extends React.Component {
       <Segment raised style={{ 'margin': '-7vh -5vw 0 -5vw', 'height': '100vh' }}>
         <NavBar />
         <br/>
-        <Grid verticalAlign='center'>
-          <Grid.Column celled style={{ maxWidth: '80%', 'backgroundColor': 'rgba(240, 240, 240, 0.5)' }}>
+        <Grid centered>
+          <Grid.Column style={{ maxWidth: '80%', 'backgroundColor': 'rgba(240, 240, 240, 0.5)' }}>
             <Header as='h2' textAlign='center'>
               {(this.props.location.data) ? 'Update Category' :
               'New Category'}
