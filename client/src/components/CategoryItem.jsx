@@ -11,7 +11,12 @@ class CategoryItem extends React.Component {
     return (
       <Item className='background item'>
         <Item.Header style={{ fontSize: '1.2em', paddingBottom: '0.5em' }} >
-          <Link to={`/${this.props.category.companyId}/categories/${this.props.category.id}/articles`}>{this.props.category.name}</Link>
+          <Link to={{
+            pathname: `/${this.props.category.companyId}/categories/${this.props.category.id}/articles`,
+            state: {
+              categoryName: this.props.category.name
+            }
+          }}>{this.props.category.name}</Link>
           <Button compact color='red' icon='trash alternate' floated='right' onClick={() => this.props.handleDelete(this.props.category)} />
           <Button compact floated='right' >
             <Link to={{

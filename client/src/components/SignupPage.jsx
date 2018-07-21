@@ -34,16 +34,24 @@ class SignupPage extends React.Component {
       var data = {
         name: this.state.name,
         email: this.state.email,
-        password: this.state.email,
+        password: this.state.password,
         company: this.state.company,
         domain: this.state.domain
       };
       axios.post('/signupuser', data)
         .then(result => {
-          if (result.data === 'user exists') {
-            alert('An admin user already exists for this company. Contact admin to sign up.');
-          } else if (result.data === 'duplicate email') {
-            alert('User with given email already exists.');
+          if (!result.data.signup) {
+            if (result.data.message === 'user exists') {
+              alert('An admin user already exists for this company. Contact admin to sign up.');
+            } else if (result.data.message === 'duplicate email') {
+              alert('User with given email already exists.');
+            } else {
+              let errors = result.data.errors;
+              var messages = errors.map((error) => {
+                return error.msg;
+              });
+              alert(messages);
+            }
           } else {
             this.setState({
               onHome: true
@@ -108,6 +116,7 @@ class SignupPage extends React.Component {
                     value={this.state.password}
                     onChange={this.handleChange.bind(this)}
                   />
+                  <p className='password-info'>Password must be between 8-100 characters long.</p>
                   <Form.Input
                     fluid
                     icon='lock'

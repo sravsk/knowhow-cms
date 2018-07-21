@@ -48,14 +48,14 @@ class Home extends React.Component {
       var info = <CategoriesPage />
     }
     return (
-      <Segment raised  style={{ 'marginTop': '-5em'}}>
+      <Segment raised style={{ 'margin': '-7vh -5vw 0 -5vw' }}>
         <NavBar />
-        <Button floated='left' style={{'width': '40%'}}><Link to='#' className='button-text-color'>{this.state.company}</Link></Button>
+        <Header as='h1' color='blue' style={{ 'margin': '0 0 -4vh 0', 'paddingLeft': '2vh' }}>{this.state.company}</Header>
         <Button floated='right'><Link to='/addcategory' className='button-text-color'>Add New Category</Link></Button>
-        <Button floated='right' ><Link to='/newarticle' className='button-text-color'>Add New Article</Link></Button>
+        <Button floated='right' ><Link to='/addarticle' className='button-text-color'>Add New Article</Link></Button>
         <br /><br />
-        <Grid container celled>
-          <Grid.Column width={3} className='background'>
+        <Grid celled>
+          <Grid.Column width={3} className='background sidebar'>
             <br/><br/>
             <Button fluid style={{ 'color': '#2185d0'}} onClick={this.showArticles.bind(this)}>Articles</Button><br/>
             <Button fluid style={{ 'color': '#2185d0'}} onClick={this.showCategories.bind(this)}>Categories</Button>

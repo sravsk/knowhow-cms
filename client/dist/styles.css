@@ -10,10 +10,15 @@
   color: white;
 }
 
+.sidebar {
+  position: fixed;
+}
+
 .content-main {
   height: 100vh;
   background: url(https://www.smta.org/images/knowledgebase-LAPTOP-smta-600.png) no-repeat center;
   background-size: 100vh;
+  margin: -5vh -5vw;
   border: none;
  }
 
@@ -27,4 +32,13 @@
 
  .button-text-color {
   color: '#2185d0';
+ }
+
+ .segment-style {
+  margin: -7vh -5vw 0 -5vw;
+ }
+
+ .password-info {
+  margin-top: -1em;
+  color: red;
  }

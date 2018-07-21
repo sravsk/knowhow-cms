@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Item, Button, Segment, Header, Icon, Modal } from 'semantic-ui-react';
+import { Container, Item, Button, Segment, Header, Icon, Modal, Grid } from 'semantic-ui-react';
 import NavBar from './NavBar.jsx';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
@@ -27,9 +27,10 @@ class ArticleContent extends React.Component {
     let articleId = this.props.match.params;
     let article = this.props.location.state.article;
     return (
-      <Segment raised  style={{ 'minHeight': '100vh'}}>
+      <Segment raised style={{ 'margin': '-9vh -5vw 0 -5vw','minHeight': '90vh'}}>
+        <NavBar />
         <br />
-        <Modal open={this.state.open} trigger={<Button floated='right' onClick={this.toggleModal}>Delete Article</Button>} basic size='small'>
+        <Modal open={this.state.open} trigger={<Button floated='right' style={{ 'color': '#2185d0'}} onClick={this.toggleModal}>Delete Article</Button>} basic size='small'>
           <Modal.Content>
             <p>
               {`You are about to delete ${article.title}.  Continue?`}
@@ -46,7 +47,7 @@ class ArticleContent extends React.Component {
         </Modal>
         <Button floated='right'>
           <Link to={{
-            pathname: '/newarticle',
+            pathname: '/addarticle',
             state: {
               title: article.title,
               description: article.description,
@@ -54,15 +55,17 @@ class ArticleContent extends React.Component {
               category: article.categoryId,
               id: article.id
             }
-          }} >Edit Article</Link>
+          }} className='button-text-color'>Edit Article</Link>
         </Button>
-        <Header as='h2' attached='top' style={{'marginTop': '7vh'}} >
-          {article.title}
-        </Header>
-        <Header as='h3' attached='top, bottom'>
-          {article.description}
-        </Header>
-        <Segment style={{ 'minHeight': '60vh' }}>
+        <Segment style={{ 'marginTop': '5vh', 'padding': '3vh 0', textAlign: 'center' }}>
+          <Header as='h1' style={{'lineHeight': '80%'}}>
+            {article.title}
+          </Header>
+          <Header as='h3' style={{'lineHeight': '80%'}}>
+            {article.description}
+          </Header>
+        </Segment>
+        <Segment style={{ 'minHeight': '70vh' }}>
           <div dangerouslySetInnerHTML={{__html: article.content}}></div>
         </Segment>
       </Segment>

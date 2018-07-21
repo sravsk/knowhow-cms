@@ -1,6 +1,7 @@
 import React from 'react';
-import { Container, Form, Button, Input, Dropdown } from 'semantic-ui-react';
+import { Segment, Form, Button, Input, Dropdown, Grid } from 'semantic-ui-react';
 import Editor from './Editor.jsx';
+import NavBar from './NavBar.jsx';
 import ReactQuill from 'react-quill';
 import axios from 'axios';
 
@@ -109,62 +110,72 @@ class NewArticle extends React.Component{
 
   render() {
     return (
-      <Container>
-        <h1>{this.props.location.state ? 'Edit Article' : 'New Article'}</h1>
-        <Dropdown
-          button
-          search
-          labeled
-          fluid
-          floating
-          className='icon'
-          icon='bars'
-          text='Select Category'
-          options={this.state.categories}
-          value={this.state.category}
-          onChange={this.handleSelectCategory}
-        />
-        <br />
-        <Form>
-          <h3>Title</h3>
-          <Input
-            placeholder='New Article Title'
-            onChange={this.handleTitleChange}
-            value={this.state.title}
-          />
-          <br />
-          <br />
+      <Segment raised style={{ 'margin': '-7vh -5vw 0 -5vw', 'height': '100vh' }}>
+        <NavBar />
+        <Grid verticalAlign='center'>
+          <Grid.Column celled style={{ maxWidth: '80%', 'backgroundColor': 'rgba(240, 240, 240, 0.5)' }}>
+            <h2>{this.props.location.state ? 'Edit Article' : 'New Article'}</h2>
+            <br />
+            <Segment raised>
+              <Dropdown
+                button
+                search
+                labeled
+                fluid
+                floating
+                className='icon'
+                icon='bars'
+                text='Select Category'
+                options={this.state.categories}
+                value={this.state.category}
+                onChange={this.handleSelectCategory}
+              />
+              <br />
+              <Form>
+                <h3>Article Title</h3>
+                <Input
+                  fluid
+                  placeholder='New Article Title'
+                  onChange={this.handleTitleChange}
+                  value={this.state.title}
+                />
+                <br />
 
-          <h3>Description</h3>
-          <Input
-            placeholder='Article description'
-            onChange={this.handleDescriptionChange}
-            fluid
-            value={this.state.description}
-          />
-          <br />
+                <h3>Article Description</h3>
+                <Input
+                  placeholder='Article description'
+                  onChange={this.handleDescriptionChange}
+                  fluid
+                  value={this.state.description}
+                />
+                <br />
 
-          <h3>Content</h3>
-          <ReactQuill
-            className="editor"
-            placeholder={"Contribute content . . . "}
-            className="content"
-            ref={(el) => { this.reactQuillRef = el }}
-            modules={this.state.modules}
-            formats={this.state.formats}
-            theme="snow"
-            bounds={'.editor'}
-            onChange={this.handleContentChange}
-            value={this.state.content}
-          />
-          <br />
+                <h3>Article Content</h3>
+                <ReactQuill
+                  className="editor"
+                  placeholder={"Contribute content . . . "}
+                  className="content"
+                  ref={(el) => { this.reactQuillRef = el }}
+                  modules={this.state.modules}
+                  formats={this.state.formats}
+                  theme="snow"
+                  bounds={'.editor'}
+                  onChange={this.handleContentChange}
+                  value={this.state.content}
+                  style={{ 'minHeight': '15vh' }}
+                />
+                <br />
 
-          <Button
-            content='Save Article'
-            onClick={this.saveArticle}
-          />
-        </Form>
-      </Container>
+                <Button
+                  content='Save Article'
+                  onClick={this.saveArticle}
+                  style={{ 'color': '#2185d0'}}
+                />
+              </Form>
+            </Segment>
+          </Grid.Column>
+        </Grid>
+      </Segment>
     )
   }
 };
