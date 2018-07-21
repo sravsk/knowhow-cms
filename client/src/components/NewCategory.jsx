@@ -91,7 +91,9 @@ class NewCategory extends React.Component {
                   onChange={this.handleChange.bind(this)}
                 />
                 <br />
-                <Form.Button content='Save Category' style={{ 'color': '#2185d0'}}/>
+                <Container textAlign='center'>
+                  <Form.Button content='Save Category' style={{ 'color': '#2185d0', 'width': '20vw' }}/>
+                </Container>
               </Segment>
             </Form>
           </Grid.Column>
