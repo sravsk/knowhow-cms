@@ -29,7 +29,7 @@ class CategoriesPage extends React.Component {
 
   handleDelete(obj) {
       axios.post('/deletecategory', {id: obj.id, coId: obj.companyId})
-      .then(res => this.setState({categories: res.data}, () => this.forceUpdate()))
+      .then(res => this.setState({categories: res.data}))
   }
 
   render() {
