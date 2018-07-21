@@ -206,16 +206,16 @@ var dbHelpers = {
 
   // update an article
   updateArticle: (article, cb) => {
-    Article.findById(article.id)
+    Article.findById(JSON.parse(article).id)
     .then(record => {
       if (record === null){
         cb(record)
       } else {
         record.update({
-          title: article.title,
-          description: article.description,
-          content: article.content,
-          categoryId: article.categoryId
+          title: JSON.parse(article).title,
+          description: JSON.parse(article).description,
+          content: JSON.parse(article).content,
+          categoryId: JSON.parse(article).categoryId
         })
         .then(response => cb(response))
         cb(result.dataValues)
