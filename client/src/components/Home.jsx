@@ -51,6 +51,7 @@ class Home extends React.Component {
       <Segment raised style={{ 'marginTop': '-8vh' }}>
         <NavBar />
         <Header as='h1' color='blue' style={{ 'margin': '0 0 -4vh 0', 'paddingLeft': '2vh' }}>{this.state.company}</Header>
+        <Button floated='right'><Link to='/inviteuser'>Invite a new user for your company</Link></Button>
         <Button floated='right'><Link to='/addcategory' className='button-text-color'>Add New Category</Link></Button>
         <Button floated='right' ><Link to='/addarticle' className='button-text-color'>Add New Article</Link></Button>
         <br /><br />

@@ -4,10 +4,10 @@ const Company = require('./Models/Company');
 const User = require('./Models/User');
 const Category = require('./Models/Category');
 const Article = require('./Models/Article');
-
+const Invitation = require('./Models/Invitation');
 const bcrypt = require('bcrypt');
-
-
+const sgMail = require('@sendgrid/mail');
+const key = require('../config.js').SENDGRID_API_KEY;
 
 // This creates the tables in the database and their relationships.
 assoc();
@@ -84,6 +84,66 @@ var dbHelpers = {
       }
     })
   },
+
+  // invite additional users, send an email invite with a random code using sendgrid
+  // save companyId and code in invitations table
+  inviteUser: ({companyId, email}, cb) => {
+    // generate a random 6 digit number
+    var num = Math.floor(Math.random() * 900000) + 100000;
+
+    // save companyId and random number in invitations table
+    let invite = Invitation.build({
+      code: num,
+      companyId: companyId
+    });
+    invite.save();
+
+    // send an invitation email with code
+    sgMail.setApiKey(key);
+    const msg = {
+      to: email,
+      from: 'knowhowrpt@gmail.com',
+      subject: 'Invitation to join Knowhow',
+      text: `Enter code ${num} at signup`
+    };
+    sgMail.send(msg);
+    cb(true);
+  },
+
+// TODO - fix function below
+  // // add user with a code
+  // addUserWithCode: ({name, email, password, code}, cb) => {
+  //   User.findOne({
+  //     where: {email: email}
+  //   })
+  //   .then(result => {
+  //     if (result !== null) {
+  //       // a user already exists with this email
+  //       cb(false)
+  //     } else
+  //         // find companyId with code
+  //         Invitation.find({
+  //           where: {code: code}
+  //         })
+  //         .then(invite => {
+  //           let companyId = invite.companyId;
+  //           // create user
+  //           User.create({
+  //             name: name,
+  //             email: email,
+  //             password: password,
+  //             role: 'admin',
+  //             companyId: companyId
+  //           })
+  //           .then(user => {
+  //             cb(true);
+  //           })
+  //         })
+
+  //       })
+  //     }
+  //   }
+  // },
 
   // authenticateUser: ({email, password}, cb) => {
   //   // console.log('in authenticateUser function')
