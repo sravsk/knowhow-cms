@@ -48,7 +48,7 @@ class Home extends React.Component {
       var info = <CategoriesPage />
     }
     return (
-      <Segment raised style={{ 'margin': '-7vh -5vw 0 -5vw' }}>
+      <Segment raised style={{ 'marginTop': '-8vh' }}>
         <NavBar />
         <Header as='h1' color='blue' style={{ 'margin': '0 0 -4vh 0', 'paddingLeft': '2vh' }}>{this.state.company}</Header>
         <Button floated='right'><Link to='/addcategory' className='button-text-color'>Add New Category</Link></Button>
