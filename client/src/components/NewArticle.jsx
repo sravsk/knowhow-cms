@@ -1,5 +1,5 @@
 import React from 'react';
-import { Segment, Form, Button, Input, Dropdown, Grid, Header } from 'semantic-ui-react';
+import { Segment, Form, Button, Input, Dropdown, Grid, Header, Container } from 'semantic-ui-react';
 import Editor from './Editor.jsx';
 import NavBar from './NavBar.jsx';
 import ReactQuill from 'react-quill';
@@ -114,7 +114,7 @@ class NewArticle extends React.Component{
         <NavBar />
         <Grid centered>
           <Grid.Column style={{ maxWidth: '80%', 'backgroundColor': 'rgba(240, 240, 240, 0.5)' }}>
-            <h2>{this.props.location.state ? 'Edit Article' : 'New Article'}</h2>
+            <Header as='h2' textAlign='center'>{this.props.location.state ? 'Edit Article' : 'New Article'}</Header>
             <br />
             <Segment raised>
               <Dropdown
@@ -162,11 +162,13 @@ class NewArticle extends React.Component{
                   value={this.state.content}
                   style={{ 'minHeight': '15vh' }}
                 />
-                <Button
-                  content='Save Article'
-                  onClick={this.saveArticle}
-                  style={{ 'color': '#2185d0'}}
-                />
+                <Container textAlign='center'>
+                  <Button
+                    content='Save Article'
+                    onClick={this.saveArticle}
+                    style={{ 'color': '#2185d0', 'width': '20vw'}}
+                  />
+                </Container>
               </Form>
             </Segment>
           </Grid.Column>
