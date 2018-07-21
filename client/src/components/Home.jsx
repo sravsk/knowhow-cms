@@ -13,8 +13,7 @@ class Home extends React.Component {
     this.state = {
       showArticles: true,
       showCategories: false,
-      company: '',
-      inviteUser: false
+      company: ''
     }
   }
 
@@ -47,8 +46,6 @@ class Home extends React.Component {
       var info = <CompanyArticles />
     } else if (this.state.showCategories) {
       var info = <CategoriesPage />
-    } else if (this.state.inviteUser) {
-      <Redirect to='/invite' />
     }
     return (
       <Segment raised style={{ 'marginTop': '-8vh' }}>
