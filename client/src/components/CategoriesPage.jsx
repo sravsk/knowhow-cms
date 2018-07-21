@@ -10,7 +10,6 @@ class CategoriesPage extends React.Component {
     this.state = {
       categories: []
     }
-    this.forceUpdate = this.forceUpdate.bind(this);
   }
 
   componentDidMount() {
