@@ -295,6 +295,17 @@ app.get('/api/:companyId', (req, res) => {
   });
 });
 
+app.get('/api/article/:articleId', (req, res) => {
+  //enable CORS for this route
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, HEAD');
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  let articleId = req.params.articleId;
+  db.fetchOneArticle(articleId, (data) => {
+    res.send(data);
+  });
+});
+
 
 // app.post('/loginuser', passport.authenticate('local'), (req, res) => {
 //   console.log('user authenticated')
