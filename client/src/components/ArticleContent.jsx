@@ -27,7 +27,7 @@ class ArticleContent extends React.Component {
     let articleId = this.props.match.params;
     let article = this.props.location.state.article;
     return (
-      <Segment raised style={{ 'margin': '-9vh -5vw 0 -5vw','minHeight': '90vh'}}>
+      <Segment raised style={{ 'margin': '-9vh -5vw 0 -5vw','minHeight': '90vh' }}>
         <NavBar />
         <br />
         <Modal open={this.state.open} trigger={<Button floated='right' style={{ 'color': '#2185d0'}} onClick={this.toggleModal}>Delete Article</Button>} basic size='small'>
@@ -57,15 +57,15 @@ class ArticleContent extends React.Component {
             }
           }} className='button-text-color'>Edit Article</Link>
         </Button>
-        <Segment style={{ 'marginTop': '5vh', 'padding': '3vh 0', textAlign: 'center' }}>
-          <Header as='h1' style={{'lineHeight': '80%'}}>
+        <Segment style={{ 'marginTop': '5vh', 'padding': '3vh 0', textAlign: 'center', 'backgroundColor': 'rgba(240, 240, 240, 0.5)' }}>
+          <Header as='h1' style={{'lineHeight': '80%' }}>
             {article.title}
           </Header>
           <Header as='h3' style={{'lineHeight': '80%'}}>
             {article.description}
           </Header>
         </Segment>
-        <Segment style={{ 'minHeight': '70vh' }}>
+        <Segment style={{ 'minHeight': '70vh', 'backgroundColor': 'rgba(240, 240, 240, 0.5)' }}>
           <div dangerouslySetInnerHTML={{__html: article.content}}></div>
         </Segment>
       </Segment>

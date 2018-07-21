@@ -112,8 +112,8 @@ class NewArticle extends React.Component{
     return (
       <Segment raised style={{ 'margin': '-7vh -5vw 0 -5vw', 'height': '100vh' }}>
         <NavBar />
-        <Grid verticalAlign='center'>
-          <Grid.Column celled style={{ maxWidth: '80%', 'backgroundColor': 'rgba(240, 240, 240, 0.5)' }}>
+        <Grid centered>
+          <Grid.Column style={{ maxWidth: '80%', 'backgroundColor': 'rgba(240, 240, 240, 0.5)' }}>
             <h2>{this.props.location.state ? 'Edit Article' : 'New Article'}</h2>
             <br />
             <Segment raised>
@@ -125,7 +125,7 @@ class NewArticle extends React.Component{
                 floating
                 className='icon'
                 icon='bars'
-                text='Select Category'
+                placeholder='Select Category'
                 options={this.state.categories}
                 value={this.state.category}
                 onChange={this.handleSelectCategory}
@@ -162,7 +162,6 @@ class NewArticle extends React.Component{
                   value={this.state.content}
                   style={{ 'minHeight': '15vh' }}
                 />
-
                 <Button
                   content='Save Article'
                   onClick={this.saveArticle}

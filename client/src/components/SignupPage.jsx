@@ -116,7 +116,7 @@ class SignupPage extends React.Component {
                     value={this.state.password}
                     onChange={this.handleChange.bind(this)}
                   />
-                  <p className='password-info'>Password must be between 8-100 characters long.</p>
+                  {/*<p className='password-info'>Password must be between 8-100 characters long.</p>*/}
                   <Form.Input
                     fluid
                     icon='lock'
