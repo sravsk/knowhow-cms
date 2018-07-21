@@ -42,3 +42,7 @@
   margin-top: -1em;
   color: red;
  }
+
+img {
+  max-width: 100%;
+}
