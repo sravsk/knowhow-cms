@@ -7,7 +7,7 @@ const Article = require('./Models/Article');
 const Invitation = require('./Models/Invitation');
 const bcrypt = require('bcrypt');
 const sgMail = require('@sendgrid/mail');
-const key = require('../config.js').SENDGRID_API_KEY;
+const key = process.env.SENDGRID_API_KEY || require('../config.js').SENDGRID_API_KEY;
 
 // This creates the tables in the database and their relationships.
 assoc();
