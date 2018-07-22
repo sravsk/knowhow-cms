@@ -1,10 +1,15 @@
 const Sequelize = require('sequelize');
 
-var connection = process.env || require('../config.js');
+// var connection = require('../config.js');
+const DBNAME = process.env.DBNAME || require('../config.js').DBNAME
+const DBUSERNAME = process.env.DBUSERNAME || require('../config.js').DBUSERNAME
+const DBPASSWORD = process.env.DBPASSWORD || require('../config.js').DBPASSWORD
+const DBHOST = process.env.DBHOST || require('../config.js').DBHOST
+const DBPORT = process.env.DBPORT || require('../config.js').DBPORT
 
-var db = new Sequelize(connection.DBNAME, connection.DBUSERNAME, connection.DBPASSWORD, {
-  host: connection.DBHOST,
-  port: connection.DBPORT,
+var db = new Sequelize(DBNAME, DBUSERNAME, DBPASSWORD, {
+  host: DBHOST,
+  port: DBPORT,
   dialect: 'mysql',
   dialectOptions: {
     ssl: 'Amazon RDS'
