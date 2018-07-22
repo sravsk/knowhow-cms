@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 
-var connection = require('../config.js');
+var connection = process.env || require('../config.js');
 
 var db = new Sequelize(connection.DBNAME, connection.DBUSERNAME, connection.DBPASSWORD, {
   host: connection.DBHOST,
