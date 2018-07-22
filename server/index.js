@@ -9,10 +9,10 @@ const LocalStrategy = require('passport-local').Strategy;
 const expressValidator = require('express-validator');
 
 const db = require('../db/helpers.js');
-const sessionStore = require('./../db/models/session.js');
+const sessionStore = require('../db/Models/Session.js');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 const saltRounds = 10;
 
 app.use(bodyParser.json());
