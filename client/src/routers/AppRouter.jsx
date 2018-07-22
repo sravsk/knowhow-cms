@@ -8,7 +8,7 @@ import LandingPage from '../components/LandingPage.jsx';
 import NavBar from '../components/NavBar.jsx';
 import LoginPage from '../components/LoginPage.jsx';
 import SignupPage from '../components/SignupPage.jsx';
-import Home from '../components/home.jsx';
+import Home from '../components/Home.jsx';
 import devAdminPage from '../components/devAdminPage.jsx';
 import CategoriesPage from '../components/CategoriesPage.jsx';
 import CompanyArticles from '../components/CompanyArticles.jsx';
