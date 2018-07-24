@@ -5,7 +5,7 @@ const User = require('./Models/User');
 const Category = require('./Models/Category');
 const Article = require('./Models/Article');
 const Invitation = require('./Models/Invitation');
-const bcrypt = require('bcrypt');
+const bcryptjs = require('bcryptjs');
 const sgMail = require('@sendgrid/mail');
 const key = process.env.SENDGRID_API_KEY || require('../config.js').SENDGRID_API_KEY;
 

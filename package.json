@@ -4,8 +4,6 @@
   "main": "index.js",
   "scripts": {
     "start": "node server/index.js",
-    "postinstall": "npm run build",
-    "build": "webpack",
     "dev-start": "nodemon server/index.js",
     "dev-build": "webpack -d --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -26,8 +24,8 @@
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.5",
     "babel-preset-env": "^1.7.0",
-    "bcrypt": "^3.0.0",
     "bcrypt-nodejs": "0.0.3",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "connect-session-sequelize": "^5.2.2",
     "cookie-parser": "^1.4.3",

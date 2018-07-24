@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
-const bcrypt = require('bcrypt');
+const bcryptjs = require('bcryptjs');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
@@ -100,7 +100,7 @@ app.post('/signupuser', (req, res) => {
   } else {
     let password = req.body.password;
     // hash the password by auto-gen a salt and hash
-    bcrypt.hash(password, saltRounds, (err, hash) => {
+    bcryptjs.hash(password, saltRounds, (err, hash) => {
       // store hash in database
       if (hash) {
         db.addUser({
@@ -163,7 +163,7 @@ app.post('/loginuser', (req, res) => {
       let hash = user.password;
       let comparePassword = req.body.password;
       let name = user.name;
-      bcrypt.compare(comparePassword, hash, (err, result) => {
+      bcryptjs.compare(comparePassword, hash, (err, result) => {
         if (result) { // valid user
           let userInfo = {
             name: user.name,
