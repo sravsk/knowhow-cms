@@ -98,40 +98,33 @@ var dbHelpers = {
     });
   },
 
-// TODO - fix function below
-  // // add user with a code
-  // addUserWithCode: ({name, email, password, code}, cb) => {
-  //   User.findOne({
-  //     where: {email: email}
-  //   })
-  //   .then(result => {
-  //     if (result !== null) {
-  //       // a user already exists with this email
-  //       cb(false)
-  //     } else
-  //         // find companyId with code
-  //         Invitation.find({
-  //           where: {code: code}
-  //         })
-  //         .then(invite => {
-  //           let companyId = invite.companyId;
-  //           // create user
-  //           User.create({
-  //             name: name,
-  //             email: email,
-  //             password: password,
-  //             role: 'admin',
-  //             companyId: companyId
-  //           })
-  //           .then(user => {
-  //             cb(true);
-  //           })
-  //         })
+  checkInvite: (hash, cb) => {
+    Invitation.find({
+      where: {hash: hash}
+    })
+    .then(invite => {
+      if (invite === null) {
+        cb(null);
+      } else {
+        cb(invite.dataValues.companyId, invite.dataValues.email, invite.dataValues.role);
+      }
+    });
+  },
 
-  //       })
-  //     }
-  //   }
-  // },
+  addUserWithCode: ({email, name, password, role, companyId}, cb) => {
+    let user = User.build({
+      email: email,
+      name: name,
+      password: password,
+      role: role,
+      companyId: companyId
+    });
+    user.save()
+    .then(done => {
+      cb(true);
+    })
+  },
+
 
   // authenticateUser: ({email, password}, cb) => {
   //   // console.log('in authenticateUser function')
