@@ -91,7 +91,7 @@ class SignupPage extends React.Component {
                     fluid
                     icon='user'
                     iconPosition='left'
-                    placeholder='Name'
+                    placeholder='Enter Name'
                     name='name'
                     value={this.state.name}
                     onChange={this.handleChange.bind(this)}
@@ -100,7 +100,7 @@ class SignupPage extends React.Component {
                     fluid
                     icon='mail'
                     iconPosition='left'
-                    placeholder='Email'
+                    placeholder='Enter Email'
                     name='email'
                     value={this.state.email}
                     onChange={this.handleChange.bind(this)}
@@ -109,7 +109,7 @@ class SignupPage extends React.Component {
                     fluid
                     icon='lock'
                     iconPosition='left'
-                    placeholder='Password'
+                    placeholder='Enter Password'
                     type='password'
                     name='password'
                     value={this.state.password}
@@ -132,7 +132,7 @@ class SignupPage extends React.Component {
                     fluid
                     icon='building'
                     iconPosition='left'
-                    placeholder='Company Name'
+                    placeholder='Enter Company Name'
                     name='company'
                     value={this.state.company}
                     onChange={this.handleChange.bind(this)}
@@ -141,7 +141,7 @@ class SignupPage extends React.Component {
                     fluid
                     icon='building'
                     iconPosition='left'
-                    placeholder='Domain'
+                    placeholder='Enter Domain'
                     name='domain'
                     value={this.state.domain}
                     onChange={this.handleChange.bind(this)}
@@ -151,7 +151,7 @@ class SignupPage extends React.Component {
               </Segment.Group>
             </Form>
             <Message>
-              <strong>Signing up with a code?</strong><br/><br/><Link to='/signupforcompany'><Button primary fluid>Go to sign up with code</Button></Link>
+              <strong>Signing up with a code?</strong><br/><br/><Link to='/signupwithcode'><Button primary fluid>Go to sign up with code</Button></Link>
             </Message>
             <Message>
               Already a member?&nbsp; <Link to='/login'><Button primary basic size='small'>Log In</Button></Link>
