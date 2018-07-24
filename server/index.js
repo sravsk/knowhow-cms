@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
-const bcryptjs = require('bcryptjs');
+const bcrypt = require('bcryptjs');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
@@ -10,6 +10,7 @@ const expressValidator = require('express-validator');
 
 const db = require('../db/helpers.js');
 const sessionStore = require('../db/Models/Session.js');
+const sendmail = require('./sendmail.js');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -100,7 +101,7 @@ app.post('/signupuser', (req, res) => {
   } else {
     let password = req.body.password;
     // hash the password by auto-gen a salt and hash
-    bcryptjs.hash(password, saltRounds, (err, hash) => {
+    bcrypt.hash(password, saltRounds, (err, hash) => {
       // store hash in database
       if (hash) {
         db.addUser({
@@ -144,13 +145,35 @@ app.post('/signupuser', (req, res) => {
   }
 });
 
-// send an invitation email to invite additional user for a company
 app.post('/inviteuser', (req, res) => {
   var companyId = req.user.companyId;
+  var role = req.body.role;
   var email = req.body.email;
-  console.log('in inviteuser', companyId, email)
-  db.inviteUser({companyId, email}, (invitationSent) => {
-    res.send(invitationSent);
+  // generate a random string composed of 8 chars from A-Z, a-z, 0-9
+  var code = '';
+  var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  for (var i = 0; i < 8; i++) {
+    code += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
+
+  // hash the generated random code
+  bcrypt.hash(code, saltRounds, (err, hash) => {
+    if (hash) {
+      // save companyId, email, hash and role in invitations table
+      db.addInvite({companyId, email, hash, role}, (saved) => {
+        if (saved) {
+          // send invitation email containing role and generated code
+          var to = req.body.email;
+          var subject = 'Invitation to join Know-how';
+          // TODO - after we have deployed app, send a clickable link in email to join
+          // TODO - add some basic info about know-how in the invitation email
+          var html = `<p>Enter the following code to sign up to Know-how</p>
+          <strong>code : ${code}</strong>`;
+          sendmail(to, subject, html);
+          res.send('Invitation sent');
+        }
+      });
+    }
   });
 });
 
@@ -163,7 +186,7 @@ app.post('/loginuser', (req, res) => {
       let hash = user.password;
       let comparePassword = req.body.password;
       let name = user.name;
-      bcryptjs.compare(comparePassword, hash, (err, result) => {
+      bcrypt.compare(comparePassword, hash, (err, result) => {
         if (result) { // valid user
           let userInfo = {
             name: user.name,
