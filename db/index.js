@@ -7,14 +7,19 @@ const DBPASSWORD = process.env.DBPASSWORD || require('../config.js').DBPASSWORD
 const DBHOST = process.env.DBHOST || require('../config.js').DBHOST
 const DBPORT = process.env.DBPORT || require('../config.js').DBPORT
 
-var db = new Sequelize(DBNAME, DBUSERNAME, DBPASSWORD, {
-  host: DBHOST,
-  port: DBPORT,
-  dialect: 'mysql',
-  dialectOptions: {
-    ssl: 'Amazon RDS'
-  }
-});
+// var db = new Sequelize(DBNAME, DBUSERNAME, DBPASSWORD, {
+//   host: DBHOST,
+//   port: DBPORT,
+//   dialect: 'mysql',
+//   dialectOptions: {
+//     ssl: 'Amazon RDS'
+//   }
+// });
+
+
+const db = new Sequelize(`mysql://${DBUSERNAME}:${DBPASSWORD}@${DBHOST}:${DBPORT}/${DBNAME}`)
+
+// postgresql://username:password@awsrdshost:5432/dbname
 
 
 // if (process.env.DATABASE_URL !== undefined) {
