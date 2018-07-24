@@ -13,6 +13,6 @@ hooks:
       runas: ec2-user
       timeout: 300
   ApplicationStart:
-    - location: /var/www/html/knowhow/scripts/npm-start.sh 
+    - location: scripts/npm-start.sh 
       runas: ec2-user
       timeout: 600
