@@ -7,7 +7,6 @@ const DBPASSWORD = process.env.DBPASSWORD || require('../config.js').DBPASSWORD
 const DBHOST = process.env.DBHOST || require('../config.js').DBHOST
 const DBPORT = process.env.DBPORT || require('../config.js').DBPORT
 
-<<<<<<< HEAD
 // var db = new Sequelize(DBNAME, DBUSERNAME, DBPASSWORD, {
 //   host: DBHOST,
 //   port: DBPORT,
@@ -19,11 +18,6 @@ const DBPORT = process.env.DBPORT || require('../config.js').DBPORT
 
 
 const db = new Sequelize(`mysql://${DBUSERNAME}:${DBPASSWORD}@${DBHOST}:${DBPORT}/${DBNAME}`, {
-=======
-var db = new Sequelize(DBNAME, DBUSERNAME, DBPASSWORD, {
-  host: DBHOST,
-  port: DBPORT,
->>>>>>> a2af194c0863d6f09bb4b6a255e6b5e7160397ec
   dialect: 'mysql',
   dialectOptions: {
     ssl: 'Amazon RDS'
