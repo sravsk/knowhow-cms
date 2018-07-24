@@ -1,0 +1,18 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /var/www/html/knowhow
+hooks:
+  BeforeInstall:
+   - location: scripts/npm-before-install.sh 
+     timeout: 1200
+     runas: ec2-user
+  AfterInstall:
+    - location: scripts/npm-install.sh
+      runas: ec2-user
+      timeout: 300
+  ApplicationStart:
+    - location: /var/www/html/knowhow/scripts/npm-start.sh 
+      runas: ec2-user
+      timeout: 600
