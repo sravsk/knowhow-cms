@@ -3,7 +3,9 @@ const db = require('../index.js');
 
 const Invitation = db.define('invitation', {
   companyId: { type: Sequelize.INTEGER},
-  code: { type: Sequelize.INTEGER}
+  email: {type: Sequelize.STRING},
+  hash: { type: Sequelize.TEXT},
+  role: { type: Sequelize.ENUM('admin', 'general')}
 });
 
 Invitation.sync();
