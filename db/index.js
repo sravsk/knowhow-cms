@@ -16,8 +16,12 @@ const DBPORT = process.env.DBPORT || require('../config.js').DBPORT
 //   }
 // });
 
-
-const db = new Sequelize(`mysql://${DBUSERNAME}:${DBPASSWORD}@${DBHOST}:${DBPORT}/${DBNAME}`)
+const db = new Sequelize(`mysql://${DBUSERNAME}:${DBPASSWORD}@${DBHOST}:${DBPORT}/${DBNAME}`, {
+  dialect: 'mysql',
+  dialectOptions: {
+    ssl: 'Amazon RDS'
+  }
+})
 
 // postgresql://username:password@awsrdshost:5432/dbname
 
