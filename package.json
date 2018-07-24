@@ -6,7 +6,7 @@
     "start": "node server/index.js",
     "dev-start": "nodemon server/index.js",
     "dev-build": "webpack -d --watch",
-    "test": "mocha server/spec.js"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
