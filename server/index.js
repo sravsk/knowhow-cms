@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const expressValidator = require('express-validator');
+const randomstring = require('randomstring');
 
 const db = require('../db/helpers.js');
 const sessionStore = require('../db/Models/Session.js');
@@ -16,7 +17,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const saltRounds = 10;
 
-// this salt is used only for inviting a new user
+// this salt is used only for inviting a new user and password recovery
 const salt = '$2a$10$8WIft9tqyYTZKQASFhGBYe';
 
 app.use(bodyParser.json());
@@ -83,11 +84,15 @@ app.get('/signup', (req, res) => {
 });
 
 app.get('/signupwithcode', (req, res) => {
-  if (req.isAuthenticated()) {
-    res.redirect('/home');
-  } else {
-    res.sendFile(path.join(__dirname, '/../client/dist/index.html'));
-  }
+  res.sendFile(path.join(__dirname, '/../client/dist/index.html'));
+});
+
+app.get('/forgotpassword', (req, res) => {
+  res.sendFile(path.join(__dirname, '/../client/dist/index.html'));
+});
+
+app.get('/resetpassword', (req, res) => {
+  res.sendFile(path.join(__dirname, '/../client/dist/index.html'));
 });
 
 app.get('/login', (req, res) => {
@@ -219,7 +224,7 @@ app.post('/inviteuser', (req, res) => {
           // send invitation email containing role and generated code
           var to = req.body.email;
           var subject = 'Invitation to join Know-how';
-          // TODO - after we have deployed app, send a clickable link in email to join
+          // TODO - after deploying app, send a clickable link in email
           // TODO - add some basic info about know-how in the invitation email
           var html = `<p>Enter the following code to sign up on Know-how</p>
           <strong>code : ${code}</strong>`;
@@ -273,7 +278,32 @@ app.post('/loginuser', (req, res) => {
   });
 });
 
-// add a new category
+app.post('/forgotpwd', (req, res) => {
+  let email = req.query.email;
+  // check if email exists in users table
+  db.findUser({email: email}, (user) => {
+    if (user) {
+      // if yes, generate random code of 8 chars; hash it with salt and save in passwordresets table along with user id
+      let code = randomstring.generate(8);
+      bcrypt.hash(code, salt, (err, hash) => {
+        if (hash) {
+          db.addPasswordReset({ resetHash: hash, userId: user.id }, (done) => {
+            if (done) {
+              // send code in email and ask user to enter code at myapp.com/resetpassword to choose a new password
+              var to = email;
+              var subject = 'Know-how password change request';
+              // TODO - send appropriate link after deploying app
+              var html = `<h1>Change your password</h1><p>We have received a password change request for your Know-how account.</p><p>If you did not ask to change your password, then you can ignore this email and your password will not be changed.</p><p>If you want to change your password, go to myapp.com/resetpassword and enter the following code: ${code}</p><p>The code with only work once to reset your password.</p>`
+              sendmail(to, subject, html);
+            }
+          });
+        }
+      })
+    }
+  })
+  res.send('OK')
+});
+
 app.post('/addCategory', (req, res) => {
   let name = req.body.categoryName;
   let description = req.body.categoryDescription;
