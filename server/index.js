@@ -221,7 +221,7 @@ app.post('/inviteuser', (req, res) => {
           var subject = 'Invitation to join Know-how';
           // TODO - after we have deployed app, send a clickable link in email to join
           // TODO - add some basic info about know-how in the invitation email
-          var html = `<p>Enter the following code to sign up to Know-how</p>
+          var html = `<p>Enter the following code to sign up on Know-how</p>
           <strong>code : ${code}</strong>`;
           sendmail(to, subject, html);
           res.send('Invitation sent');

@@ -106,7 +106,11 @@ var dbHelpers = {
       if (invite === null) {
         cb(null);
       } else {
-        cb(invite.dataValues.companyId, invite.dataValues.email, invite.dataValues.role);
+        let companyId = invite.dataValues.companyId;
+        let email = invite.dataValues.email;
+        let role = invite.dataValues.role;
+        invite.destroy();
+        cb(companyId, email, role);
       }
     });
   },
