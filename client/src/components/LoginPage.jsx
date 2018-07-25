@@ -95,7 +95,10 @@ class LoginPage extends React.Component {
               </Segment>
             </Form>
             <Message>
-              New to us?&nbsp; <Link to='/signup'><Button primary basic size='small'>Sign up</Button></Link>
+              <Header as='h3'>Forgot your password?</Header><br/><Link to='/forgotpassword'><Button primary size='medium'>Go here</Button></Link>
+            </Message>
+            <Message>
+              <Header as='h3'>Have a code to reset your password?</Header><br/><Link to='/resetpassword'><Button primary size='medium'>Change password</Button></Link>
             </Message>
           </Grid.Column>
         </Grid>
