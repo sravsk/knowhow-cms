@@ -37,23 +37,6 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// authenticate user with an email and password stored in the database (using Passport local strategy) and return name
-// passport.use(new LocalStrategy(
-//   function(email, password, done) {
-//     // console.log('in passportlocalstrategy')
-//     db.authenticateUser({ email: email, password: password } , function(matched, name) {
-//       console.log('after user authentication')
-//       if (matched) {
-//         // credentials are valid
-//         // verify callback invokes done to suppy Passport with the user that authenticated
-//         return done(null, name);
-//       } else {
-//         return done(null, false);
-//       }
-//     })
-//   }
-// ));
-
 // Passport will maintain persistent login sessions. In order for persistent sessions to work, the authenticated user must be serialized to the session, and deserialized when subsequent requests are made.
 passport.serializeUser((name, done) => {
   done(null, name);
@@ -83,6 +66,14 @@ app.get('/signup', (req, res) => {
   }
 });
 
+app.get('/login', (req, res) => {
+  if (req.isAuthenticated()) {
+    res.redirect('/home');
+  } else {
+    res.sendFile(path.join(__dirname, '/../client/dist/index.html'));
+  }
+});
+
 app.get('/signupwithcode', (req, res) => {
   res.sendFile(path.join(__dirname, '/../client/dist/index.html'));
 });
@@ -95,24 +86,13 @@ app.get('/resetpassword', (req, res) => {
   res.sendFile(path.join(__dirname, '/../client/dist/index.html'));
 });
 
-app.get('/login', (req, res) => {
-  if (req.isAuthenticated()) {
-    res.redirect('/home');
-  } else {
-    res.sendFile(path.join(__dirname, '/../client/dist/index.html'));
-  }
-});
-
 app.post('/signupuser', (req, res) => {
   // data validation using express-validator
   req.checkBody('email', 'The email you entered is invalid. Please try again.').isEmail();
   req.checkBody('password', 'Password must be between 8-100 characters long.').len(8, 100);
   var errors = req.validationErrors();
   if (errors) {
-    let data = {
-      signup: false,
-      errors: errors
-    };
+    let data = { signup: false, errors: errors };
     res.send(data);
   } else {
     let password = req.body.password;
@@ -120,18 +100,9 @@ app.post('/signupuser', (req, res) => {
     bcrypt.hash(password, saltRounds, (err, hash) => {
       // store hash in database
       if (hash) {
-        db.addUser({
-          name: req.body.name,
-          email: req.body.email,
-          password: hash,
-          company: req.body.company,
-          domain: req.body.domain
-        }, (isUserCreated, userInfo, error) => {
+        db.addUser({ name: req.body.name, email: req.body.email, password: hash, company: req.body.company, domain: req.body.domain }, (isUserCreated, userInfo, error) => {
           if (error) {
-            let data = {
-              signup: false,
-              message: 'duplicate email'
-            };
+            let data = { signup: false, message: 'duplicate email' };
             res.send(data);
           } else if (isUserCreated) {
             // login comes from passport and creates a session and a cookie for the user
@@ -141,18 +112,12 @@ app.post('/signupuser', (req, res) => {
                 console.log(err);
                 res.sendStatus(404);
               } else {
-                let data = {
-                  signup: true,
-                  userInfo: userInfo
-                };
+                let data = { signup: true, userInfo: userInfo };
                 res.send(data);
               }
             });
           } else {
-            let data = {
-              signup: false,
-              message: 'user exists'
-            };
+            let data = { signup: false, message: 'user exists' };
             res.send(data);
           }
         });
@@ -175,18 +140,9 @@ app.post('/signupuserwithcode', (req, res) => {
           // valid code, sign up user; assume that email is unique
           bcrypt.hash(password, saltRounds, (err, hashedPassword) => {
             if (hashedPassword) {
-              db.addUserWithCode({
-                email: email,
-                name: name,
-                password: hashedPassword,
-                role: role,
-                companyId: companyId
-              }, (userCreated) => {
+              db.addUserWithCode({ email: email, name: name, password: hashedPassword, role: role, companyId: companyId }, (userCreated) => {
                 // make passport store userInfo (name and companyId) in req.user
-                var userInfo = {
-                  name: name,
-                  companyId: companyId
-                };
+                var userInfo = { name: name, companyId: companyId };
                 req.login(userInfo, (err) => {
                   if (err) {
                     console.log(err);
@@ -236,7 +192,6 @@ app.post('/inviteuser', (req, res) => {
   });
 });
 
-// TODO - loginuser using passport local strategy
 app.post('/loginuser', (req, res) => {
   db.findUser({
     email: req.body.email
@@ -247,28 +202,19 @@ app.post('/loginuser', (req, res) => {
       let name = user.name;
       bcrypt.compare(comparePassword, hash, (err, result) => {
         if (result) { // valid user
-          let userInfo = {
-            name: user.name,
-            companyId: user.companyId
-          };
+          let userInfo = { name: user.name, companyId: user.companyId };
           // make passport store userInfo (name and companyId) in req.user
           req.login(userInfo, (err) => {
             if (err) {
               console.log(err);
               res.sendStatus(404);
             } else {
-              let response = {
-                name: user.name,
-                companyId: user.companyId,
-                found: true
-              }
+              let response = { name: user.name, companyId: user.companyId, found: true };
               res.send(response);
             }
           });
         } else { // invalid user
-          let response = {
-            found: false
-          };
+          let response = { found: false };
           res.send(response);
         }
       });
@@ -438,13 +384,6 @@ app.get('/api/article/:articleId', (req, res) => {
     res.send(data);
   });
 });
-
-
-// app.post('/loginuser', passport.authenticate('local'), (req, res) => {
-//   console.log('user authenticated')
-//   res.send(req.user);
-// });
-
 
 // to get name and companyId of logged in user
 app.get('/user', (req, res) => {

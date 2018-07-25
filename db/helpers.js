@@ -6,7 +6,6 @@ const Category = require('./Models/Category');
 const Article = require('./Models/Article');
 const Invitation = require('./Models/Invitation');
 const Passwordreset = require('./Models/Passwordreset');
-const bcrypt = require('bcryptjs');
 
 
 // This creates the tables in the database and their relationships.
@@ -149,35 +148,6 @@ var dbHelpers = {
       cb(true);
     })
   },
-
-
-  // authenticateUser: ({email, password}, cb) => {
-  //   // console.log('in authenticateUser function')
-  //   User.findOne({
-  //     where: {email: email}
-  //   })
-  //   .then(result => {
-  //     if (result === null) {
-  //       // no user exists with given email
-  //       cb(false);
-  //     } else {
-  //       let hash = result.password;
-  //       let name = result.name;
-  //       bcrypt.compare(password, hash, function(err, response) {
-  //         if (response === true) {
-  //           // password matches
-  //           cb(true, name);
-  //         } else {
-  //           // password doesn't match
-  //           cb(false);
-  //         }
-  //       });
-  //     }
-  //   })
-  //   .catch(err => {
-  //     cb(false);
-  //   })
-  // },
 
 
   /////////////////////
