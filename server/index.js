@@ -304,6 +304,33 @@ app.post('/forgotpwd', (req, res) => {
   res.send('OK')
 });
 
+app.post('/resetpwd', (req, res) => {
+  let code = req.body.code;
+  let password = req.body.password;
+  // hash code with salt
+  bcrypt.hash(code, salt, (err, hash) => {
+    // check if record with hash exists in passwordresets table
+    db.verifyPwdReset({ hash: hash }, (err, userId) => {
+      if (!err) {
+        // if userId is found, hash password and update users table with new hash
+        bcrypt.hash(password, saltRounds, (err, hash) => {
+          if (hash) {
+            db.updatePassword({ userId: userId, hash: hash }, (changed) => {
+              if (changed) {
+                res.send('password changed');
+              }
+            })
+          }
+        })
+      } else {
+        // if no, send response that code is invalid
+        res.send('invalid code');
+      }
+
+    })
+  })
+});
+
 app.post('/addCategory', (req, res) => {
   let name = req.body.categoryName;
   let description = req.body.categoryDescription;
