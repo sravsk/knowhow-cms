@@ -16,6 +16,9 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const saltRounds = 10;
 
+// this salt is used only for inviting a new user
+const salt = '$2a$10$8WIft9tqyYTZKQASFhGBYe';
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(expressValidator()); // this line must be immediately after any of the bodyParser middlewares
@@ -156,8 +159,8 @@ app.post('/inviteuser', (req, res) => {
     code += possible.charAt(Math.floor(Math.random() * possible.length));
   }
 
-  // hash the generated random code
-  bcrypt.hash(code, saltRounds, (err, hash) => {
+  // hash the generated random code using a salt
+  bcrypt.hash(code, salt, (err, hash) => {
     if (hash) {
       // save companyId, email, hash and role in invitations table
       db.addInvite({companyId, email, hash, role}, (saved) => {
@@ -192,8 +195,7 @@ app.post('/loginuser', (req, res) => {
             name: user.name,
             companyId: user.companyId
           };
-          // login comes from passport and creates a session and a cookie for the user
-          // make passport store userInfo in req.user
+          // make passport store userInfo (name and companyId) in req.user
           req.login(userInfo, (err) => {
             if (err) {
               console.log(err);
