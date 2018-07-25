@@ -68,7 +68,7 @@ class SignupPage extends React.Component {
       )
     }
     return (
-      <div className='signup-form' style={{ 'marginTop': '15vh'}}>
+      <div className='signup-form' style={{ 'marginTop': '12vh' }}>
         <style>{`
           body > div,
           body > div > div,
@@ -151,7 +151,7 @@ class SignupPage extends React.Component {
               </Segment.Group>
             </Form>
             <Message>
-              <strong>Signing up with a code?</strong><br/><br/><Link to='/signupwithcode'><Button primary fluid>Go to sign up with code</Button></Link>
+              <Header as='h3'>Signing up with a code?</Header><br/><Link to='/signupwithcode'><Button primary fluid size='large'>Go to Sign up with Code</Button></Link>
             </Message>
             <Message>
               Already a member?&nbsp; <Link to='/login'><Button primary basic size='small'>Log In</Button></Link>
