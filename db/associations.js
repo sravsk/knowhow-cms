@@ -2,6 +2,7 @@ const Company = require('./Models/Company');
 const User = require('./Models/User');
 const Category = require('./Models/Category');
 const Article = require('./Models/Article');
+const Passwordreset = require('./Models/Passwordreset');
 
 Company.hasMany(User, {
   foreignKey: {
@@ -43,8 +44,20 @@ Company.hasMany(Article, {
   }
 })
 
+Passwordreset.belongsTo(User, {
+  foreignKey: {
+    allowNull: false
+  }
+});
+
+User.hasMany(Passwordreset, {
+  foreignKey: {
+    allowNull: false
+  }
+})
+
 var assoc = () => {
-  Company.sync().then(() => User.sync().then(() => Category.sync().then(() => Article.sync())))
+  Company.sync().then(() => User.sync().then(() => Category.sync().then(() => Article.sync().then(() => Passwordreset.sync()))))
 };
 
 module.exports = assoc;
