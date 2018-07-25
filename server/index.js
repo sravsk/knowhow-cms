@@ -82,6 +82,14 @@ app.get('/signup', (req, res) => {
   }
 });
 
+app.get('/signupwithcode', (req, res) => {
+  if (req.isAuthenticated()) {
+    res.redirect('/home');
+  } else {
+    res.sendFile(path.join(__dirname, '/../client/dist/index.html'));
+  }
+});
+
 app.get('/login', (req, res) => {
   if (req.isAuthenticated()) {
     res.redirect('/home');
@@ -146,6 +154,49 @@ app.post('/signupuser', (req, res) => {
       }
     });
   }
+});
+
+app.post('/signupuserwithcode', (req, res) => {
+  var code = req.query.code;
+  var name = req.query.name;
+  var password = req.query.password;
+  // hash the code and see if there's a match in invitations table
+  bcrypt.hash(code, salt, (err, hash) => {
+    if (hash) {
+      db.checkInvite(hash, (companyId, email, role) => {
+        if (companyId === null) {
+          res.send('Invalid code');
+        } else {
+          // valid code, sign up user; assume that email is unique
+          bcrypt.hash(password, saltRounds, (err, hashedPassword) => {
+            if (hashedPassword) {
+              db.addUserWithCode({
+                email: email,
+                name: name,
+                password: hashedPassword,
+                role: role,
+                companyId: companyId
+              }, (userCreated) => {
+                // make passport store userInfo (name and companyId) in req.user
+                var userInfo = {
+                  name: name,
+                  companyId: companyId
+                };
+                req.login(userInfo, (err) => {
+                  if (err) {
+                    console.log(err);
+                    res.sendStatus(404);
+                  } else {
+                    res.send('user signed up');
+                  }
+                });
+              });
+            }
+          });
+        }
+      });
+    }
+  });
 });
 
 app.post('/inviteuser', (req, res) => {
