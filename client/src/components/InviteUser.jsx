@@ -62,7 +62,7 @@ class InviteUser extends React.Component {
         >
           <Grid.Column style={{ maxWidth: 500 }}>
             <Header as='h2' color='blue' textAlign='center'>
-              Invite a user for your company
+              Invite a new user for your company
             </Header>
             <Form size='large' onSubmit={this.inviteUser.bind(this)}>
               <Segment raised>

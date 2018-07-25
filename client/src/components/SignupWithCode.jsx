@@ -114,9 +114,6 @@ class SignupExistingCompany extends React.Component {
               </Segment>
               <Form.Button content='Sign up with your code' primary fluid size='large' />
             </Form>
-            <Message>
-              Already a member?&nbsp; <Link to='/login'><Button primary basic size='small'>Log In</Button></Link>
-            </Message>
           </Grid.Column>
         </Grid>
       </div>

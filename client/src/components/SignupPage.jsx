@@ -153,9 +153,6 @@ class SignupPage extends React.Component {
             <Message>
               <Header as='h3'>Signing up with a code?</Header><br/><Link to='/signupwithcode'><Button primary fluid size='large'>Go to Sign up with Code</Button></Link>
             </Message>
-            <Message>
-              Already a member?&nbsp; <Link to='/login'><Button primary basic size='small'>Log In</Button></Link>
-            </Message>
           </Grid.Column>
         </Grid>
       </div>
