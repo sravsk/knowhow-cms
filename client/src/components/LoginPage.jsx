@@ -78,7 +78,7 @@ class LoginPage extends React.Component {
                   fluid
                   icon='mail'
                   iconPosition='left'
-                  placeholder='Email'
+                  placeholder='Enter Email'
                   onChange={this.handleChange.bind(this)}
                 />
                 <Form.Input
@@ -87,7 +87,7 @@ class LoginPage extends React.Component {
                   fluid
                   icon='lock'
                   iconPosition='left'
-                  placeholder='Password'
+                  placeholder='Enter Password'
                   type='password'
                   onChange={this.handleChange.bind(this)}
                 />

@@ -18,7 +18,7 @@ import ArticleContent from '../components/ArticleContent.jsx';
 import NewArticle from '../components/NewArticle.jsx';
 import NewCategory from '../components/NewCategory.jsx';
 import InviteUser from '../components/InviteUser.jsx';
-import SignupForCompany from '../components/SignupForCompany.jsx';
+import SignupWithCode from '../components/SignupWithCode.jsx';
 
 const AppRouter =() => (
   <BrowserRouter>
@@ -39,7 +39,7 @@ const AppRouter =() => (
         <Route exact path='/devadminpage' component={devAdminPage} />
         <Route exact path='/addarticle' component={NewArticle} />
         <Route exact path='/inviteuser' component={InviteUser} />
-        <Route exact path='/signupforcompany' component={SignupForCompany} />
+        <Route exact path='/signupwithcode' component={SignupWithCode} />
 
       </Switch>
     </Container>

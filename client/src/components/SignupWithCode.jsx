@@ -8,11 +8,10 @@ class SignupExistingCompany extends React.Component {
     super(props);
     this.state = {
       name: '',
-      email: '',
       code: '',
       password: '',
       passwordMatch: ''
-    }
+    };
   }
 
   handleChange(event) {
@@ -22,20 +21,27 @@ class SignupExistingCompany extends React.Component {
   }
 
   signupUser() {
-    if (this.state.name === '' || this.state.email === '' || this.state.password === '' || this.state.passwordMatch === '' || this.state.code === '') {
-      alert('Name, Email, Code, Password fields cannot be empty. Enter new values.');
+    if (this.state.name === '' || this.state.password === '' || this.state.passwordMatch === '' || this.state.code === '') {
+      alert('Name, Code, Password fields cannot be empty. Enter new values.');
     }
     else if (this.state.password !== this.state.passwordMatch) {
       alert('Passwords do not match. Try again.');
+    } else if (this.state.password.length < 8 || this.state.password.length > 100) {
+      alert('Password length must be between 8 and 100 characters');
     } else {
       // all fields have values and passwords match
-      var data = {
-        name: this.state.name,
-        email: this.state.email,
-        password: this.state.password,
-        code: this.state.code
-      };
-      // TODO - send a POST request with user info and sign up user
+      axios.post(`/signupuserwithcode?name=${this.state.name}&password=${this.state.password}&code=${this.state.code}`)
+      .then(result => {
+        if (result.data === 'user signed up') {
+          alert('You have been signed up');
+          this.setState({
+            onHome: true
+          });
+        } else {
+          alert('Invalid code');
+        }
+      })
+
     }
   }
 
@@ -51,7 +57,7 @@ class SignupExistingCompany extends React.Component {
           body > div,
           body > div > div,
           body > div > div > div.signup-form {
-            height: 100%;
+            height: 95%;
           }
         `}</style>
         <Grid
@@ -67,20 +73,21 @@ class SignupExistingCompany extends React.Component {
               <Segment raised>
                 <Form.Input
                   fluid
-                  icon='user'
+                  icon='certificate'
                   iconPosition='left'
-                  placeholder='Name'
-                  name='name'
-                  value={this.state.name}
+                  placeholder='Enter code from invitation email'
+                  type='code'
+                  name='code'
+                  value={this.state.code}
                   onChange={this.handleChange.bind(this)}
                 />
                 <Form.Input
                   fluid
-                  icon='mail'
+                  icon='user'
                   iconPosition='left'
-                  placeholder='Email'
-                  name='email'
-                  value={this.state.email}
+                  placeholder='Enter Name'
+                  name='name'
+                  value={this.state.name}
                   onChange={this.handleChange.bind(this)}
                 />
                 <Form.Input
@@ -102,14 +109,6 @@ class SignupExistingCompany extends React.Component {
                   type='password'
                   name='passwordMatch'
                   value={this.state.passwordMatch}
-                  onChange={this.handleChange.bind(this)}
-                />
-                <Form.Input
-                  fluid
-                  placeholder='Enter code from invitation email'
-                  type='code'
-                  name='code'
-                  value={this.state.code}
                   onChange={this.handleChange.bind(this)}
                 />
               </Segment>

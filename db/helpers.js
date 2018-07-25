@@ -5,9 +5,8 @@ const User = require('./Models/User');
 const Category = require('./Models/Category');
 const Article = require('./Models/Article');
 const Invitation = require('./Models/Invitation');
-const bcryptjs = require('bcryptjs');
-const sgMail = require('@sendgrid/mail');
-const key = process.env.SENDGRID_API_KEY || require('../config.js').SENDGRID_API_KEY;
+const bcrypt = require('bcryptjs');
+
 
 // This creates the tables in the database and their relationships.
 assoc();
@@ -85,65 +84,51 @@ var dbHelpers = {
     })
   },
 
-  // invite additional users, send an email invite with a random code using sendgrid
-  // save companyId and code in invitations table
-  inviteUser: ({companyId, email}, cb) => {
-    // generate a random 6 digit number
-    var num = Math.floor(Math.random() * 900000) + 100000;
-
-    // save companyId and random number in invitations table
+  // save companyId, email, hash and role in invitations table
+  addInvite: ({companyId, email, hash, role}, cb) => {
     let invite = Invitation.build({
-      code: num,
-      companyId: companyId
+      companyId: companyId,
+      email: email,
+      hash: hash,
+      role: role
     });
-    invite.save();
-
-    // send an invitation email with code
-    sgMail.setApiKey(key);
-    const msg = {
-      to: email,
-      from: 'knowhowrpt@gmail.com',
-      subject: 'Invitation to join Knowhow',
-      text: `Enter code ${num} at signup`
-    };
-    sgMail.send(msg);
-    cb(true);
+    invite.save()
+    .then(done => {
+      cb(true);
+    });
   },
 
-// TODO - fix function below
-  // // add user with a code
-  // addUserWithCode: ({name, email, password, code}, cb) => {
-  //   User.findOne({
-  //     where: {email: email}
-  //   })
-  //   .then(result => {
-  //     if (result !== null) {
-  //       // a user already exists with this email
-  //       cb(false)
-  //     } else
-  //         // find companyId with code
-  //         Invitation.find({
-  //           where: {code: code}
-  //         })
-  //         .then(invite => {
-  //           let companyId = invite.companyId;
-  //           // create user
-  //           User.create({
-  //             name: name,
-  //             email: email,
-  //             password: password,
-  //             role: 'admin',
-  //             companyId: companyId
-  //           })
-  //           .then(user => {
-  //             cb(true);
-  //           })
-  //         })
+  checkInvite: (hash, cb) => {
+    Invitation.find({
+      where: {hash: hash}
+    })
+    .then(invite => {
+      if (invite === null) {
+        cb(null);
+      } else {
+        let companyId = invite.dataValues.companyId;
+        let email = invite.dataValues.email;
+        let role = invite.dataValues.role;
+        invite.destroy();
+        cb(companyId, email, role);
+      }
+    });
+  },
 
-  //       })
-  //     }
-  //   }
-  // },
+  addUserWithCode: ({email, name, password, role, companyId}, cb) => {
+    let user = User.build({
+      email: email,
+      name: name,
+      password: password,
+      role: role,
+      companyId: companyId
+    });
+    user.save()
+    .then(done => {
+      cb(true);
+    })
+  },
+
 
   // authenticateUser: ({email, password}, cb) => {
   //   // console.log('in authenticateUser function')

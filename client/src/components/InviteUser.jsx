@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Form, Grid, Header, Message, Segment } from 'semantic-ui-react';
+import { Button, Form, Grid, Header, Segment, Dropdown } from 'semantic-ui-react';
 import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 
@@ -7,7 +7,9 @@ class InviteUser extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: ''
+      email: '',
+      roles: [{key: 'admin', text: 'admin', value: 'admin'}, {key: 'general', text: 'general', value: 'general'}],
+      role: 'general'
     }
   }
 
@@ -18,28 +20,32 @@ class InviteUser extends React.Component {
   }
 
   inviteUser() {
-    console.log('in invite user', this.state)
     if (this.state.email === '') {
       alert('Email cannot be empty. Enter new value.');
     } else {
       let data = {
-        email: this.state.email
+        email: this.state.email,
+        role: this.state.role
       };
       axios.post('/inviteuser', data)
       .then(result => {
         if (result.data) {
           alert('Invitation has been sent');
+          this.setState({
+            email: ''
+          })
         }
       })
     }
   }
 
+  handleSelectRole(e, { value }) {
+    this.setState({
+      role: value
+    });
+  }
+
   render() {
-    if (this.state.onHome) {
-      return (
-        <Redirect to='/home' />
-      )
-    }
     return (
       <div className='login-form'>
         <style>{`
@@ -56,7 +62,7 @@ class InviteUser extends React.Component {
         >
           <Grid.Column style={{ maxWidth: 500 }}>
             <Header as='h2' color='blue' textAlign='center'>
-              Invite an admin user for your company
+              Invite a user for your company
             </Header>
             <Form size='large' onSubmit={this.inviteUser.bind(this)}>
               <Segment raised>
@@ -69,6 +75,14 @@ class InviteUser extends React.Component {
                   placeholder='Email'
                   onChange={this.handleChange.bind(this)}
                 />
+                <Dropdown
+                  placeholder='Select Role'
+                  fluid
+                  selection
+                  options={this.state.roles}
+                  onChange={this.handleSelectRole.bind(this)}
+                />
+                <br/>
                 <Form.Button content='Send Invite' color='blue' fluid size='large'></Form.Button>
               </Segment>
             </Form>
