@@ -9,8 +9,6 @@ module.exports = {
     filename: 'bundle.js',
     path: DIST_DIR
   },
-  // Let webpack know to generate a Node.js bundle
-  target: "node",
   module: {
     rules: [
       {
