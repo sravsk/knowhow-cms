@@ -5,7 +5,7 @@ const User = require('./Models/User');
 const Category = require('./Models/Category');
 const Article = require('./Models/Article');
 const Invitation = require('./Models/Invitation');
-const bcrypt = require('bcryptjs');
+const Passwordreset = require('./Models/Passwordreset');
 
 
 // This creates the tables in the database and their relationships.
@@ -67,8 +67,23 @@ var dbHelpers = {
     })
   },
 
-  // updating a user's password, during forgot pw or after invitation
-  updateUser: (obj) => {},
+  // updating a user's password
+  updatePassword: ({userId, hash}, cb) => {
+    User.find({
+      where: {id: userId}
+    }).
+    then(user => {
+      if (user) {
+        user.update({
+          password: hash
+        })
+        .then(result => cb(true));
+      } else {
+        cb(false);
+      }
+    })
+
+  },
 
   // find a user and pass it to the callback function
   findUser: ({email}, cb) => {
@@ -83,6 +98,11 @@ var dbHelpers = {
       }
     })
   },
+
+
+    /////////////////////
+  //     INVITATIONS    //
+  /////////////////////
 
   // save companyId, email, hash and role in invitations table
   addInvite: ({companyId, email, hash, role}, cb) => {
@@ -128,35 +148,6 @@ var dbHelpers = {
       cb(true);
     })
   },
-
-
-  // authenticateUser: ({email, password}, cb) => {
-  //   // console.log('in authenticateUser function')
-  //   User.findOne({
-  //     where: {email: email}
-  //   })
-  //   .then(result => {
-  //     if (result === null) {
-  //       // no user exists with given email
-  //       cb(false);
-  //     } else {
-  //       let hash = result.password;
-  //       let name = result.name;
-  //       bcrypt.compare(password, hash, function(err, response) {
-  //         if (response === true) {
-  //           // password matches
-  //           cb(true, name);
-  //         } else {
-  //           // password doesn't match
-  //           cb(false);
-  //         }
-  //       });
-  //     }
-  //   })
-  //   .catch(err => {
-  //     cb(false);
-  //   })
-  // },
 
 
   /////////////////////
@@ -393,7 +384,38 @@ var dbHelpers = {
       }
 
     })
+  },
+
+      /////////////////////
+  //     PASSWORD RESETS   //
+  /////////////////////
+
+  addPasswordReset: ({resetHash, userId}, cb) => {
+    let instance = Passwordreset.build({
+      resetHash: resetHash,
+      userId: userId
+    });
+    instance.save()
+    .then(result => {
+      cb(true);
+    })
+  },
+
+  verifyPwdReset: ({ hash: hash }, cb) => {
+    Passwordreset.find({
+      where: {resetHash: hash}
+    })
+    .then(result => {
+      if (result) {
+        let userId = result.userId;
+        result.destroy();
+        cb(false, userId);
+      } else {
+        cb(true);
+      }
+    })
   }
+
 }
 
 module.exports = dbHelpers;

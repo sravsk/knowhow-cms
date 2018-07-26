@@ -19,6 +19,8 @@ import NewArticle from '../components/NewArticle.jsx';
 import NewCategory from '../components/NewCategory.jsx';
 import InviteUser from '../components/InviteUser.jsx';
 import SignupWithCode from '../components/SignupWithCode.jsx';
+import ForgotPassword from '../components/ForgotPassword.jsx';
+import ResetPassword from '../components/ResetPassword.jsx';
 
 const AppRouter =() => (
   <BrowserRouter>
@@ -40,7 +42,8 @@ const AppRouter =() => (
         <Route exact path='/addarticle' component={NewArticle} />
         <Route exact path='/inviteuser' component={InviteUser} />
         <Route exact path='/signupwithcode' component={SignupWithCode} />
-
+        <Route exact path='/forgotpassword' component={ForgotPassword} />
+        <Route exact path='/resetpassword' component={ResetPassword} />
       </Switch>
     </Container>
   </BrowserRouter>
