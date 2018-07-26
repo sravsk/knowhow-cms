@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node server/index.js",
     "dev-start": "nodemon server/index.js",
-    "dev-build": "webpack -d --watch",
+    "build": "webpack -w",
+    "prod" : "webpack",
     "test": "mocha"
   },
   "repository": {
