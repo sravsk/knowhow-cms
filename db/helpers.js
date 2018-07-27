@@ -53,7 +53,8 @@ var dbHelpers = {
               .then(user => {
                 let userInfo = {
                   name: user.name,
-                  companyId: user.companyId
+                  companyId: user.companyId,
+                  role: user.role
                 }
                 cb(true, userInfo, null);
               })

@@ -57,6 +57,16 @@ var authMiddleware = function () {
   }
 };
 
+// middleware to check if user has 'admin' role
+var admin = function() {
+  return (req, res, next) => {
+    if (req.user.role === 'admin') {
+      return next();
+    }
+    res.redirect('/');
+  }
+}
+
 // if user is authenticated, redirect to homepage if they try accessing signup/login pages
 app.get('/signup', (req, res) => {
   if (req.isAuthenticated()) {
@@ -141,8 +151,8 @@ app.post('/signupuserwithcode', (req, res) => {
           bcrypt.hash(password, saltRounds, (err, hashedPassword) => {
             if (hashedPassword) {
               db.addUserWithCode({ email: email, name: name, password: hashedPassword, role: role, companyId: companyId }, (userCreated) => {
-                // make passport store userInfo (name and companyId) in req.user
-                var userInfo = { name: name, companyId: companyId };
+                // make passport store userInfo (name, companyId and role) in req.user
+                var userInfo = { name: name, companyId: companyId, role: role };
                 req.login(userInfo, (err) => {
                   if (err) {
                     console.log(err);
@@ -160,7 +170,7 @@ app.post('/signupuserwithcode', (req, res) => {
   });
 });
 
-app.post('/inviteuser', (req, res) => {
+app.post('/inviteuser', admin(), (req, res) => {
   var companyId = req.user.companyId;
   var role = req.body.role;
   var email = req.body.email;
@@ -202,8 +212,8 @@ app.post('/loginuser', (req, res) => {
       let name = user.name;
       bcrypt.compare(comparePassword, hash, (err, result) => {
         if (result) { // valid user
-          let userInfo = { name: user.name, companyId: user.companyId };
-          // make passport store userInfo (name and companyId) in req.user
+          let userInfo = { name: user.name, companyId: user.companyId, role: user.role };
+          // make passport store userInfo (name, companyId and role) in req.user
           req.login(userInfo, (err) => {
             if (err) {
               console.log(err);
@@ -422,7 +432,6 @@ app.get('/db/rebuild', (req, res) => {
   db.recreateDB();
   res.end('DB is rebuilt')
 })
-
 
 // protect all routes except the ones above
 app.get('*', authMiddleware(), (req, res) => {
