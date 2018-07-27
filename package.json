@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack && node server/index.js",
+    "prestart": "node node_modules/webpack/bin/webpack.js",
     "dev-start": "nodemon server/index.js",
     "build": "webpack -w",
     "prod": "webpack",
