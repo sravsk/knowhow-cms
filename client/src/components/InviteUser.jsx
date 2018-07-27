@@ -29,11 +29,13 @@ class InviteUser extends React.Component {
       };
       axios.post('/inviteuser', data)
       .then(result => {
-        if (result.data) {
+        if (result.data === 'Invitation sent') {
           alert('Invitation has been sent');
           this.setState({
             email: ''
           })
+        } else {
+          alert('Only admin users can invite a new user for their company');
         }
       })
     }
