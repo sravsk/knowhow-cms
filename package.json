@@ -36,11 +36,8 @@
     "express": "^4.16.3",
     "express-session": "^1.15.6",
     "express-validator": "^5.2.0",
-<<<<<<< HEAD
     "logstash-client": "^1.1.1",
-=======
     "json-loader": "^0.5.7",
->>>>>>> fa7183c9d1206e02720f599aa8223c49d8cc4ead
     "mysql2": "^1.5.3",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
