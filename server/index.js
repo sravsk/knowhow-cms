@@ -374,8 +374,8 @@ app.get('/api/:hashedcompanyId', wrap(async (req, res) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, HEAD');
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    var id = hashids.encode(1);
-    console.log("hashed version of company id 1 is : ", id)
+    // var id = hashids.encode(1);
+    // console.log("hashed version of company id 1 is : ", id)
      //1 -> NGp3aq8Qq8kQZKrM
     let CompanyId = hashids.decode(req.params.hashedcompanyId);
     let data = await apidb.fetchCompanyData(CompanyId);
@@ -386,14 +386,14 @@ app.get('/api/:hashedcompanyId', wrap(async (req, res) => {
 }));
 
 
-app.get('/api/:hashedcompanyId/article/:articleId', wrap(async(req, res) => {
+app.get('/api/:hashedcompanyId/article/:hashedarticleId', wrap(async(req, res) => {
   try{
     //enable CORS for this route
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, HEAD');
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     let CompanyId = hashids.decode(req.params.hashedcompanyId);
-    let articleId = req.params.articleId;
+    let articleId = hashids.decode(req.params.hashedarticleId);
     let article = await apidb.fetchOneArticle(CompanyId, articleId);
     res.json(article);
   } catch(err) {
@@ -417,14 +417,14 @@ app.get('/api/:hashedcompanyId/categoriesdata', wrap(async(req, res) => {
 }));
 
 // get all articles for a given company id and category id
-app.get('/api/:hashedcompanyId/categories/:categoryId/articlesdata', wrap(async(req, res) => {
+app.get('/api/:hashedcompanyId/categories/:hashedcategoryId/articlesdata', wrap(async(req, res) => {
   try{
     //enable CORS for this route
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, HEAD');
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     let CompanyId = hashids.decode(req.params.hashedcompanyId);
-    let categoryId = req.params.categoryId;
+    let categoryId = hashids.decode(req.params.hashedcategoryId);
     let articles = await apidb.fetchArticles(CompanyId, categoryId);
     res.json(articles);
   } catch(err) {
