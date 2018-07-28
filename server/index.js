@@ -219,7 +219,7 @@ app.post('/loginuser', (req, res) => {
               console.log(err);
               res.sendStatus(404);
             } else {
-              let response = { name: user.name, companyId: user.companyId, found: true };
+              let response = { name: user.name, companyId: user.companyId, role: user.role, found: true };
               res.send(response);
             }
           });

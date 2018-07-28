@@ -22,9 +22,21 @@ const company = (state = '', action) => {
   }
 }
 
+const role = (state = '', action) => {
+  switch (action.type) {
+    case 'CHANGE_ROLE':
+    return Object.assign({}, state, {
+      role: role
+    });
+    default:
+      return state
+  }
+}
+
 const AppReducer = combineReducers({
   user,
-  company
+  company,
+  role
 })
 
 export default AppReducer;
