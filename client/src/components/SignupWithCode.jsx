@@ -32,7 +32,8 @@ class SignupExistingCompany extends React.Component {
       // all fields have values and passwords match
       axios.post(`/signupuserwithcode?name=${this.state.name}&password=${this.state.password}&code=${this.state.code}`)
       .then(result => {
-        if (result.data === 'user signed up') {
+        if (result.data.signup) {
+          // result.data has properties name, companyId and role
           alert('You have been signed up');
           this.setState({
             onHome: true

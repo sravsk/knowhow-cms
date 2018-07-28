@@ -53,6 +53,7 @@ class SignupPage extends React.Component {
               alert(messages);
             }
           } else {
+            // result.data.userInfo is an object with name, companyId and role
             this.setState({
               onHome: true
             });

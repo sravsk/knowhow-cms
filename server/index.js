@@ -161,7 +161,8 @@ app.post('/signupuserwithcode', (req, res) => {
                     console.log(err);
                     res.sendStatus(404);
                   } else {
-                    res.send('user signed up');
+                    let data = { signup: true, name: name, companyId: companyId, role: role };
+                    res.send(data);
                   }
                 });
               });
@@ -222,7 +223,7 @@ app.post('/loginuser', (req, res) => {
               console.log(err);
               res.sendStatus(404);
             } else {
-              let response = { name: user.name, companyId: user.companyId, found: true };
+              let response = { name: user.name, companyId: user.companyId, role: user.role, found: true };
               res.send(response);
             }
           });
@@ -377,7 +378,7 @@ app.post('/deleteArticle', (req, res) => {
 //    API routes     //
 //////////////////////////
 
-// wrapper function for asycn await error handling 
+// wrapper function for asycn await error handling
 let wrap = fn => (...args) => fn(...args).catch(args[2]);
 
 app.get('/api/:companyId', wrap(async (req, res) => {
