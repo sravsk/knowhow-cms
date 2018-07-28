@@ -35,19 +35,6 @@ module.exports = {
   SENDGRID_API_KEY: 'sendgrid-api-key'
 };
 
-Create a .conf file for elastic search.
-
-input {
-    jdbc {
-        jdbc_connection_string => "jdbc:mysql://localhost:5432/mydb"
-        jdbc_user => "mysql"
-        jdbc_validate_connection => true
-        jdbc_driver_library => "/path/to/mysql-9.4-1201.jdbc41.jar"
-        jdbc_driver_class => "org.mysql.Driver"
-        statement => "SELECT * from contacts"
-    }
-}
-output
 
 ## Requirements
 
