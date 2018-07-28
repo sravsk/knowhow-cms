@@ -35,5 +35,8 @@ config.js
 
 .DS_Store
 
-# resources 
+# resources
 resources
+
+# elastic search config
+# logstash.conf

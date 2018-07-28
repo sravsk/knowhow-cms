@@ -10,8 +10,11 @@ const expressValidator = require('express-validator');
 const randomstring = require('randomstring');
 
 const db = require('../db/helpers.js');
+const apidb = require('../db/apiHelpers.js');
 const sessionStore = require('../db/Models/Session.js');
 const sendmail = require('./sendmail.js');
+const Hashids = require('hashids');
+const hashids = new Hashids('knowhow-api', 16);
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -110,7 +113,7 @@ app.post('/signupuser', (req, res) => {
     bcrypt.hash(password, saltRounds, (err, hash) => {
       // store hash in database
       if (hash) {
-        db.addUser({ name: req.body.name, email: req.body.email, password: hash, company: req.body.company, domain: req.body.domain }, (isUserCreated, userInfo, error) => {
+        db.addUser({ name: req.body.name, email: req.body.email, password: hash, company: req.body.company, domain: req.body.domain}, (isUserCreated, userInfo, error) => {
           if (error) {
             let data = { signup: false, message: 'duplicate email' };
             res.send(data);
@@ -158,7 +161,8 @@ app.post('/signupuserwithcode', (req, res) => {
                     console.log(err);
                     res.sendStatus(404);
                   } else {
-                    res.send('user signed up');
+                    let data = { signup: true, name: name, companyId: companyId, role: role };
+                    res.send(data);
                   }
                 });
               });
@@ -310,10 +314,6 @@ app.post('/deletecategory', (req, res) => {
 
 // get all categories for a given company id
 app.get('/:companyId/categoriesdata', (req, res) => {
-  //enable CORS for this route
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, HEAD');
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   let companyId = req.params.companyId;
   db.fetchCategoriesByCompany(companyId, (categories) => {
     res.send(categories);
@@ -322,10 +322,6 @@ app.get('/:companyId/categoriesdata', (req, res) => {
 
 // get all articles for a given company id and category id
 app.get('/:companyId/categories/:categoryId/articlesdata', (req, res) => {
-  //enable CORS for this route
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, HEAD');
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   let companyId = req.params.companyId;
   let categoryId = req.params.categoryId;
   db.fetchArticles({companyId, categoryId}, (articles) => {
@@ -335,10 +331,6 @@ app.get('/:companyId/categories/:categoryId/articlesdata', (req, res) => {
 
 // get all articles for a given company id
 app.get('/:companyId/articlesdata', (req, res) => {
-  //enable CORS for this route
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, HEAD');
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   let companyId = req.params.companyId;
   db.fetchCompanyArticles({companyId}, (articles) => {
     res.send(articles);
@@ -373,27 +365,88 @@ app.post('/deleteArticle', (req, res) => {
 //////////////////////////
 //    API routes     //
 //////////////////////////
-app.get('/api/:companyId', (req, res) => {
-  //enable CORS for this route
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, HEAD');
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  let companyId = req.params.companyId;
-  db.fetchCompanyData(companyId, (data) => {
-    res.send(data);
-  });
-});
 
-app.get('/api/article/:articleId', (req, res) => {
-  //enable CORS for this route
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, HEAD');
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  let articleId = req.params.articleId;
-  db.fetchOneArticle(articleId, (data) => {
-    res.send(data);
-  });
-});
+// wrapper function for asycn await error handling
+let wrap = fn => (...args) => fn(...args).catch(args[2]);
+
+app.get('/api/:hashedcompanyId', wrap(async (req, res) => {
+  try {
+    //enable CORS for this route
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, HEAD');
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    // var id = hashids.encode(1);
+    // console.log("hashed version of company id 1 is : ", id)
+     //1 -> NGp3aq8Qq8kQZKrM
+    let CompanyId = hashids.decode(req.params.hashedcompanyId);
+    let data = await apidb.fetchCompanyData(CompanyId);
+    res.json(data);
+  } catch(error) {
+    res.status(500).json({ error: error.toString() });
+  }
+}));
+
+
+app.get('/api/:hashedcompanyId/article/:hashedarticleId', wrap(async(req, res) => {
+  try{
+    //enable CORS for this route
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, HEAD');
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    let CompanyId = hashids.decode(req.params.hashedcompanyId);
+    let articleId = hashids.decode(req.params.hashedarticleId);
+    let article = await apidb.fetchOneArticle(CompanyId, articleId);
+    res.json(article);
+  } catch(err) {
+    res.status(500).json({ error: error.toString() });
+  }
+}));
+
+// get all categories for a given company id
+app.get('/api/:hashedcompanyId/categoriesdata', wrap(async(req, res) => {
+  try{
+    //enable CORS for this route
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, HEAD');
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    let CompanyId = hashids.decode(req.params.hashedcompanyId);
+    let categories = await apidb.fetchCategoriesByCompany(CompanyId);
+    res.json(categories);
+  } catch(err) {
+    res.status(500).json({ error: error.toString() });
+  }
+}));
+
+// get all articles for a given company id and category id
+app.get('/api/:hashedcompanyId/categories/:hashedcategoryId/articlesdata', wrap(async(req, res) => {
+  try{
+    //enable CORS for this route
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, HEAD');
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    let CompanyId = hashids.decode(req.params.hashedcompanyId);
+    let categoryId = hashids.decode(req.params.hashedcategoryId);
+    let articles = await apidb.fetchArticles(CompanyId, categoryId);
+    res.json(articles);
+  } catch(err) {
+    res.status(500).json({ error: err.toString() });
+  }
+}));
+
+// get all articles for a given company id
+app.get('/api/:hashedcompanyId/articlesdata', wrap(async(req, res) => {
+  try{
+    //enable CORS for this route
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, HEAD');
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    let CompanyId = hashids.decode(req.params.hashedcompanyId);
+    let articles = await apidb.fetchCompanyArticles(CompanyId);
+    res.json(articles);
+  } catch(err) {
+    res.status(500).json({ error: err.toString() });
+  }
+}));
 
 // to get name and companyId of logged in user
 app.get('/user', (req, res) => {
