@@ -10,8 +10,11 @@ const expressValidator = require('express-validator');
 const randomstring = require('randomstring');
 
 const db = require('../db/helpers.js');
+const apidb = require('../db/apiHelpers.js');
 const sessionStore = require('../db/Models/Session.js');
 const sendmail = require('./sendmail.js');
+const Hashids = require('hashids');
+const hashids = new Hashids('knowhow-api', 16);
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -110,7 +113,7 @@ app.post('/signupuser', (req, res) => {
     bcrypt.hash(password, saltRounds, (err, hash) => {
       // store hash in database
       if (hash) {
-        db.addUser({ name: req.body.name, email: req.body.email, password: hash, company: req.body.company, domain: req.body.domain }, (isUserCreated, userInfo, error) => {
+        db.addUser({ name: req.body.name, email: req.body.email, password: hash, company: req.body.company, domain: req.body.domain}, (isUserCreated, userInfo, error) => {
           if (error) {
             let data = { signup: false, message: 'duplicate email' };
             res.send(data);
@@ -373,16 +376,25 @@ app.post('/deleteArticle', (req, res) => {
 //////////////////////////
 //    API routes     //
 //////////////////////////
-app.get('/api/:companyId', (req, res) => {
-  //enable CORS for this route
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, HEAD');
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  let companyId = req.params.companyId;
-  db.fetchCompanyData(companyId, (data) => {
-    res.send(data);
-  });
-});
+
+// wrapper function for asycn await error handling 
+let wrap = fn => (...args) => fn(...args).catch(args[2]);
+
+app.get('/api/:companyId', wrap(async (req, res) => {
+  try {
+    //enable CORS for this route
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, HEAD');
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+     //1 -> NGp3aq8Qq8kQZKrM
+    let hashCompanyId = hashids.decode(req.params.companyId);
+    let data = await apidb.fetchCompanyData(hashCompanyId);
+    res.json(data);
+  } catch(error) {
+    res.status(500).json({ error: error.toString() });
+  }
+}));
+
 
 app.get('/api/article/:articleId', (req, res) => {
   //enable CORS for this route
