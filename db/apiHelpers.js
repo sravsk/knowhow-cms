@@ -37,8 +37,44 @@ const fetchCompanyData = async(companyId) => {
 	return data;
 };
 
+const fetchOneArticle = async(companyId, articleId) => {
+  const article = await Article.findAll({
+    where: {
+      companyId: companyId, 
+      id : articleId
+    },
+    attributes: ['id', 'title', 'description', 'content', 'categoryId', 'companyId']
+    })
+  return article;
+};
+
+const fetchArticles = async(companyId, categoryId) => {
+  const articles = await Article.findAll({
+      where: {
+        companyId: companyId,
+        categoryId: categoryId
+      },
+      attributes: ['id', 'title', 'description', 'content', 'categoryId', 'companyId']
+    })
+  return articles;
+}
+
+const fetchCompanyArticles = async(companyId) => {
+  const articles = await Article.findAll({
+      where: {
+        companyId: companyId
+      },
+      attributes: ['id', 'title', 'description', 'content', 'categoryId', 'companyId']
+    })
+  return articles;
+}
+
+
 module.exports = {
 	fetchCompanyId,
 	fetchCategoriesByCompany,
-	fetchCompanyData
+	fetchCompanyData,
+  fetchOneArticle,
+  fetchArticles,
+  fetchCompanyArticles
 };
