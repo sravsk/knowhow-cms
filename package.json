@@ -6,8 +6,9 @@
     "start": "webpack && node server/index.js",
     "pre-start": "node node_modules/webpack/bin/webpack.js",
     "dev-start": "nodemon server/index.js",
-    "build": "webpack -w",
-    "prod": "webpack",
+    "build": "npm run clean && npm run compile",
+    "clean": "rm -rf ./build/index.bundle.js",
+    "compile": "NODE_ENV=production webpack --config ./webpack.config.js --progress",
     "test": "mocha"
   },
   "repository": {
