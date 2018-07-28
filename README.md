@@ -20,27 +20,19 @@
 
 ## Usage
 
-> Create a config.js file in the root directory
+> Create a config.js file in the root directory.
 
-Create a local MySQL database and add the following code in the file.
-
-module.exports = {
-  DBNAME: 'your-database-name',
-  DBUSERNAME: 'your-username',
-  DBPASSWORD: 'your-password',
-  DBHOST: 'localhost'
-};
-
-or
-
-Create a DB instance on Amazon RDS and add the following code in the file.
+Create a DB instance on Amazon RDS (or create a local MySQL database).
+Go to sendgrid.com, sign up for an account and generate an API key.
+Add the following code in the config.js file.
 
 module.exports = {
   DBNAME: 'database-name',
-  DBUSERNAME: 'username',
-  DBPASSWORD: 'password',
-  DBHOST: 'amazonrdsdb-hostname',
-  DBPORT: 'rds-instance-port-number'
+  DBUSERNAME: 'db-username',
+  DBPASSWORD: 'db-password',
+  DBHOST: 'amazonrds-db-hostname or localhost',
+  DBPORT: 'port-number(3306)',
+  SENDGRID_API_KEY: 'sendgrid-api-key'
 };
 
 Create a .conf file for elastic search.
@@ -76,7 +68,6 @@ npm install
 ### Roadmap
 
 View the project roadmap [here](LINK_TO_PROJECT_ISSUES)
-
 
 ## Contributing
 
