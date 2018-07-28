@@ -39,4 +39,4 @@ config.js
 resources
 
 # elastic search config
-logstash.conf
+# logstash.conf
