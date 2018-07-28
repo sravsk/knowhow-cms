@@ -5,6 +5,7 @@
   "scripts": {
     "start": "webpack && node server/index.js",
     "pre-start": "node node_modules/webpack/bin/webpack.js",
+    "dev-react": "webpack -d --watch",
     "dev-start": "nodemon server/index.js",
     "build": "npm run clean && npm run compile",
     "clean": "rm -rf ./build/index.bundle.js",
