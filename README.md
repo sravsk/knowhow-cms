@@ -22,8 +22,9 @@
 
 > Create a config.js file in the root directory.
 
-Create a DB instance on Amazon RDS (or create a local MySQL database).
-Go to sendgrid.com, sign up for an account and generate an API key.
+> Create a DB instance on Amazon RDS (or create a local MySQL database).
+
+> Go to sendgrid.com, sign up for an account and generate an API key.
 Add the following code in the config.js file.
 
 module.exports = {
@@ -35,14 +36,21 @@ module.exports = {
   SENDGRID_API_KEY: 'sendgrid-api-key'
 };
 
+> Download Elasticsearch and Logstash from elastic.co. Download the JDBC driver for MySQL.
+
+Run bin/elasticsearch.
+
+In the logstash.conf config file in the root directory, enter the path to your downloaded jdbc driver library.
+
+Run bin/logstash -f logstash.conf
 
 ## Requirements
 
-Node
-MySQL
-React
-Sequelize
-Express
+> Node
+> MySQL
+> React
+> Sequelize
+> Express
 
 ## Development
 
