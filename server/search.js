@@ -29,7 +29,7 @@ client.ping({
 });
 
 // search function for all articles with a given search term and companyId
-const queryTerm = (term, companyId, offset = 0, callback) => {
+const queryTerm = (term, companyId, offset, callback) => {
   const body = {
     // from allows us to paginate the results
     from: offset,
@@ -43,7 +43,8 @@ const queryTerm = (term, companyId, offset = 0, callback) => {
           fuzziness: 'auto'
         }
       }
-    }
+    },
+    size: 10000
   };
   client.search({index, type, body})
     .then(results => {
@@ -52,8 +53,6 @@ const queryTerm = (term, companyId, offset = 0, callback) => {
 };
 
 module.exports = queryTerm;
-
-
 
 
 
