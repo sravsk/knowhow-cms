@@ -29,9 +29,9 @@ client.ping({
 });
 
 
-    const { count } = await client.count();
-    console.log('====== count ======')
-    console.log(count)
+    // const { count } = await client.count();
+    // console.log('====== count ======')
+    // console.log(count)
 
 
 
