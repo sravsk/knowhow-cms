@@ -3,14 +3,15 @@ import axios from 'axios';
 import { Button, Form, Grid, Header, Message, Segment } from 'semantic-ui-react';
 import { Link, Redirect } from 'react-router-dom';
 
-class SignupExistingCompany extends React.Component {
+class SignupWithCode extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       name: '',
       code: '',
       password: '',
-      passwordMatch: ''
+      passwordMatch: '',
+      onHome: false
     };
   }
 
@@ -32,7 +33,8 @@ class SignupExistingCompany extends React.Component {
       // all fields have values and passwords match
       axios.post(`/signupuserwithcode?name=${this.state.name}&password=${this.state.password}&code=${this.state.code}`)
       .then(result => {
-        if (result.data === 'user signed up') {
+        if (result.data.signup) {
+          // result.data has properties name, companyId and role
           alert('You have been signed up');
           this.setState({
             onHome: true
@@ -121,4 +123,4 @@ class SignupExistingCompany extends React.Component {
   }
 }
 
-export default SignupExistingCompany;
+export default SignupWithCode;
