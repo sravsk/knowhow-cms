@@ -36,6 +36,11 @@ client.ping({
   }
 });
 
+    const { count } = await client.count();
+    console.log('====== count ======')
+    console.log(count)
+
+
 // var logstash = new Logstash({
 //   type: 'udp', // udp, tcp, memory
 //   host: 'logstash.example.org',
