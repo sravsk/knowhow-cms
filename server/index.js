@@ -13,6 +13,8 @@ const db = require('../db/helpers.js');
 const apidb = require('../db/apiHelpers.js');
 const sessionStore = require('../db/Models/Session.js');
 const sendmail = require('./sendmail.js');
+const queryTerm = require('./search.js');
+
 const Hashids = require('hashids');
 const hashids = new Hashids('knowhow-api', 16);
 
@@ -362,6 +364,21 @@ app.post('/deleteArticle', (req, res) => {
   db.deleteArticle(req.body.articleId, () => res.redirect('/home'));
 })
 
+// to get name and companyId of logged in user
+app.get('/user', (req, res) => {
+  res.send(req.user);
+});
+
+app.get('/logout', (req, res) => {
+  // req.logout is a function available from passport
+  req.logout();
+  // destroy session for the user that has been logged out
+  req.session.destroy();
+  // logout user
+  res.send('logged out')
+});
+
+
 //////////////////////////
 //    API routes     //
 //////////////////////////
@@ -448,19 +465,19 @@ app.get('/api/:hashedcompanyId/articlesdata', wrap(async(req, res) => {
   }
 }));
 
-// to get name and companyId of logged in user
-app.get('/user', (req, res) => {
-  res.send(req.user);
+// get articles containing a given search term
+app.get('/api/:hashedCompanyId/search', (req, res) => {
+  //enable CORS for this route
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, HEAD');
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  let term = req.query.term;
+  let companyId = hashids.decode(req.params.hashedCompanyId)[0];
+  queryTerm(term, companyId, 0, (results) => {
+    res.send(results);
+  })
 });
 
-app.get('/logout', (req, res) => {
-  // req.logout is a function available from passport
-  req.logout();
-  // destroy session for the user that has been logged out
-  req.session.destroy();
-  // logout user
-  res.send('logged out')
-});
 
 //////////////////////////
 //    DB dev routes     //

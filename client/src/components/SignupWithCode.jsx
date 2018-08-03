@@ -3,14 +3,15 @@ import axios from 'axios';
 import { Button, Form, Grid, Header, Message, Segment } from 'semantic-ui-react';
 import { Link, Redirect } from 'react-router-dom';
 
-class SignupExistingCompany extends React.Component {
+class SignupWithCode extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       name: '',
       code: '',
       password: '',
-      passwordMatch: ''
+      passwordMatch: '',
+      onHome: false
     };
   }
 
@@ -122,4 +123,4 @@ class SignupExistingCompany extends React.Component {
   }
 }
 
-export default SignupExistingCompany;
+export default SignupWithCode;
