@@ -88,12 +88,33 @@ class NewArticle extends React.Component{
     // var delta = editor.getContents()
     // console.log('delta ', delta)
     // console.log('delta.ops ', delta.ops)
-    var itag = html.match(/<img src="[^"]*">/g)
-    // console.log('itag ', itag)
-    itag.map(tag => {
-      let urlReg = /"([^"]*)"/
-      let urlString = tag.match(urlReg)
-      console.log('urlString ', urlString)
+    // var itag = html.match(/<img src="[^"]*">/g)
+
+
+
+    let dataUri = /(<img src=")([^"]*)(">)/g
+    console.log('dataUri ', html.match(dataUri))
+    function replaceUri(match, p1, p2, p3, offset, string) {
+      return p2.includes('base64') ? `${p1}${awsFile}${p2}` : `${p1}${p2}${p2}`
+    }
+    function replaceUri(match, p1, p2, p3, offset, string) {
+      let bucket = 'houskertest'
+      let path = 'folder1'
+      let image = 'squirrel.png'
+      let awsFile = `https://s3-us-west-2.amazonaws.com/${bucket}/${path}/${image}`
+      return p2.includes('base64') ? `${p1}${awsFile}${p3}` : `${p1}${p2}${p3}`
+    }
+    let corrected = html.replace(dataUri, replaceUri)
+    console.log('corrected ', corrected)
+
+
+
+    // let htmlConverted = html.replace()
+    // // console.log('itag ', itag)
+    // let corrected = itag.map(tag => {
+    //   let urlReg = /"([^"]*)"/
+    //   let urlString = tag.match(urlReg)
+    //   console.log('urlString ', urlString)
 
 // let url = new URL(urlString[1]);
 // let bufImg = ImageIO.read(url);
@@ -106,17 +127,20 @@ class NewArticle extends React.Component{
 //send to file to AWS and specify a path
 //replace url with AWS filepath of image that you specified
 
+// let bucket = 'adelleTest'
+// let path = 'folder1'
+// let image = 'image1.png'
 
-
-      tag = tag.replace(urlReg, '"test"')
-      // console.log('tag ', tag)
-    })
-    // console.log('itag ', itag)
+//       tag = tag.replace(urlReg, `"https://s3.amazonaws.com/${bucket}/${path}/${image}"`)
+//       // console.log('tag ', tag)
+//     }).join('');
+//     console.log('corrected ', corrected)
 
 
 
     this.setState({
-      content: html
+      // content: html
+      content: corrected
     })
   }
 
