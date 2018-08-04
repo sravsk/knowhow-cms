@@ -84,6 +84,37 @@ class NewArticle extends React.Component{
   }
 
   handleContentChange(html) {
+    // var editor = this.reactQuillRef.getEditor()
+    // var delta = editor.getContents()
+    // console.log('delta ', delta)
+    // console.log('delta.ops ', delta.ops)
+    var itag = html.match(/<img src="[^"]*">/g)
+    // console.log('itag ', itag)
+    itag.map(tag => {
+      let urlReg = /"([^"]*)"/
+      let urlString = tag.match(urlReg)
+      console.log('urlString ', urlString)
+
+// let url = new URL(urlString[1]);
+// let bufImg = ImageIO.read(url);
+// let file = new File("downloaded.jpg");
+// ImageIO.write(img, "jpg", file);
+
+
+//filter for data urls (urls hosted on other sites can stay)
+//convert data urls to file for upload (maybe involves converting to a blob and fileReader???)
+//send to file to AWS and specify a path
+//replace url with AWS filepath of image that you specified
+
+
+
+      tag = tag.replace(urlReg, '"test"')
+      // console.log('tag ', tag)
+    })
+    // console.log('itag ', itag)
+
+
+
     this.setState({
       content: html
     })

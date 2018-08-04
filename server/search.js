@@ -28,6 +28,13 @@ client.ping({
   }
 });
 
+
+    // const { count } = await client.count();
+    // console.log('====== count ======')
+    // console.log(count)
+
+
+
 // search function for all articles with a given search term and companyId
 const queryTerm = (term, companyId, offset, callback) => {
   const body = {
@@ -76,6 +83,7 @@ module.exports = queryTerm;
 // CustomESHTTPConnector.prototype.createAgent = function (config) {
 //     return new customHttpAgent(this.makeAgentConfig(config));
 // };
+
 // var logstash = new Logstash({
 //   type: 'udp', // udp, tcp, memory
 //   host: 'logstash.example.org',

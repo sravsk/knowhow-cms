@@ -4,13 +4,16 @@ import { Grid, Header, Container, Button, Segment } from 'semantic-ui-react';
 import axios from 'axios';
 import ArticleItem from './ArticleItem.jsx';
 import NavBar from './NavBar.jsx';
+import Pagination from './Pagination.jsx';
 
 class ArticlesPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      articles: []
-    }
+      articles: [],
+      pageOfItems: []
+    };
+    this.onChangePage = this.onChangePage.bind(this);
   }
 
   componentDidMount() {
@@ -25,8 +28,15 @@ class ArticlesPage extends React.Component {
       })
   }
 
+  onChangePage(pageOfItems) {
+    // update state with new page of items
+    this.setState({
+      pageOfItems: pageOfItems
+    });
+  }
+
   render() {
-    let renderArticles = this.state.articles.map(article => {
+    let renderArticles = this.state.pageOfItems.map(article => {
       return (<Segment key={article.id}><ArticleItem article={article} /></Segment>);
     })
     return (
@@ -45,6 +55,9 @@ class ArticlesPage extends React.Component {
             <Segment.Group style={{ width: '100%', 'minHeight': '70vh' }} >
               {renderArticles}
             </Segment.Group>
+          </Grid.Row>
+          <Grid.Row>
+            <Pagination items={this.state.articles} onChangePage={this.onChangePage} />
           </Grid.Row>
         </Grid>
       </Segment>
