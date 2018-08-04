@@ -61,6 +61,7 @@
     "express-validator": "^5.2.0",
     "hashids": "^1.1.4",
     "json-loader": "^0.5.7",
+    "lodash": "^4.17.10",
     "logstash-client": "^1.1.1",
     "mysql2": "^1.5.3",
     "passport": "^0.4.0",

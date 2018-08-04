@@ -2,6 +2,8 @@ import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { Container, Menu, Header, Button, Input, Search } from 'semantic-ui-react';
 import axios from 'axios';
+import _ from 'lodash';
+import ArticleItem from './ArticleItem.jsx';
 
 class NavBar extends React.Component {
   constructor (props) {
@@ -9,8 +11,13 @@ class NavBar extends React.Component {
     this.state = {
       isLoggedIn: false,
       user: '',
+      value: '',
+      isLoading: false,
+      results: [],
       onLandingPage: false
-    }
+    };
+    this.handleResultSelect = this.handleResultSelect.bind(this);
+    this.handleSearchChange = this.handleSearchChange.bind(this);
   }
 
   componentDidMount() {
@@ -27,6 +34,24 @@ class NavBar extends React.Component {
           });
         }
       })
+  }
+
+  handleResultSelect(e, { result }) {
+    this.setState({ value: <ArticleItem article={article} /> })
+  }
+
+  handleSearchChange(e, { value }) {
+    this.setState({ isLoading: true, value })
+    console.log('in search value', this.state, value)
+    axios.get(`/search?term=${value}`)
+      .then(searchResults => {
+        var searchResults = searchResults.data.hits;
+        var results = searchResults.map(item => item._source);
+        this.setState ({
+          isLoading: false,
+          results: results
+        })
+      });
   }
 
   handleLogout() {
@@ -67,6 +92,7 @@ class NavBar extends React.Component {
         </Container>
       );
     } else {
+      const { results, value, isLoading } = this.state;
       return (
         <Container className='navbar'>
           <Menu fixed='top' inverted>
@@ -77,7 +103,14 @@ class NavBar extends React.Component {
               <p>Hello {this.state.user}</p>
             </Menu.Item>
             <Menu.Item>
-              <Search placeholder='Search docs'/>
+              <Search
+                loading={isLoading}
+                onResultSelect={this.handleResultSelect}
+                onSearchChange={_.debounce(this.handleSearchChange, 500, { leading: true })}
+                results={results}
+                value={value}
+                {...this.props}
+              />
             </Menu.Item>
             <Menu.Item>
               <Button primary onClick={this.handleLogout.bind(this)}>Log out</Button>
