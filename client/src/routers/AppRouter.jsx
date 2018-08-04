@@ -22,31 +22,90 @@ import SignupWithCode from '../components/SignupWithCode.jsx';
 import ForgotPassword from '../components/ForgotPassword.jsx';
 import ResetPassword from '../components/ResetPassword.jsx';
 
-const AppRouter =({ store }) => (
-  <BrowserRouter>
-    <Container>
-      <NavBar />
-      <Switch>
-        <Route exact path='/' component={LandingPage} />
-        <Route exact path='/home' component={Home} />
-        <Route exact path='/login' component={LoginPage} />
-        <Route exact path='/signup' component={SignupPage} />
-        <Route exact path='/categories' component={CategoriesPage} />
-        <Route exact path='/articles' component={ArticlesPage} />
-        <Route exact path='/companyarticles' component={CompanyArticles} />
-        <Route exact path='/editor' component={Editor} />
-        <Route exact path='/addcategory' component={NewCategory} />
-        <Route exact path='/:companyId/categories/:categoryId/articles' component={ArticlesPage} />
-        <Route exact path='/articles/:articleId' component={ArticleContent} />
-        <Route exact path='/devadminpage' component={devAdminPage} />
-        <Route exact path='/addarticle' component={NewArticle} />
-        <Route exact path='/inviteuser' component={InviteUser} />
-        <Route exact path='/signupwithcode' component={SignupWithCode} />
-        <Route exact path='/forgotpassword' component={ForgotPassword} />
-        <Route exact path='/resetpassword' component={ResetPassword} />
-      </Switch>
-    </Container>
-  </BrowserRouter>
-);
+
+
+class AppRouter extends React.Component{
+  constructor(props) {
+    super(props)
+    this.state = {
+      user: '',
+      companyId: '',
+      company: ''
+    }
+  }
+
+  updateInfo(obj) {
+    this.setState({
+      user: obj.user,
+      companyId: obj.companyId
+    })
+  }
+
+  render() {
+    return (
+      <BrowserRouter>
+        <Container>
+        <NavBar
+          user={this.state.user}
+          company={this.state.company}
+        />
+        <Switch>
+          <Route exact path='/' component={LandingPage} />
+          <Route exact path='/articles' component={ArticlesPage} />
+          <Route exact path='/editor' component={Editor} />
+          <Route exact path='/addcategory' component={NewCategory} />
+          <Route exact path='/:companyId/categories/:categoryId/articles' component={ArticlesPage} />
+          <Route exact path='/articles/:articleId' component={ArticleContent} />
+          <Route exact path='/devadminpage' component={devAdminPage} />
+          <Route exact path='/inviteuser' component={InviteUser} />
+          <Route exact path='/signupwithcode' component={SignupWithCode} />
+          <Route exact path='/forgotpassword' component={ForgotPassword} />
+          <Route exact path='/resetpassword' component={ResetPassword} />
+
+          <Route exact path='/home' render={(props) => {return (
+            <Home
+              user={this.state.user}
+              companyId={this.state.companyId}
+              company={this.state.company}
+            />
+          )}} />
+          <Route exact path='/login' render={(props) => {return (
+            <LoginPage
+              user={this.state.user}
+              companyId={this.state.companyId}
+              updateInfo={this.updateInfo}
+            />
+          )}} />
+          <Route exact path='/signup' render={(props) => {return (
+            <SignupPage
+              user={this.state.user}
+              companyId={this.state.companyId}
+              updateInfo={this.updateInfo}
+            />
+          )}} />
+          <Route exact path='/categories' render={(props) => {return (
+            <CategoriesPage
+              user={this.state.user}
+              companyId={this.state.companyId}
+            />
+          )}} />
+          <Route exact path='/companyarticles' render={(props) => {return (
+            <CompanyArticles
+              user={this.state.user}
+              companyId={this.state.companyId}
+            />
+          )}} />
+          <Route exact path='/addarticle' render={(props) => {return (
+            <NewArticle
+            user={this.state.user}
+            companyId={this.state.companyId}
+            />
+          )}} />
+        </Switch>
+        </Container>
+      </BrowserRouter>
+    );
+  }
+}
 
 export default AppRouter;
