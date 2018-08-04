@@ -15,7 +15,7 @@ class NavBar extends React.Component {
       isLoading: false,
       results: [],
       onLandingPage: false,
-      linkToArticle: null
+      article: null,
     };
     this.handleResultSelect = this.handleResultSelect.bind(this);
     this.handleSearchChange = this.handleSearchChange.bind(this);
@@ -39,23 +39,16 @@ class NavBar extends React.Component {
 
   handleResultSelect(e, { result }) {
     this.setState({
-      value: result.title
-    })
-
-      // TODO - link to article
-      var test = <Link to={{
-        pathname: `/articles/${result.id}`,
-        state: {
-          article: result
-        }
-      }} > result.title </Link>
-
-      console.log('in handle result select', test, typeof test)
+      value: result.title,
+      article: result
+    });
   }
 
-
   handleSearchChange(e, { value }) {
-    this.setState({ isLoading: true, value })
+    this.setState({
+      isLoading: true,
+      value: value
+    });
     axios.get(`/search?term=${value}`)
       .then(searchResults => {
         var searchResults = searchResults.data.hits;
@@ -84,6 +77,15 @@ class NavBar extends React.Component {
     if (this.state.onLandingPage) {
       return (
         <Redirect to='/' />
+      );
+    } else if (this.state.article) {
+      // go to article selected from search results
+      var article = this.state.article;
+      return (
+        <Redirect to={{
+          pathname: `/articles/${article.id}`,
+          state: { article: article }
+        }} />
       );
     }
     // show login and signup buttons if user is not logged in
