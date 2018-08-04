@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 
 import { Container, Header } from 'semantic-ui-react';
 import { BrowserRouter, Route, Switch, Link } from 'react-router-dom';
-import { Provider } from 'react-redux';
 
 import LandingPage from '../components/LandingPage.jsx';
 import NavBar from '../components/NavBar.jsx';
@@ -24,32 +23,30 @@ import ForgotPassword from '../components/ForgotPassword.jsx';
 import ResetPassword from '../components/ResetPassword.jsx';
 
 const AppRouter =({ store }) => (
-  <Provider store={store}>
-    <BrowserRouter>
-      <Container>
-        <NavBar />
-        <Switch>
-          <Route exact path='/' component={LandingPage} />
-          <Route exact path='/home' component={Home} />
-          <Route exact path='/login' component={LoginPage} />
-          <Route exact path='/signup' component={SignupPage} />
-          <Route exact path='/categories' component={CategoriesPage} />
-          <Route exact path='/articles' component={ArticlesPage} />
-          <Route exact path='/companyarticles' component={CompanyArticles} />
-          <Route exact path='/editor' component={Editor} />
-          <Route exact path='/addcategory' component={NewCategory} />
-          <Route exact path='/:companyId/categories/:categoryId/articles' component={ArticlesPage} />
-          <Route exact path='/articles/:articleId' component={ArticleContent} />
-          <Route exact path='/devadminpage' component={devAdminPage} />
-          <Route exact path='/addarticle' component={NewArticle} />
-          <Route exact path='/inviteuser' component={InviteUser} />
-          <Route exact path='/signupwithcode' component={SignupWithCode} />
-          <Route exact path='/forgotpassword' component={ForgotPassword} />
-          <Route exact path='/resetpassword' component={ResetPassword} />
-        </Switch>
-      </Container>
-    </BrowserRouter>
-  </Provider>
+  <BrowserRouter>
+    <Container>
+      <NavBar />
+      <Switch>
+        <Route exact path='/' component={LandingPage} />
+        <Route exact path='/home' component={Home} />
+        <Route exact path='/login' component={LoginPage} />
+        <Route exact path='/signup' component={SignupPage} />
+        <Route exact path='/categories' component={CategoriesPage} />
+        <Route exact path='/articles' component={ArticlesPage} />
+        <Route exact path='/companyarticles' component={CompanyArticles} />
+        <Route exact path='/editor' component={Editor} />
+        <Route exact path='/addcategory' component={NewCategory} />
+        <Route exact path='/:companyId/categories/:categoryId/articles' component={ArticlesPage} />
+        <Route exact path='/articles/:articleId' component={ArticleContent} />
+        <Route exact path='/devadminpage' component={devAdminPage} />
+        <Route exact path='/addarticle' component={NewArticle} />
+        <Route exact path='/inviteuser' component={InviteUser} />
+        <Route exact path='/signupwithcode' component={SignupWithCode} />
+        <Route exact path='/forgotpassword' component={ForgotPassword} />
+        <Route exact path='/resetpassword' component={ResetPassword} />
+      </Switch>
+    </Container>
+  </BrowserRouter>
 );
 
 export default AppRouter;
