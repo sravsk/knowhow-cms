@@ -19,7 +19,7 @@ var client = new elasticsearch.Client({
 
 client.ping({
   // ping usually has a 3000ms timeout
-  requestTimeout: 1000
+  requestTimeout: 3000
 }, function (error) {
   if (error) {
     console.trace('elasticsearch cluster is down!');
@@ -28,12 +28,8 @@ client.ping({
   }
 });
 
-
-    // const { count } = await client.count();
-    // console.log('====== count ======')
-    // console.log(count)
-
-
+// const { count } = await client.count();
+// console.log('====== count ======', count)
 
 // search function for all articles with a given search term and companyId
 const queryTerm = (term, companyId, offset, callback) => {
@@ -41,14 +37,23 @@ const queryTerm = (term, companyId, offset, callback) => {
     // from allows us to paginate the results
     from: offset,
     query: {
-      'multi_match': {
-          query: term,
-          // 'and' operator is used to prioritize results that contain all of the tokens in the query
-          operator: 'and',
-          type: "most_fields",
-          fields: ['title', 'description', 'content'],
-          // // fuzziness adjusts tolerance for spelling mistakes, higher fuzziness will allow for more corrections in result hits
-          fuzziness: 'auto'
+      bool: {
+        must: {
+          'multi_match': {
+            query: term,
+            // 'and' operator is used to prioritize results that contain all of the tokens in the query
+            operator: 'and',
+            type: "most_fields",
+            fields: ['title', 'description', 'content'],
+            // fuzziness adjusts tolerance for spelling mistakes, higher fuzziness will allow for more corrections in result hits
+            fuzziness: 'auto'
+          }
+        },
+        filter: [{
+          term: {
+            companyid: companyId
+          }
+        }]
       }
     },
     size: 10000
