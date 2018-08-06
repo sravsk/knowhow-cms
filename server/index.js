@@ -385,6 +385,15 @@ app.post('/deleteArticle', (req, res) => {
   db.deleteArticle(req.body.articleId, () => res.redirect('/home'));
 })
 
+// get articles containing a given search term
+app.get('/search', (req, res) => {
+  let term = req.query.term;
+  let companyId = req.user.companyId;
+  queryTerm(term, companyId, 0, (results) => {
+    res.send(results);
+  })
+});
+
 // to get name and companyId of logged in user
 app.get('/user', (req, res) => {
   res.send(req.user);

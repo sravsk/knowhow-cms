@@ -41,14 +41,14 @@ const queryTerm = (term, companyId, offset, callback) => {
     // from allows us to paginate the results
     from: offset,
     query: {
-      match: {
-        content: {
+      'multi_match': {
           query: term,
           // 'and' operator is used to prioritize results that contain all of the tokens in the query
           operator: 'and',
-          // fuzziness adjusts tolerance for spelling mistakes, higher fuzziness will allow for more corrections in result hits
+          type: "most_fields",
+          fields: ['title', 'description', 'content'],
+          // // fuzziness adjusts tolerance for spelling mistakes, higher fuzziness will allow for more corrections in result hits
           fuzziness: 'auto'
-        }
       }
     },
     size: 10000
