@@ -14,6 +14,15 @@ const apidb = require('../db/apiHelpers.js');
 const sessionStore = require('../db/Models/Session.js');
 const sendmail = require('./sendmail.js');
 const queryTerm = require('./search.js');
+const config = require('../config.js');
+const AWS = require('aws-sdk');
+
+const s3 = new AWS.S3({
+  accessKeyId: config.S3.accessKeyId,
+  secretAccessKey: config.S3.secretAccessKey,
+  Bucket: config.S3.Bucket,
+  apiVersion: config.S3.apiVersion,
+});
 
 const Hashids = require('hashids');
 const hashids = new Hashids('knowhow-api', 16);
@@ -351,6 +360,18 @@ app.post('/article', (req, res) => {
     })
   }
 
+});
+
+app.post('/uploadimage', (req, res) => {
+  let buffer = new Buffer(req.body.data, 'base64');
+  s3.putObject({
+    Bucket: config.S3.Bucket,
+    Key: `${req.body.imageKey}`,
+    Body: buffer,
+    ACL: 'public-read'
+  },function (resp) {
+    res.status(201).send(arguments);
+  });
 });
 
 app.get('/company', (req, res) => {
