@@ -6,6 +6,7 @@ import NavBar from './NavBar.jsx';
 import CompanyArticles from './CompanyArticles.jsx';
 import CategoriesPage from './CategoriesPage.jsx';
 import axios from 'axios';
+import Chat from './Chat.jsx';
 
 class Home extends React.Component {
   constructor(props) {
@@ -14,7 +15,8 @@ class Home extends React.Component {
       showArticles: true,
       showCategories: false,
       company: '',
-      role: ''
+      role: '',
+      showChat : false
     }
   }
 
@@ -36,14 +38,24 @@ class Home extends React.Component {
   showCategories() {
     this.setState({
       showCategories: true,
-      showArticles: false
+      showArticles: false,
+      showChat : false
     });
   }
 
   showArticles() {
     this.setState({
       showCategories: false,
-      showArticles: true
+      showArticles: true,
+      showChat : false
+    });
+  }
+
+  showChat() {
+    this.setState({
+      showCategories: false,
+      showArticles: false,
+      showChat : true
     });
   }
 
@@ -52,6 +64,8 @@ class Home extends React.Component {
       var info = <CompanyArticles />
     } else if (this.state.showCategories) {
       var info = <CategoriesPage />
+    } else if(this.state.showChat) {
+      var info = <Chat/>
     }
     return (
       <Segment raised style={{ 'marginTop': '-8vh' }}>
@@ -65,7 +79,8 @@ class Home extends React.Component {
           <Grid.Column width={3} className='background sidebar'>
             <br/><br/>
             <Button fluid style={{ 'color': '#2185d0'}} onClick={this.showArticles.bind(this)}>Articles</Button><br/>
-            <Button fluid style={{ 'color': '#2185d0'}} onClick={this.showCategories.bind(this)}>Categories</Button>
+            <Button fluid style={{ 'color': '#2185d0'}} onClick={this.showCategories.bind(this)}>Categories</Button><br/>
+            <Button fluid style={{ 'color': '#2185d0'}} onClick={this.showChat.bind(this)}>Chat</Button>
           </Grid.Column>
           <Grid.Column width={13}>
             {info}
