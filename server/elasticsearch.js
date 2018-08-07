@@ -88,7 +88,7 @@ const updateArticle = (article) => {
   var content = article.content;
   var categoryid = article.categoryId;
   var theScript = {
-    "inline": `ctx._source.title = ${title}; ctx._source.description = ${description}; ctx._source.content = ${content}; ctx._source.categoryid = ${categoryid};`
+    "inline": `ctx._source.title = '${title}'; ctx._source.description = '${description}'; ctx._source.content = '${content}'; ctx._source.categoryid = ${categoryid};`
   }
   client.updateByQuery({
      index: index,
@@ -98,7 +98,7 @@ const updateArticle = (article) => {
         "script": theScript
      }
   }, function(err, res) {
-    // console.log(err, response);
+    // console.log('in update article', err, res);
   });
 }
 
