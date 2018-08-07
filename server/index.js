@@ -213,27 +213,29 @@ app.post('/loginuser', (req, res) => {
     email: req.body.email
   }, (user) => {
     if (user !== null) {
-      let hash = user.password;
-      let comparePassword = req.body.password;
-      let name = user.name;
-      bcrypt.compare(comparePassword, hash, (err, result) => {
-        if (result) { // valid user
-          let userInfo = { name: user.name, companyId: user.companyId, role: user.role };
-          // make passport store userInfo (name, companyId and role) in req.user
-          req.login(userInfo, (err) => {
-            if (err) {
-              console.log(err);
-              res.sendStatus(404);
-            } else {
-              let response = { name: user.name, companyId: user.companyId, role: user.role, found: true };
-              res.send(response);
-            }
-          });
-        } else { // invalid user
-          let response = { found: false };
-          res.send(response);
-        }
-      });
+      db.findUserCompany(user.id, foundCompany => {
+        let hash = user.password;
+        let comparePassword = req.body.password;
+        let name = user.name;
+        bcrypt.compare(comparePassword, hash, (err, result) => {
+          if (result) { // valid user
+            let userInfo = { user: user.name, companyId: user.companyId, role: user.role };
+            // make passport store userInfo (name, companyId and role) in req.user
+            req.login(userInfo, (err) => {
+              if (err) {
+                console.log(err);
+                res.sendStatus(404);
+              } else {
+                let response = { user: user.name, companyId: user.companyId, role: user.role, company: foundCompany, found: true };
+                res.send(response);
+              }
+            });
+          } else { // invalid user
+            let response = { found: false };
+            res.send(response);
+          }
+        });
+      })
     } else {
       res.send('no user');
     }

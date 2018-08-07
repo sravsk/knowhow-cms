@@ -170,6 +170,10 @@ var dbHelpers = {
     })
   },
 
+  findUserCompany: (userId, cb) => {
+    User.findOne({where: {id: userId}}).then(user => Company.findOne({where: {id: user.companyId}}).then(company => cb(company.name)))
+  },
+
 
   /////////////////////
   //    CATEGORIES   //
