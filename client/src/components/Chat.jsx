@@ -1,4 +1,4 @@
-import React from 'React';
+import React from 'react';
 import { Grid, Header, Container, Button, Segment, Comment, Form} from 'semantic-ui-react';
 import socketIOClient from 'socket.io-client';
 import axios from 'axios';
