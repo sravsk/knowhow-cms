@@ -64,7 +64,9 @@ const queryTerm = (term, companyId, offset, callback) => {
     });
 };
 
-module.exports = queryTerm;
+module.exports = {
+  queryTerm: queryTerm
+};
 
 
 

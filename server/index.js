@@ -13,7 +13,7 @@ const db = require('../db/helpers.js');
 const apidb = require('../db/apiHelpers.js');
 const sessionStore = require('../db/Models/Session.js');
 const sendmail = require('./sendmail.js');
-const queryTerm = require('./search.js');
+const elasticsearch = require('./elasticsearch.js');
 const config = require('../config.js');
 const AWS = require('aws-sdk');
 
@@ -391,7 +391,7 @@ app.post('/deleteArticle', (req, res) => {
 app.get('/search', (req, res) => {
   let term = req.query.term;
   let companyId = req.user.companyId;
-  queryTerm(term, companyId, 0, (results) => {
+  elasticsearch.queryTerm(term, companyId, 0, (results) => {
     res.send(results);
   })
 });
@@ -505,7 +505,7 @@ app.get('/api/:hashedCompanyId/search', (req, res) => {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   let term = req.query.term;
   let companyId = hashids.decode(req.params.hashedCompanyId)[0];
-  queryTerm(term, companyId, 0, (results) => {
+  elasticsearch.queryTerm(term, companyId, 0, (results) => {
     res.send(results);
   })
 });
