@@ -97,13 +97,17 @@ class NewArticle extends React.Component{
       } else {
         let corrected = html.replace(dataUri, this.replaceUri)
         this.setState({
+          content: html,
           corrected: corrected
         })
       }
+    } else {
+      this.setState({
+        content: html,
+        corrected: html
+      })
     }
-    this.setState({
-      content: html
-    })
+
   }
 
   replaceUri(match, p1, p2, p3, offset, string) {
