@@ -259,7 +259,7 @@ var dbHelpers = {
           categoryId: JSON.parse(article).categoryId
         })
         .then(response => cb(response))
-        cb(result.dataValues)
+        cb(record.dataValues)
       }
     })
   },

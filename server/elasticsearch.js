@@ -64,8 +64,48 @@ const queryTerm = (term, companyId, offset, callback) => {
     });
 };
 
+// delete an article from elasticsearch index
+const deleteArticle = (articleId) => {
+  client.deleteByQuery({
+    index: index,
+    type: type,
+    body: {
+       query: {
+           match: { id: articleId }
+       }
+    }
+  }, function (error, response) {
+      // console.log(err, response);
+  });
+}
+
+// update an article in elasticsearch index
+const updateArticle = (article) => {
+  var article = JSON.parse(article);
+  var id = article.id;
+  var title = article.title;
+  var description = article.description;
+  var content = article.content;
+  var categoryid = article.categoryId;
+  var theScript = {
+    "inline": `ctx._source.title = ${title}; ctx._source.description = ${description}; ctx._source.content = ${content}; ctx._source.categoryid = ${categoryid};`
+  }
+  client.updateByQuery({
+     index: index,
+     type: type,
+     body: {
+        "query": { "match": { id: id } },
+        "script": theScript
+     }
+  }, function(err, res) {
+    // console.log(err, response);
+  });
+}
+
 module.exports = {
-  queryTerm: queryTerm
+  queryTerm: queryTerm,
+  deleteArticle: deleteArticle,
+  updateArticle: updateArticle
 };
 
 

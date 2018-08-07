@@ -355,6 +355,7 @@ app.post('/article', (req, res) => {
   let companyId = req.session.passport.user.companyId;
   //update if exists
   if(req.body.id) {
+    elasticsearch.updateArticle(JSON.stringify(req.body));
     db.updateArticle(JSON.stringify(req.body), () => res.end(`${req.body.title} has been updated`));
   } else {
     db.addArticle(data.categoryId, data, companyId, (response) => {
@@ -384,6 +385,7 @@ app.get('/company', (req, res) => {
 })
 
 app.post('/deleteArticle', (req, res) => {
+  elasticsearch.deleteArticle(req.body.articleId);
   db.deleteArticle(req.body.articleId, () => res.redirect('/home'));
 })
 
