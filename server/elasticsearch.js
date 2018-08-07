@@ -70,14 +70,14 @@ const deleteArticle = (articleId) => {
     index: index,
     type: type,
     body: {
-       query: {
-           match: { id: articleId }
-       }
+      query: {
+        match: { id: articleId }
+      }
     }
   }, function (error, response) {
       // console.log(err, response);
   });
-}
+};
 
 // update an article in elasticsearch index
 const updateArticle = (article) => {
@@ -88,24 +88,44 @@ const updateArticle = (article) => {
   var content = article.content;
   var categoryid = article.categoryId;
   var theScript = {
-    "inline": `ctx._source.title = '${title}'; ctx._source.description = '${description}'; ctx._source.content = '${content}'; ctx._source.categoryid = ${categoryid};`
+    "source": `ctx._source.title = '${title}'; ctx._source.description = '${description}'; ctx._source.content = '${content}'; ctx._source.categoryid = ${categoryid};`
   }
   client.updateByQuery({
-     index: index,
-     type: type,
-     body: {
-        "query": { "match": { id: id } },
-        "script": theScript
-     }
+    index: index,
+    type: type,
+    body: {
+      "query": { "term": { id: id } },
+      "script": theScript
+    }
   }, function(err, res) {
     // console.log('in update article', err, res);
   });
-}
+};
+
+const addArticle = (article) => {
+  var article = JSON.parse(article);
+  client.index({
+    index: index,
+    type: type,
+    id: article.id,
+    body: {
+      id: article.id,
+      title: article.title,
+      description: article.description,
+      content: article.content,
+      categoryid: article.categoryId,
+      companyid: article.companyId
+    }
+ }, function(err, resp, status) {
+    // console.log('in add article', err, resp);
+ });
+};
 
 module.exports = {
   queryTerm: queryTerm,
   deleteArticle: deleteArticle,
-  updateArticle: updateArticle
+  updateArticle: updateArticle,
+  addArticle: addArticle
 };
 
 

@@ -359,7 +359,8 @@ app.post('/article', (req, res) => {
     db.updateArticle(JSON.stringify(req.body), () => res.end(`${req.body.title} has been updated`));
   } else {
     db.addArticle(data.categoryId, data, companyId, (response) => {
-      res.end(response)
+      elasticsearch.addArticle(JSON.stringify(response));
+      res.end('success')
     })
   }
 
