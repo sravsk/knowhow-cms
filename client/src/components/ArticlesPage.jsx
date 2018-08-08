@@ -40,7 +40,7 @@ class ArticlesPage extends React.Component {
       return (<Segment key={article.id}><ArticleItem article={article} /></Segment>);
     })
     return (
-      <Segment raised  style={{ 'marginTop': '-5em'}}>
+      <Segment raised>
         <Grid style = {{ marginLeft: '2vw', marginRight: '2vw' }} >
           <Grid.Row>
             <Grid.Column floated='left' width={12}>

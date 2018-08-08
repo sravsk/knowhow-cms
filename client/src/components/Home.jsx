@@ -55,7 +55,6 @@ class Home extends React.Component {
     return (
       <Segment raised style={{ 'marginTop': '8vh' }}>
         <Header as='h1' color='blue' style={{ 'margin': '0 0 -4vh 0', 'paddingLeft': '2vh' }}>{this.props.company}</Header>
-        { (this.props.role === 'admin') && <Button floated='right'><Link to='/inviteuser'>Invite a new user for your company</Link></Button> }
         <Button floated='right'><Link to='/addcategory' className='button-text-color'>Add New Category</Link></Button>
         <Button floated='right' ><Link to='/addarticle' className='button-text-color'>Add New Article</Link></Button>
         <br /><br />
@@ -64,7 +63,8 @@ class Home extends React.Component {
             <br/><br/>
             <Button fluid style={{ 'color': '#2185d0'}} onClick={this.showArticles.bind(this)}>Articles</Button><br/>
             <Button fluid style={{ 'color': '#2185d0'}} onClick={this.showCategories.bind(this)}>Categories</Button><br/>
-            <Button fluid style={{ 'color': '#2185d0'}} onClick={this.showChat.bind(this)}>Chat</Button>
+            <Button fluid style={{ 'color': '#2185d0'}} onClick={this.showChat.bind(this)}>Chat</Button><br/>
+            <Button fluid style={{ 'color': '#2185d0'}}><Link to='/settings'>Settings</Link></Button>
           </Grid.Column>
           <Grid.Column width={13}>
             {info}
@@ -74,5 +74,7 @@ class Home extends React.Component {
     );
   }
 }
+
+
 
 export default Home;

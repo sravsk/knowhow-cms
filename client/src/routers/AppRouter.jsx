@@ -21,7 +21,7 @@ import InviteUser from '../components/InviteUser.jsx';
 import SignupWithCode from '../components/SignupWithCode.jsx';
 import ForgotPassword from '../components/ForgotPassword.jsx';
 import ResetPassword from '../components/ResetPassword.jsx';
-
+import Settings from '../components/Settings.jsx';
 
 
 class AppRouter extends React.Component{
@@ -67,6 +67,14 @@ class AppRouter extends React.Component{
             <Route exact path='/signupwithcode' component={SignupWithCode} />
             <Route exact path='/forgotpassword' component={ForgotPassword} />
             <Route exact path='/resetpassword' component={ResetPassword} />
+
+            <Route exact path='/settings' render={(props) => {
+              return (
+                <Settings
+                  role={this.state.role}
+                />
+              )
+            }} />
 
             <Route exact path='/home' render={(props) => {return (
               <Home
