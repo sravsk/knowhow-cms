@@ -62,7 +62,6 @@ class NewCategory extends React.Component {
   render() {
     return (
       <Segment raised style={{ 'marginTop': '-7vh', 'height': '100vh' }}>
-        <NavBar />
         <br/>
         <Grid centered>
           <Grid.Column style={{ maxWidth: '80%', 'backgroundColor': 'rgba(240, 240, 240, 0.5)' }}>

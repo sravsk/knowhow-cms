@@ -4,6 +4,7 @@ import Editor from './Editor.jsx';
 import NavBar from './NavBar.jsx';
 import ReactQuill from 'react-quill';
 import axios from 'axios';
+import { withRouter } from "react-router-dom";
 
 class NewArticle extends React.Component{
   constructor(props) {
@@ -142,7 +143,6 @@ class NewArticle extends React.Component{
   render() {
     return (
       <Segment raised style={{ 'marginTop': '-7vh', 'height': '100vh' }}>
-        <NavBar />
         <Grid centered>
           <Grid.Column style={{ maxWidth: '80%', 'backgroundColor': 'rgba(240, 240, 240, 0.5)' }}>
             <Header as='h2' textAlign='center'>{this.props.location.state ? 'Edit Article' : 'New Article'}</Header>
@@ -209,4 +209,4 @@ class NewArticle extends React.Component{
   }
 };
 
-export default NewArticle;
+export default withRouter(NewArticle);

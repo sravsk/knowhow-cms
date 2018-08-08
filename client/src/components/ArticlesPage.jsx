@@ -41,7 +41,6 @@ class ArticlesPage extends React.Component {
     })
     return (
       <Segment raised  style={{ 'marginTop': '-5em'}}>
-        <NavBar />
         <Grid style = {{ marginLeft: '2vw', marginRight: '2vw' }} >
           <Grid.Row>
             <Grid.Column floated='left' width={12}>
