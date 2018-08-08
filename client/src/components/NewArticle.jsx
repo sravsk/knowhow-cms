@@ -3,6 +3,8 @@ import { Segment, Form, Button, Input, Dropdown, Grid, Header, Container } from 
 import Editor from './Editor.jsx';
 import NavBar from './NavBar.jsx';
 import ReactQuill from 'react-quill';
+import Delta from 'quill-delta';
+import config from '../../../config.js';
 import axios from 'axios';
 import { withRouter } from "react-router-dom";
 
@@ -10,6 +12,7 @@ class NewArticle extends React.Component{
   constructor(props) {
     super(props);
     this.state = {
+      image: 0,
       title: '',
       description: '',
       content: '',
@@ -36,13 +39,13 @@ class NewArticle extends React.Component{
         'link', 'image', 'video'
       ]
     }
-
     this.setState = this.setState.bind(this);
     this.handleContentChange = this.handleContentChange.bind(this);
     this.handleTitleChange = this.handleTitleChange.bind(this);
     this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
     this.handleSelectCategory = this.handleSelectCategory.bind(this);
     this.saveArticle = this.saveArticle.bind(this);
+    this.replaceUri = this.replaceUri.bind(this);
   }
 
   componentDidMount() {
@@ -85,40 +88,51 @@ class NewArticle extends React.Component{
   }
 
   handleContentChange(html) {
-    // var editor = this.reactQuillRef.getEditor()
-    // var delta = editor.getContents()
-    // console.log('delta ', delta)
-    // console.log('delta.ops ', delta.ops)
-    var itag = html.match(/<img src="[^"]*">/g)
-    // console.log('itag ', itag)
-    itag.map(tag => {
-      let urlReg = /"([^"]*)"/
-      let urlString = tag.match(urlReg)
-      console.log('urlString ', urlString)
+    let editor = this.reactQuillRef.getEditor()
+    let delta = editor.getContents();
+    if(typeof delta.ops[delta.ops.length - 2] === 'object') {
+      let dataUri = /(<img src=")([^"]*)(">)/g;
+      if(!this.state.category | !this.state.title) {
+        alert('Ensure both category and title are specified');
+        return;
+      } else {
+        let corrected = html.replace(dataUri, this.replaceUri)
+        this.setState({
+          content: html,
+          corrected: corrected
+        })
+      }
+    } else {
+      this.setState({
+        content: html,
+        corrected: html
+      })
+    }
 
-// let url = new URL(urlString[1]);
-// let bufImg = ImageIO.read(url);
-// let file = new File("downloaded.jpg");
-// ImageIO.write(img, "jpg", file);
+  }
 
-
-//filter for data urls (urls hosted on other sites can stay)
-//convert data urls to file for upload (maybe involves converting to a blob and fileReader???)
-//send to file to AWS and specify a path
-//replace url with AWS filepath of image that you specified
-
-
-
-      tag = tag.replace(urlReg, '"test"')
-      // console.log('tag ', tag)
-    })
-    // console.log('itag ', itag)
-
-
-
-    this.setState({
-      content: html
-    })
+  replaceUri(match, p1, p2, p3, offset, string) {
+    let bucket = config.S3.Bucket;
+    let image = this.state.image
+    let regex = /^data:.+\/(.+);base64,(.*)$/;
+    let matches = p2.match(regex);
+    let ext = matches[1];
+    let data = matches[2];
+    let key = `${this.state.category}/${this.state.title}/${this.state.image}.${ext}`;
+    let encoded = `${encodeURIComponent(this.state.category)}/${encodeURIComponent(this.state.title)}/${this.state.image}.${ext}`.replace(/%20/g, '+');
+    this.setState({image: this.state.image++})
+    if(p2.includes('base64')) {
+      let uri = /^data:.+\/(.+);base64,(.*)$/;
+      let urimatch = p2.match(uri);
+      axios.post('/uploadimage', {
+        imageKey: key,
+        data: data
+      })
+      .then(res => console.log(res));
+      return `${p1}https://s3-us-west-2.amazonaws.com/${bucket}/${encoded}${p3}`
+    } else {
+      return `${p1}${p2}${p3}`
+    }
   }
 
   handleSelectCategory(e, { value }) {
@@ -131,7 +145,7 @@ class NewArticle extends React.Component{
     let obj = {
       title: this.state.title,
       description: this.state.description,
-      content: this.state.content,
+      content: this.state.corrected,
       categoryId: this.state.category,
       id: this.state.id
     };

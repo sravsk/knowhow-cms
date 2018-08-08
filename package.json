@@ -45,7 +45,7 @@
   "homepage": "https://github.com/rpt06-ASTA/thesis#readme",
   "dependencies": {
     "@sendgrid/mail": "^6.3.1",
-    "aws-sdk": "^2.281.1",
+    "aws-sdk": "^2.286.2",
     "axios": "^0.18.0",
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.5",
@@ -74,6 +74,7 @@
     "react-router-dom": "^4.3.1",
     "semantic-ui-react": "^0.82.0",
     "sequelize": "^4.38.0",
+    "socket.io": "^2.1.1",
     "webpack": "^4.16.2"
   },
   "description": "",
