@@ -1,6 +1,5 @@
 const Sequelize = require('sequelize');
 
-// var connection = require('../config.js');
 const DBNAME = process.env.DBNAME || require('../config.js').DBNAME
 const DBUSERNAME = process.env.DBUSERNAME || require('../config.js').DBUSERNAME
 const DBPASSWORD = process.env.DBPASSWORD || require('../config.js').DBPASSWORD
@@ -22,8 +21,6 @@ const db = new Sequelize(`mysql://${DBUSERNAME}:${DBPASSWORD}@${DBHOST}:${DBPORT
   //   ssl: 'Amazon RDS'
   // }
 })
-
-// postgresql://username:password@awsrdshost:5432/dbname
 
 
 // if (process.env.DATABASE_URL !== undefined) {
