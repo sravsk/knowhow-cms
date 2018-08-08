@@ -240,7 +240,7 @@ var dbHelpers = {
       })
 
       newArt.setCategory(foundCat, {save: false});
-      newArt.save().then(() => cb('success'))
+      newArt.save().then((article) => cb(article.dataValues))
 
     })
   },
@@ -259,7 +259,7 @@ var dbHelpers = {
           categoryId: JSON.parse(article).categoryId
         })
         .then(response => cb(response))
-        cb(result.dataValues)
+        cb(record.dataValues)
       }
     })
   },

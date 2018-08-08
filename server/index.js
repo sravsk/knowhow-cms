@@ -12,8 +12,8 @@ const randomstring = require('randomstring');
 const db = require('../db/helpers.js');
 const apidb = require('../db/apiHelpers.js');
 const sessionStore = require('../db/Models/Session.js');
-const sendmail = require('./sendmail.js');
-const queryTerm = require('./search.js');
+const sendmail = require('../services/sendmail.js');
+const elasticsearch = require('../services/elasticsearch.js');
 const config = require('../config.js');
 const AWS = require('aws-sdk');
 
@@ -304,7 +304,7 @@ app.post('/resetpwd', (req, res) => {
   })
 });
 
-app.post('/addCategory', (req, res) => {
+app.post('/addCategory', authMiddleware(), (req, res) => {
   let name = req.body.categoryName;
   let description = req.body.categoryDescription;
   let companyId = req.user.companyId;
@@ -313,20 +313,20 @@ app.post('/addCategory', (req, res) => {
   });
 });
 
-app.post('/updatecategory', (req, res) => {
+app.post('/updatecategory', authMiddleware(), (req, res) => {
   db.updateCategory(req.body, updated => {
     res.end(JSON.stringify(updated));
   })
 });
 
-app.post('/deletecategory', (req, res) => {
+app.post('/deletecategory', authMiddleware(), (req, res) => {
   db.deleteCategory(req.body, categories => {
     res.end(JSON.stringify(categories));
   })
 })
 
 // get all categories for a given company id
-app.get('/:companyId/categoriesdata', (req, res) => {
+app.get('/:companyId/categoriesdata', authMiddleware(), (req, res) => {
   let companyId = req.params.companyId;
   db.fetchCategoriesByCompany(companyId, (categories) => {
     res.send(categories);
@@ -334,7 +334,7 @@ app.get('/:companyId/categoriesdata', (req, res) => {
 });
 
 // get all articles for a given company id and category id
-app.get('/:companyId/categories/:categoryId/articlesdata', (req, res) => {
+app.get('/:companyId/categories/:categoryId/articlesdata', authMiddleware(), (req, res) => {
   let companyId = req.params.companyId;
   let categoryId = req.params.categoryId;
   db.fetchArticles({companyId, categoryId}, (articles) => {
@@ -343,28 +343,30 @@ app.get('/:companyId/categories/:categoryId/articlesdata', (req, res) => {
 });
 
 // get all articles for a given company id
-app.get('/:companyId/articlesdata', (req, res) => {
+app.get('/:companyId/articlesdata', authMiddleware(), (req, res) => {
   let companyId = req.params.companyId;
   db.fetchCompanyArticles({companyId}, (articles) => {
     res.send(articles);
   });
 });
 
-app.post('/article', (req, res) => {
+app.post('/article', authMiddleware(), (req, res) => {
   let data = req.body;
   let companyId = req.session.passport.user.companyId;
   //update if exists
   if(req.body.id) {
+    elasticsearch.updateArticle(JSON.stringify(req.body));
     db.updateArticle(JSON.stringify(req.body), () => res.end(`${req.body.title} has been updated`));
   } else {
     db.addArticle(data.categoryId, data, companyId, (response) => {
-      res.end(response)
+      elasticsearch.addArticle(JSON.stringify(response));
+      res.end('success')
     })
   }
 
 });
 
-app.post('/uploadimage', (req, res) => {
+app.post('/uploadimage', authMiddleware(), (req, res) => {
   let buffer = new Buffer(req.body.data, 'base64');
   s3.putObject({
     Bucket: config.S3.Bucket,
@@ -376,22 +378,23 @@ app.post('/uploadimage', (req, res) => {
   });
 });
 
-app.get('/company', (req, res) => {
+app.get('/company', authMiddleware(), (req, res) => {
   let companyId = req.user.companyId;
   db.fetchCompanyData(companyId, (data) => {
     res.send(data[0].name);
   })
 })
 
-app.post('/deleteArticle', (req, res) => {
+app.post('/deleteArticle', authMiddleware(), (req, res) => {
+  elasticsearch.deleteArticle(req.body.articleId);
   db.deleteArticle(req.body.articleId, () => res.redirect('/home'));
 })
 
 // get articles containing a given search term
-app.get('/search', (req, res) => {
+app.get('/search', authMiddleware(), (req, res) => {
   let term = req.query.term;
   let companyId = req.user.companyId;
-  queryTerm(term, companyId, 0, (results) => {
+  elasticsearch.queryTerm(term, companyId, 0, (results) => {
     res.send(results);
   })
 });
@@ -505,7 +508,7 @@ app.get('/api/:hashedCompanyId/search', (req, res) => {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   let term = req.query.term;
   let companyId = hashids.decode(req.params.hashedCompanyId)[0];
-  queryTerm(term, companyId, 0, (results) => {
+  elasticsearch.queryTerm(term, companyId, 0, (results) => {
     res.send(results);
   })
 });
@@ -535,12 +538,10 @@ app.get('/db/rebuild', (req, res) => {
   res.end('DB is rebuilt')
 })
 
-// protect all routes except the ones above
+// protect routes
 app.get('*', authMiddleware(), (req, res) => {
   res.sendFile(path.join(__dirname, '/../client/dist/index.html'));
 });
-
-// TODO - protect all server routes except login, signup, logout, /user after we figure out how to authenticate user in external app and use that info in know-how app
 
 app.listen(process.env.PORT !== undefined ? process.env.PORT : PORT, () => {
   console.log(`listening on port ${PORT}`);
