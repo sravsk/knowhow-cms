@@ -12,8 +12,8 @@ const randomstring = require('randomstring');
 const db = require('../db/helpers.js');
 const apidb = require('../db/apiHelpers.js');
 const sessionStore = require('../db/Models/Session.js');
-const sendmail = require('./sendmail.js');
-const elasticsearch = require('./elasticsearch.js');
+const sendmail = require('../services/sendmail.js');
+const elasticsearch = require('../services/elasticsearch.js');
 const config = require('../config.js');
 const AWS = require('aws-sdk');
 
