@@ -27,8 +27,7 @@ class ArticleContent extends React.Component {
     let articleId = this.props.match.params;
     let article = this.props.location.state.article;
     return (
-      <Segment raised style={{ 'marginTop': '-10vh','minHeight': '90vh' }}>
-        <NavBar />
+      <Segment raised style={{ 'marginTop': '8vh','minHeight': '90vh' }}>
         <br />
         <Modal open={this.state.open} trigger={<Button floated='right' style={{ 'color': '#2185d0'}} onClick={this.toggleModal}>Delete Article</Button>} basic size='small'>
           <Modal.Content>
