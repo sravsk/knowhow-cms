@@ -59,12 +59,14 @@ class Home extends React.Component {
         <Button floated='right' ><Link to='/addarticle' className='button-text-color'>Add New Article</Link></Button>
         <br /><br />
         <Grid celled>
-          <Grid.Column width={3} className='background sidebar'>
+          <Grid.Column width={3} className='background'>
             <br/><br/>
-            <Button fluid style={{ 'color': '#2185d0'}} onClick={this.showArticles.bind(this)}>Articles</Button><br/>
-            <Button fluid style={{ 'color': '#2185d0'}} onClick={this.showCategories.bind(this)}>Categories</Button><br/>
-            <Button fluid style={{ 'color': '#2185d0'}} onClick={this.showChat.bind(this)}>Chat</Button><br/>
-            <Button fluid style={{ 'color': '#2185d0'}}><Link to='/settings'>Settings</Link></Button>
+            <div style={{position: 'fixed', margin: '2em'}}>
+              <Button fluid style={{ 'color': '#2185d0'}} onClick={this.showArticles.bind(this)}>Articles</Button><br/>
+              <Button fluid style={{ 'color': '#2185d0'}} onClick={this.showCategories.bind(this)}>Categories</Button><br/>
+              <Button fluid style={{ 'color': '#2185d0'}} onClick={this.showChat.bind(this)}>Chat</Button><br/>
+              <Button fluid style={{ 'color': '#2185d0'}}><Link to='/settings'>Settings</Link></Button>
+            </div>
           </Grid.Column>
           <Grid.Column width={13}>
             {info}
