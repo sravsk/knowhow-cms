@@ -1,24 +1,33 @@
-var elasticsearch = require('elasticsearch');
+const esconfig = require('../config.js').ES;
 
-// elasticsearch variables - index and type values are from logstash.conf
+// elasticsearch variables - index and type
 const index = 'articles';
 const type = 'documents';
 
 const port = 9200;
-const host = process.env.ES_host || 'localhost';
 
-// create an instance of Elasticsearch client
-var client = new elasticsearch.Client({
-  host: {host, port},
-  apiVersion: '6.3',
-  // connectionClass: CustomESHTTPConnector,
-  // keepAlive: true,
-  // log: 'trace'
-  log: 'error'
+// create an elasticsearch client for your Amazon ES
+let client = new require('elasticsearch').Client({
+  hosts: [esconfig.url],
+  connectionClass: require('http-aws-es'),
+  log: 'trace'
 });
 
+let AWS = require('aws-sdk');
+AWS.config.update({
+  credentials: new AWS.Credentials(esconfig.accessKeyId, esconfig.secretAccessKey),
+  region: esconfig.region
+});
+
+// create an instance of Elasticsearch client on localhost
+// var client = new require('elasticsearch').Client({
+//   host: `localhost:${port}`,
+//   apiVersion: '6.2',
+//   log: 'trace'
+//   // log: 'error'
+// });
+
 client.ping({
-  // ping usually has a 3000ms timeout
   requestTimeout: 3000
 }, function (error) {
   if (error) {
@@ -28,8 +37,6 @@ client.ping({
   }
 });
 
-// const { count } = await client.count();
-// console.log('====== count ======', count)
 
 // search function for all articles with a given search term and companyId
 const queryTerm = (term, companyId, offset, callback) => {
@@ -50,9 +57,7 @@ const queryTerm = (term, companyId, offset, callback) => {
           }
         },
         filter: [{
-          term: {
-            companyid: companyId
-          }
+          term: { companyid: companyId }
         }]
       }
     },

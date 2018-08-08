@@ -60,6 +60,7 @@
     "express-session": "^1.15.6",
     "express-validator": "^5.2.0",
     "hashids": "^1.1.4",
+    "http-aws-es": "^6.0.0",
     "json-loader": "^0.5.7",
     "lodash": "^4.17.10",
     "logstash-client": "^1.1.1",
