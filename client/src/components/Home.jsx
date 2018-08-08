@@ -12,25 +12,8 @@ class Home extends React.Component {
     super(props);
     this.state = {
       showArticles: true,
-      showCategories: false,
-      company: '',
-      role: ''
+      showCategories: false
     }
-  }
-
-  componentDidMount() {
-    axios.get('/company')
-      .then(result => {
-        this.setState({
-          company: result.data,
-        });
-      });
-    axios.get('/user')
-      .then(result => {
-        this.setState({
-          role: result.data.role
-        });
-      });
   }
 
   showCategories() {
@@ -54,10 +37,9 @@ class Home extends React.Component {
       var info = <CategoriesPage />
     }
     return (
-      <Segment raised style={{ 'marginTop': '-8vh' }}>
-        <NavBar />
-        <Header as='h1' color='blue' style={{ 'margin': '0 0 -4vh 0', 'paddingLeft': '2vh' }}>{this.state.company}</Header>
-        { (this.state.role === 'admin') && <Button floated='right'><Link to='/inviteuser'>Invite a new user for your company</Link></Button> }
+      <Segment raised style={{ 'marginTop': '8vh' }}>
+        <Header as='h1' color='blue' style={{ 'margin': '0 0 -4vh 0', 'paddingLeft': '2vh' }}>{this.props.company}</Header>
+        { (this.props.role === 'admin') && <Button floated='right'><Link to='/inviteuser'>Invite a new user for your company</Link></Button> }
         <Button floated='right'><Link to='/addcategory' className='button-text-color'>Add New Category</Link></Button>
         <Button floated='right' ><Link to='/addarticle' className='button-text-color'>Add New Article</Link></Button>
         <br /><br />

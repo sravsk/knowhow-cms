@@ -33,8 +33,8 @@ class LoginPage extends React.Component {
           alert(`User with email ${this.state.email} does not exist. Sign up.`);
         } else if (result.data.found) {
           // correct username and password
-          console.log(this.props.store)
-          alert(`${result.data.name} is logged in`);
+          this.props.updateInfo(result.data);
+          alert(`${result.data.user} is logged in`);
           // redirect to home
           this.setState({
             onHome: true

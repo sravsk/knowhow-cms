@@ -6,7 +6,7 @@ import _ from 'lodash';
 import ArticleItem from './ArticleItem.jsx';
 
 class NavBar extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
     this.state = {
       isLoggedIn: false,
@@ -19,23 +19,9 @@ class NavBar extends React.Component {
     };
     this.handleResultSelect = this.handleResultSelect.bind(this);
     this.handleSearchChange = this.handleSearchChange.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
   }
 
-  componentDidMount() {
-    // check if a user is logged in
-    // if yes, get userInfo (name and companyId of user)
-    axios.get('/user')
-      .then(result => {
-        if (result.data) {
-          let name = result.data.name;
-          let companyId = result.data.companyId;
-          this.setState({
-            isLoggedIn: true,
-            user: name
-          });
-        }
-      })
-  }
 
   handleResultSelect(e, { result }) {
     this.setState({
@@ -68,6 +54,7 @@ class NavBar extends React.Component {
   }
 
   handleLogout() {
+    this.props.updateInfo({user: '', companyId: '', company: '', role: ''})
     axios.get('/logout')
       .then(result => {
         if (result.data === 'logged out') {
@@ -76,7 +63,7 @@ class NavBar extends React.Component {
             onLandingPage: true
           })
         }
-      });
+      })
   }
 
   render () {
@@ -88,7 +75,7 @@ class NavBar extends React.Component {
     }
     // show login and signup buttons if user is not logged in
     // show logout button if user is logged in
-    if (!this.state.isLoggedIn) {
+    if (this.props.user === '') {
       return (
         <Container className='navbar'>
         <Menu fixed='top' inverted>
@@ -104,7 +91,7 @@ class NavBar extends React.Component {
         </Menu>
         </Container>
       );
-    } else {
+    } else if (this.props.user !== '') {
       const { results, value, isLoading } = this.state;
       return (
         <Container className='navbar'>
@@ -113,7 +100,7 @@ class NavBar extends React.Component {
               <Link to='/home'><Header as='h1' style={{ 'color': '#61dafb' }}>Know-how</Header></Link>
             </Menu.Item>
             <Menu.Item  position='right'>
-              <p>Hello {this.state.user}</p>
+              <p>Hello {this.props.user}</p>
             </Menu.Item>
             <Menu.Item>
               <Search
@@ -122,11 +109,10 @@ class NavBar extends React.Component {
                 onSearchChange={_.debounce(this.handleSearchChange, 500, { leading: true })}
                 results={results}
                 value={value}
-                {...this.props}
               />
             </Menu.Item>
             <Menu.Item>
-              <Button primary onClick={this.handleLogout.bind(this)}>Log out</Button>
+              <Button primary onClick={() => this.handleLogout()}>Log out</Button>
             </Menu.Item>
           </Menu>
         </Container>

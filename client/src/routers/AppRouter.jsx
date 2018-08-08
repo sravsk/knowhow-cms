@@ -30,14 +30,19 @@ class AppRouter extends React.Component{
     this.state = {
       user: '',
       companyId: '',
-      company: ''
+      company: '',
+      role: ''
     }
+    this.updateInfo = this.updateInfo.bind(this)
+    console.log(this.props)
   }
 
   updateInfo(obj) {
     this.setState({
       user: obj.user,
-      companyId: obj.companyId
+      companyId: obj.companyId,
+      company: obj.company,
+      role: obj.role
     })
   }
 
@@ -45,63 +50,73 @@ class AppRouter extends React.Component{
     return (
       <BrowserRouter>
         <Container>
-        <NavBar
-          user={this.state.user}
-          company={this.state.company}
-        />
-        <Switch>
-          <Route exact path='/' component={LandingPage} />
-          <Route exact path='/articles' component={ArticlesPage} />
-          <Route exact path='/editor' component={Editor} />
-          <Route exact path='/addcategory' component={NewCategory} />
-          <Route exact path='/:companyId/categories/:categoryId/articles' component={ArticlesPage} />
-          <Route exact path='/articles/:articleId' component={ArticleContent} />
-          <Route exact path='/devadminpage' component={devAdminPage} />
-          <Route exact path='/inviteuser' component={InviteUser} />
-          <Route exact path='/signupwithcode' component={SignupWithCode} />
-          <Route exact path='/forgotpassword' component={ForgotPassword} />
-          <Route exact path='/resetpassword' component={ResetPassword} />
-
-          <Route exact path='/home' render={(props) => {return (
-            <Home
-              user={this.state.user}
-              companyId={this.state.companyId}
-              company={this.state.company}
-            />
-          )}} />
-          <Route exact path='/login' render={(props) => {return (
-            <LoginPage
-              user={this.state.user}
-              companyId={this.state.companyId}
-              updateInfo={this.updateInfo}
-            />
-          )}} />
-          <Route exact path='/signup' render={(props) => {return (
-            <SignupPage
-              user={this.state.user}
-              companyId={this.state.companyId}
-              updateInfo={this.updateInfo}
-            />
-          )}} />
-          <Route exact path='/categories' render={(props) => {return (
-            <CategoriesPage
-              user={this.state.user}
-              companyId={this.state.companyId}
-            />
-          )}} />
-          <Route exact path='/companyarticles' render={(props) => {return (
-            <CompanyArticles
-              user={this.state.user}
-              companyId={this.state.companyId}
-            />
-          )}} />
-          <Route exact path='/addarticle' render={(props) => {return (
-            <NewArticle
+          <NavBar
             user={this.state.user}
-            companyId={this.state.companyId}
-            />
-          )}} />
-        </Switch>
+            company={this.state.company}
+            updateUserInfo={this.updateInfo}
+          />
+          <Switch>
+            <Route exact path='/' component={LandingPage} />
+            <Route exact path='/articles' component={ArticlesPage} />
+            <Route exact path='/editor' component={Editor} />
+            <Route exact path='/addcategory' component={NewCategory} />
+            <Route exact path='/:companyId/categories/:categoryId/articles' component={ArticlesPage} />
+            <Route exact path='/articles/:articleId' component={ArticleContent} />
+            <Route exact path='/devadminpage' component={devAdminPage} />
+            <Route exact path='/inviteuser' component={InviteUser} />
+            <Route exact path='/signupwithcode' component={SignupWithCode} />
+            <Route exact path='/forgotpassword' component={ForgotPassword} />
+            <Route exact path='/resetpassword' component={ResetPassword} />
+
+            <Route exact path='/home' render={(props) => {return (
+              <Home
+                user={this.state.user}
+                companyId={this.state.companyId}
+                company={this.state.company}
+                role={this.state.role}
+              />
+            )}} />
+
+            <Route exact path='/login' render={(props) => {return (
+              <LoginPage
+                updateInfo={this.updateInfo}
+              />
+            )}} />
+
+            <Route exact path='/signup' render={(props) => {return (
+              <SignupPage
+                updateInfo={this.updateInfo}
+              />
+            )}} />
+
+            <Route exact path='/categories' render={(props) => {return (
+              <CategoriesPage
+                user={this.state.user}
+                companyId={this.state.companyId}
+                company={this.state.company}
+                role={this.state.role}
+              />
+            )}} />
+
+            <Route exact path='/companyarticles' render={(props) => {return (
+              <CompanyArticles
+                user={this.state.user}
+                companyId={this.state.companyId}
+                company={this.state.company}
+                role={this.state.role}
+              />
+            )}} />
+
+            <Route exact path='/addarticle' render={(props) => {return (
+              <NewArticle
+                user={this.state.user}
+                companyId={this.state.companyId}
+                company={this.state.company}
+                role={this.state.role}
+              />
+            )}} />
+
+          </Switch>
         </Container>
       </BrowserRouter>
     );
