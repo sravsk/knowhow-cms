@@ -10,7 +10,7 @@ const port = 9200;
 let client = new require('elasticsearch').Client({
   hosts: [esconfig.url],
   connectionClass: require('http-aws-es'),
-  log: 'trace'
+  // log: 'trace'
 });
 
 let AWS = require('aws-sdk');
@@ -37,6 +37,26 @@ client.ping({
   }
 });
 
+// if index doesn't exist, create it
+const makeIndex = () => {
+  client.indices.exists({
+    index: index
+  }).then(result => {
+    console.log(result)
+      if (!result) {
+       client.indices.create({
+        index: index
+      }).then((err, response) => {
+        console.log(err, response);
+      })
+    }
+  });
+};
+
+makeIndex();
+
+
+// TO DO - populate elasticsearch with some initial data
 
 // search function for all articles with a given search term and companyId
 const queryTerm = (term, companyId, offset, callback) => {
