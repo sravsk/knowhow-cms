@@ -47,7 +47,7 @@ class NavBar extends React.Component {
   }
 
   handleLogout() {
-    this.props.updateInfo({user: '', companyId: '', company: '', role: ''})
+    this.props.updateUserInfo({user: '', companyId: '', company: '', role: ''})
     axios.get('/logout')
       .then(result => {
         if (result.data === 'logged out') {
