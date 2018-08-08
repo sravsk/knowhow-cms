@@ -1,9 +1,10 @@
 import React from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link, Redirect, withRouter } from 'react-router-dom';
 import { Container, Menu, Header, Button, Input, Search } from 'semantic-ui-react';
 import axios from 'axios';
 import _ from 'lodash';
 import ArticleItem from './ArticleItem.jsx';
+
 
 class NavBar extends React.Component {
   constructor(props) {
@@ -51,21 +52,13 @@ class NavBar extends React.Component {
     axios.get('/logout')
       .then(result => {
         if (result.data === 'logged out') {
-          this.setState({
-            isLoggedIn: false,
-            onLandingPage: true
-          })
+          this.props.history.push('/');
         }
       })
   }
 
   render () {
-    // Redirect to LandingPage after user is logged out
-    if (this.state.onLandingPage) {
-      return (
-        <Redirect to='/' />
-      );
-    } else if (this.state.article) {
+    if (this.state.article) {
       // go to article selected from search results
       var article = this.state.article;
       return (
@@ -124,4 +117,4 @@ class NavBar extends React.Component {
 
 }
 
-export default NavBar;
+export default withRouter(NavBar);
