@@ -151,7 +151,7 @@ class NewArticle extends React.Component{
     };
     axios.post('/article',obj).then(res => {
       alert(res.data);
-    });
+    }).then(() => this.props.history.push('/home'));
   }
 
   render() {
