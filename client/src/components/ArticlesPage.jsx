@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { Grid, Header, Container, Button, Segment } from 'semantic-ui-react';
 import axios from 'axios';
 import ArticleItem from './ArticleItem.jsx';
-import NavBar from './NavBar.jsx';
 import Pagination from './Pagination.jsx';
 
 class ArticlesPage extends React.Component {

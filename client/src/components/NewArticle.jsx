@@ -1,7 +1,6 @@
 import React from 'react';
 import { Segment, Form, Button, Input, Dropdown, Grid, Header, Container } from 'semantic-ui-react';
 import Editor from './Editor.jsx';
-import NavBar from './NavBar.jsx';
 import ReactQuill from 'react-quill';
 import Delta from 'quill-delta';
 import config from '../../../config.js';
