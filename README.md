@@ -25,6 +25,9 @@
 > Create a DB instance on Amazon RDS (or create a local MySQL database).
 
 > Go to sendgrid.com, sign up for an account and generate an API key.
+
+> Create an Elasticsearch domain on AWS, configure a cluster and set up access.
+
 Add the following code in the config.js file.
 
 module.exports = {
@@ -33,10 +36,16 @@ module.exports = {
   DBPASSWORD: 'db-password',
   DBHOST: 'amazonrds-db-hostname or localhost',
   DBPORT: 'port-number(3306)',
-  SENDGRID_API_KEY: 'sendgrid-api-key'
+  SENDGRID_API_KEY: 'sendgrid-api-key',
+  ES: {
+    url: 'AWS-ES-endpoint',
+    region: 'region',
+    accessKeyId: 'access-key',
+    secretAccessKey: 'secret-access-key'
+  }
 };
 
-> Download Elasticsearch and Logstash from elastic.co. Download the JDBC driver for MySQL.
+> To use a local elasticsearch cluster, download Elasticsearch and Logstash from elastic.co. Download the JDBC driver for MySQL.
 
 Run bin/elasticsearch.
 
