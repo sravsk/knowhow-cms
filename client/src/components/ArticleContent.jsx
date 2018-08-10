@@ -1,6 +1,5 @@
 import React from 'react';
 import { Container, Item, Button, Segment, Header, Icon, Modal, Grid } from 'semantic-ui-react';
-import NavBar from './NavBar.jsx';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 

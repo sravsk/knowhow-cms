@@ -3,7 +3,6 @@ import Editor from './Editor.jsx';
 import { Link } from 'react-router-dom';
 import { Container, Grid, Button, Header, Segment } from 'semantic-ui-react';
 import axios from 'axios';
-import NavBar from './NavBar.jsx';
 import CompanyArticles from './CompanyArticles.jsx';
 import CategoriesPage from './CategoriesPage.jsx';
 import Chat from './Chat.jsx';

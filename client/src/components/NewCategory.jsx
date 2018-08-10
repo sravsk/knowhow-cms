@@ -1,7 +1,6 @@
 import React from 'react';
 import { Container, Grid, Header, Form, Message, Segment } from 'semantic-ui-react';
 import axios from 'axios';
-import NavBar from './NavBar.jsx';
 
 class NewCategory extends React.Component {
   constructor(props) {
