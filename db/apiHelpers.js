@@ -22,6 +22,9 @@ const fetchCategoriesByCompany = async(companyId) => {
       where: {
         companyId: companyId
       },
+      order: [
+        ['id', 'DESC']
+      ],
       attributes: ['id', 'name', 'description', 'companyId']
     })
     return categories;
@@ -40,7 +43,7 @@ const fetchCompanyData = async(companyId) => {
 const fetchOneArticle = async(companyId, articleId) => {
   const article = await Article.findAll({
     where: {
-      companyId: companyId, 
+      companyId: companyId,
       id : articleId
     },
     attributes: ['id', 'title', 'description', 'content', 'categoryId', 'companyId']
@@ -54,6 +57,9 @@ const fetchArticles = async(companyId, categoryId) => {
         companyId: companyId,
         categoryId: categoryId
       },
+      order: [
+        ['id', 'DESC']
+      ],
       attributes: ['id', 'title', 'description', 'content', 'categoryId', 'companyId']
     })
   return articles;
@@ -64,6 +70,9 @@ const fetchCompanyArticles = async(companyId) => {
       where: {
         companyId: companyId
       },
+      order: [
+        ['id', 'DESC']
+      ],
       attributes: ['id', 'title', 'description', 'content', 'categoryId', 'companyId']
     })
   return articles;
