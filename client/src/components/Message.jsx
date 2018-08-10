@@ -4,7 +4,7 @@ import { Grid, Header, Container, Button, Segment, Comment, Form} from 'semantic
 const Message = (props) => {
 	return(
       <Comment>
-        <Comment.Avatar src='https://semantic-ui.com/images/avatar/small/matt.jpg' />
+        <Comment.Avatar src='https://s3-us-west-1.amazonaws.com/knowhow-s3/assets/matt.jpg' />
         <Comment.Content>
           <Comment.Author as='a'>{props.user}</Comment.Author>
           <Comment.Metadata>
