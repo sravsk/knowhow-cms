@@ -7,25 +7,25 @@ const type = 'documents';
 const port = 9200;
 
 // create an elasticsearch client for your Amazon ES
-let client = new require('elasticsearch').Client({
-  hosts: [esconfig.url],
-  connectionClass: require('http-aws-es'),
-  // log: 'trace'
-});
+// let client = new require('elasticsearch').Client({
+//   hosts: [esconfig.url],
+//   connectionClass: require('http-aws-es'),
+//   // log: 'trace'
+// });
 
-let AWS = require('aws-sdk');
-AWS.config.update({
-  credentials: new AWS.Credentials(esconfig.accessKeyId, esconfig.secretAccessKey),
-  region: esconfig.region
-});
+// let AWS = require('aws-sdk');
+// AWS.config.update({
+//   credentials: new AWS.Credentials(esconfig.accessKeyId, esconfig.secretAccessKey),
+//   region: esconfig.region
+// });
 
 // create an instance of Elasticsearch client on localhost
-// var client = new require('elasticsearch').Client({
-//   host: `localhost:${port}`,
-//   apiVersion: '6.2',
-//   log: 'trace'
-//   // log: 'error'
-// });
+var client = new require('elasticsearch').Client({
+  host: `localhost:${port}`,
+  apiVersion: '6.2',
+  log: 'trace'
+  // log: 'error'
+});
 
 client.ping({
   requestTimeout: 3000
@@ -81,7 +81,7 @@ const queryTerm = (term, companyId, offset, callback) => {
         }]
       }
     },
-    size: 10000
+    size: 100
   };
   client.search({index, type, body})
     .then(results => {
@@ -90,7 +90,7 @@ const queryTerm = (term, companyId, offset, callback) => {
 };
 
 // delete an article from elasticsearch index
-const deleteArticle = (articleId) => {
+const deleteArticle = (articleId, callback) => {
   client.deleteByQuery({
     index: index,
     type: type,
@@ -100,12 +100,13 @@ const deleteArticle = (articleId) => {
       }
     }
   }, function (error, response) {
-      // console.log(err, response);
+      // console.log(error, response);
+      callback(!error);
   });
 };
 
 // update an article in elasticsearch index
-const updateArticle = (article) => {
+const updateArticle = (article, callback) => {
   var article = JSON.parse(article);
   var id = article.id;
   var title = article.title;
@@ -122,12 +123,13 @@ const updateArticle = (article) => {
       "query": { "term": { id: id } },
       "script": theScript
     }
-  }, function(err, res) {
-    // console.log('in update article', err, res);
+  }, function(error, response) {
+    // console.log('in update article', error, response);
+    callback(!error);
   });
 };
 
-const addArticle = (article) => {
+const addArticle = (article, callback) => {
   var article = JSON.parse(article);
   client.index({
     index: index,
@@ -141,12 +143,14 @@ const addArticle = (article) => {
       categoryid: article.categoryId,
       companyid: article.companyId
     }
- }, function(err, resp, status) {
-    // console.log('in add article', err, resp);
+ }, function(error, response) {
+    // console.log('in add article', error, response);
+    callback(!error);
  });
 };
 
 module.exports = {
+  client: client,
   queryTerm: queryTerm,
   deleteArticle: deleteArticle,
   updateArticle: updateArticle,

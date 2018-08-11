@@ -76,3 +76,8 @@ a:hover {
   display: table;
   margin: 0 auto;
 }
+
+.search .results {
+  overflow-y: auto;
+  max-height: 50vh;
+}
