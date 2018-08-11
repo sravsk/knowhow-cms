@@ -27,5 +27,5 @@ const insertDataMySQLtoES = () => {
   });
 };
 
-// insertDataMySQLtoES(data)
+// insertDataMySQLtoES()
 

@@ -355,12 +355,18 @@ app.post('/article', authMiddleware(), (req, res) => {
   let companyId = req.session.passport.user.companyId;
   //update if exists
   if(req.body.id) {
-    elasticsearch.updateArticle(JSON.stringify(req.body));
-    db.updateArticle(JSON.stringify(req.body), () => res.end(`${req.body.title} has been updated`));
+    elasticsearch.updateArticle(JSON.stringify(req.body), (done) => {
+      if (done) {
+        db.updateArticle(JSON.stringify(req.body), () => res.end(`${req.body.title} has been updated`));
+      }
+    });
   } else {
     db.addArticle(data.categoryId, data, companyId, (response) => {
-      elasticsearch.addArticle(JSON.stringify(response));
-      res.end('success')
+      elasticsearch.addArticle(JSON.stringify(response), (done) => {
+        if (done) {
+          res.end('success')
+        }
+      });
     })
   }
 
@@ -386,8 +392,11 @@ app.get('/company', authMiddleware(), (req, res) => {
 })
 
 app.post('/deleteArticle', authMiddleware(), (req, res) => {
-  elasticsearch.deleteArticle(req.body.articleId);
-  db.deleteArticle(req.body.articleId, () => res.redirect('/home'));
+  elasticsearch.deleteArticle(req.body.articleId, (done) => {
+    if (done) {
+      db.deleteArticle(req.body.articleId, () => res.redirect('/home'));
+    }
+  });
 })
 
 // get articles containing a given search term
