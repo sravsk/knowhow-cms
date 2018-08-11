@@ -16,7 +16,6 @@ class NavBar extends React.Component {
       isLoading: false,
       results: [],
       onLandingPage: false,
-      article: null,
     };
     this.handleResultSelect = this.handleResultSelect.bind(this);
     this.handleSearchChange = this.handleSearchChange.bind(this);
@@ -37,7 +36,10 @@ class NavBar extends React.Component {
   handleResultSelect(e, { result }) {
     this.setState({
       value: result.title,
-      article: result
+    });
+    this.props.history.push({
+      pathname: `/articles/${result.id}`,
+      state: { article: result }
     });
   }
 
@@ -64,20 +66,10 @@ class NavBar extends React.Component {
         if (result.data === 'logged out') {
           this.props.history.push('/');
         }
-      })
+      });
   }
 
   render () {
-    if (this.state.article) {
-      // go to article selected from search results
-      var article = this.state.article;
-      return (
-        <Redirect to={{
-          pathname: `/articles/${article.id}`,
-          state: { article: article }
-        }} />
-      );
-    }
     // show login and signup buttons if user is not logged in
     // show logout button if user is logged in
     if (this.props.user === '') {
