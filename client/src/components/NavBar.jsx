@@ -52,6 +52,7 @@ class NavBar extends React.Component {
       .then(searchResults => {
         var searchResults = searchResults.data.hits;
         var results = searchResults.map(item => item._source);
+        var results = results.map(result => {result.key = result.id; return result });
         this.setState ({
           isLoading: false,
           results: results
