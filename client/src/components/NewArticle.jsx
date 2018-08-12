@@ -57,20 +57,17 @@ class NewArticle extends React.Component{
         id: this.props.location.state.id,
       })
     }
-    axios.get('/user').then(res => {
-      let compId = res.data.companyId;
-      axios.get(`/${compId}/categoriesdata`).then(res2 => {
-        var cleaned = []
-        res2.data.forEach(catOption => {
-          let scrubbed = {
-            text: catOption.name,
-            value: catOption.id,
-            description: catOption.description
-          }
-          cleaned.push(scrubbed);
-        })
-        this.setState({categories: cleaned})
+    axios.get(`/${this.props.companyId}/categoriesdata`).then(res2 => {
+      var cleaned = []
+      res2.data.forEach(catOption => {
+        let scrubbed = {
+          text: catOption.name,
+          value: catOption.id,
+          description: catOption.description
+        }
+        cleaned.push(scrubbed);
       })
+      this.setState({categories: cleaned})
     })
   }
 

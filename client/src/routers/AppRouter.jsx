@@ -33,7 +33,6 @@ class AppRouter extends React.Component{
       role: ''
     }
     this.updateInfo = this.updateInfo.bind(this)
-    console.log(this.props)
   }
 
   updateInfo(obj) {
@@ -56,10 +55,8 @@ class AppRouter extends React.Component{
           />
           <Switch>
             <Route exact path='/' component={LandingPage} />
-            <Route exact path='/articles' component={ArticlesPage} />
             <Route exact path='/editor' component={Editor} />
             <Route exact path='/addcategory' component={NewCategory} />
-            <Route exact path='/:companyId/categories/:categoryId/articles' component={ArticlesPage} />
             <Route exact path='/articles/:articleId' component={ArticleContent} />
             <Route exact path='/devadminpage' component={devAdminPage} />
             <Route exact path='/inviteuser' component={InviteUser} />
@@ -88,6 +85,24 @@ class AppRouter extends React.Component{
               />
             )}} />
 
+            <Route exact path='/articles' render={(props) => {return (
+              <ArticlesPage
+                user={this.state.user}
+                companyId={this.state.companyId}
+                company={this.state.company}
+                role={this.state.role}
+              />
+            )}} />
+
+            <Route exact path='/:companyId/categories/:categoryId/articles' render={(props) => {return (
+              <ArticlesPage
+                user={this.state.user}
+                companyId={this.state.companyId}
+                company={this.state.company}
+                role={this.state.role}
+              />
+            )}} />
+            
             <Route exact path='/categories' render={(props) => {return (
               <CategoriesPage
                 user={this.state.user}

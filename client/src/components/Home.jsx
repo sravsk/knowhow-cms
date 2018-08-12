@@ -59,11 +59,26 @@ class Home extends React.Component {
 
   render () {
     if (this.state.showArticles) {
-      var info = <CompanyArticles />
+      var info = <CompanyArticles
+        user={this.props.user}
+        companyId={this.props.companyId}
+        company={this.props.company}
+        role={this.props.role}
+      />
     } else if (this.state.showCategories) {
-      var info = <CategoriesPage />
+      var info = <CategoriesPage
+        user={this.props.user}
+        companyId={this.props.companyId}
+        company={this.props.company}
+        role={this.props.role}
+      />
     } else if(this.state.showChat) {
-      var info = <Chat/>
+      var info = <Chat
+        user={this.props.user}
+        companyId={this.props.companyId}
+        company={this.props.company}
+        role={this.props.role}
+        />
     } else if (this.state.showSettings) {
       var info = <Settings role={this.props.role}/>
     }

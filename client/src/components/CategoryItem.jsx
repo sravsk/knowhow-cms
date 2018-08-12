@@ -12,7 +12,7 @@ class CategoryItem extends React.Component {
       <Item className='background item'>
         <Item.Header style={{ fontSize: '1.2em', paddingBottom: '0.5em' }} >
           <Link to={{
-            pathname: `/${this.props.category.companyId}/categories/${this.props.category.id}/articles`,
+            pathname: `/${this.props.companyId}/categories/${this.props.category.id}/articles`,
             state: {
               categoryName: this.props.category.name
             }

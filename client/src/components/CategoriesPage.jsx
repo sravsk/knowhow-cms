@@ -13,18 +13,14 @@ class CategoriesPage extends React.Component {
   }
 
   componentDidMount() {
-    // get info about logged in user
-    axios.get('/user')
+    // get all categories for given companyId
+    axios.get(`/${this.props.companyId}/categoriesdata`)
       .then(result => {
-        let companyId = result.data.companyId;
-        // get all categories for given companyId
-        axios.get(`/${companyId}/categoriesdata`)
-          .then(result => {
-            this.setState({
-              categories: result.data
-            });
-          })
-      })
+        this.setState({
+          categories: result.data
+        });
+      }
+    )
   }
 
   handleDelete(obj) {
@@ -34,7 +30,7 @@ class CategoriesPage extends React.Component {
 
   render() {
     let renderCategories = this.state.categories.map(category => {
-      return (<Segment raised key={category.id}><CategoryItem category={category} handleDelete={this.handleDelete.bind(this)}/></Segment>);
+      return (<Segment raised key={category.id}><CategoryItem category={category} handleDelete={this.handleDelete.bind(this)} {...this.props}/></Segment>);
     });
     return (
       <Segment raised>
