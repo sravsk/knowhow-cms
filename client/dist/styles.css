@@ -81,3 +81,17 @@ a:hover {
   overflow-y: auto;
   max-height: 50vh;
 }
+
+.customer-name {
+  display : none;
+}
+
+.customer-name-show {
+  display : block;
+  margin-top: 1em;
+  color : #00000066
+}
+
+.text {
+  color: #00000066 !important;
+}

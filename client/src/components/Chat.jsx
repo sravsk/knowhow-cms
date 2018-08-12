@@ -13,7 +13,8 @@ class Chat extends React.Component {
 			messages : [],
 			message : '',
 			user: '',
-			isLoggedIn : false
+			isLoggedIn : false,
+			showUser : 'customer-name'
 		}
   }
 
@@ -26,7 +27,7 @@ class Chat extends React.Component {
 		axios.get('/user')
 	      .then(result => {
 	        if (result.data) {
-	          let name = result.data.name;
+	          let name = result.data.user;
 	          let companyId = result.data.companyId;
 	          this.setState({
 	            isLoggedIn: true,
@@ -53,6 +54,9 @@ class Chat extends React.Component {
 	}
 
 	onKeyUp(e) {
+		this.setState({
+			showUser : 'customer-name-show'
+		})
 		if(e.key === 'Enter') {
 			if(this.state.message.length){
 				this.sendMessage({
@@ -60,6 +64,9 @@ class Chat extends React.Component {
 					text : this.state.message
 				})
 				e.target.value = '';
+				this.setState({
+					showUser : 'customer-name'
+				})
 			} else {
 				alert('Please enter a message');
 			}
@@ -79,6 +86,13 @@ class Chat extends React.Component {
 		let renderMessages = this.state.messages.map((message, i) => {
       return (<Segment raised key={i}><Message user={this.state.user} message={message} /></Segment>);
     })
+    const isTyping = this.state.user;
+		let user;
+		if(isTyping) {
+			user = isTyping + ' is typing...'
+		}  else {
+			user = ''
+		}
 		return(
 			<Segment raised >
         <Header as='h2' textAlign='center'>
@@ -95,6 +109,9 @@ class Chat extends React.Component {
 				          onChange={this.onChange.bind(this)} 
 				          onKeyUp={this.onKeyUp.bind(this)} />
 				       </Form>
+				       <Comment.Metadata>
+				       	<div className={this.state.showUser}>{this.state.user} is typing...</div>
+				       </Comment.Metadata>
 						 </Comment.Group>
           </Grid.Row>
         </Grid>
