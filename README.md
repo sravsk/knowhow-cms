@@ -45,13 +45,7 @@ module.exports = {
   }
 };
 
-> To use a local elasticsearch cluster, download Elasticsearch and Logstash from elastic.co. Download the JDBC driver for MySQL.
-
-Run bin/elasticsearch.
-
-In the logstash.conf config file in the root directory, enter the path to your downloaded jdbc driver library.
-
-Run bin/logstash -f logstash.conf
+> To use a local elasticsearch cluster, download Elasticsearch. Run bin/elasticsearch.
 
 ## Requirements
 

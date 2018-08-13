@@ -13,9 +13,11 @@ const db = require('../db/helpers.js');
 const apidb = require('../db/apiHelpers.js');
 const sessionStore = require('../db/Models/Session.js');
 const sendmail = require('../services/sendmail.js');
-const elasticsearch = require('../services/elasticsearch.js');
+// const elasticsearch = require('../services/elasticsearch.js');
 const config = require('../config.js');
 const AWS = require('aws-sdk');
+const axios = require('axios');
+const esUrl = 'http://localhost:8080';
 
 const s3 = new AWS.S3({
   accessKeyId: config.S3.accessKeyId,
@@ -357,21 +359,60 @@ app.post('/article', authMiddleware(), (req, res) => {
   let companyId = hashids.decode(req.session.passport.user.companyId);
   //update if exists
   if(req.body.id) {
-    elasticsearch.updateArticle(JSON.stringify(req.body), (done) => {
-      if (done) {
+    // elasticsearch.updateArticle(JSON.stringify(req.body), (done) => {
+    //   if (done) {
+    //     db.updateArticle(JSON.stringify(req.body), () => res.end(`${req.body.title} has been updated`));
+    //   }
+    // });
+    axios.patch(`${esUrl}/api/updatearticle`, req.body)
+    .then(result => {
+      if (result.data) {
         db.updateArticle(JSON.stringify(req.body), () => res.end(`${req.body.title} has been updated`));
       }
-    });
+    })
   } else {
     db.addArticle(data.categoryId, data, companyId, (response) => {
-      elasticsearch.addArticle(JSON.stringify(response), (done) => {
-        if (done) {
-          res.end('success')
-        }
-      });
+      // elasticsearch.addArticle(JSON.stringify(response), (done) => {
+      //   if (done) {
+      //     res.end('success')
+      //   }
+      // });
+      axios.post(`${esUrl}/api/addarticle`, response)
+      .then(result => {
+        res.send(result.data);
+      })
     })
   }
+});
 
+
+app.post('/deleteArticle', authMiddleware(), (req, res) => {
+  // elasticsearch.deleteArticle(req.body.articleId, (done) => {
+  //   if (done) {
+  //     db.deleteArticle(req.body.articleId, () => res.redirect('/home'));
+  //   }
+  // });
+  axios.delete(`${esUrl}/api/deletearticle/${req.body.articleId}`)
+  .then(result => {
+    if (result.data) {
+      db.deleteArticle(req.body.articleId, () => res.redirect('/home'));
+    }
+  })
+})
+
+// get articles containing a given search term
+app.get('/search', authMiddleware(), (req, res) => {
+  let term = req.query.term;
+  let companyId = req.user.companyId;
+  // elasticsearch.queryTerm(term, companyId, 0, (results) => {
+  //   res.send(results);
+  // })
+  let url = `${esUrl}/api/search?term=${term}&companyId=${companyId}`
+  axios.get(url)
+  .then(response => {
+    let results = response.data;
+    res.send(results)
+  });
 });
 
 app.post('/uploadimage', authMiddleware(), (req, res) => {
@@ -392,23 +433,6 @@ app.get('/company', authMiddleware(), (req, res) => {
     res.send(data[0].name);
   })
 })
-
-app.post('/deleteArticle', authMiddleware(), (req, res) => {
-  elasticsearch.deleteArticle(req.body.articleId, (done) => {
-    if (done) {
-      db.deleteArticle(req.body.articleId, () => res.redirect('/home'));
-    }
-  });
-})
-
-// get articles containing a given search term
-app.get('/search', authMiddleware(), (req, res) => {
-  let term = req.query.term;
-  let companyId = req.user.companyId;
-  elasticsearch.queryTerm(term, companyId, 0, (results) => {
-    res.send(results);
-  })
-});
 
 // to get name and companyId of logged in user
 app.get('/user', (req, res) => {
@@ -519,9 +543,15 @@ app.get('/api/:hashedCompanyId/search', (req, res) => {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   let term = req.query.term;
   let companyId = hashids.decode(req.params.hashedCompanyId)[0];
-  elasticsearch.queryTerm(term, companyId, 0, (results) => {
-    res.send(results);
-  })
+  // elasticsearch.queryTerm(term, companyId, 0, (results) => {
+  //   res.send(results);
+  // })
+  let url = `${esUrl}/api/search?term=${term}&companyId=${companyId}`
+  axios.get(url)
+  .then(response => {
+    let results = response.data;
+    res.send(results)
+  });
 });
 
 
