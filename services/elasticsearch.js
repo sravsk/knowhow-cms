@@ -42,7 +42,6 @@ const makeIndex = () => {
   client.indices.exists({
     index: index
   }).then(result => {
-    console.log(result)
       if (!result) {
        client.indices.create({
         index: index
@@ -54,9 +53,6 @@ const makeIndex = () => {
 };
 
 makeIndex();
-
-
-// TO DO - populate elasticsearch with some initial data
 
 // search function for all articles with a given search term and companyId
 const queryTerm = (term, companyId, offset, callback) => {
@@ -84,8 +80,9 @@ const queryTerm = (term, companyId, offset, callback) => {
     size: 100
   };
   client.search({index, type, body})
-    .then(results => {
-      callback(results.hits);
+    .then(response => {
+      const results = response.hits.hits.map(item => item._source);
+      callback(results);
     });
 };
 

@@ -50,9 +50,7 @@ class NavBar extends React.Component {
     });
     axios.get(`/search?term=${value}`)
       .then(searchResults => {
-        var searchResults = searchResults.data.hits;
-        var results = searchResults.map(item => item._source);
-        var results = results.map(result => {result.key = result.id; return result });
+        var results = searchResults.data.map(result => {result.key = result.id; return result });
         this.setState ({
           isLoading: false,
           results: results
