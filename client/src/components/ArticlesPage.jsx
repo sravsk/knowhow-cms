@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { Grid, Header, Container, Button, Segment } from 'semantic-ui-react';
 import axios from 'axios';
 import ArticleItem from './ArticleItem.jsx';
@@ -13,14 +13,16 @@ class ArticlesPage extends React.Component {
       pageOfItems: []
     };
     this.onChangePage = this.onChangePage.bind(this);
+    console.log(this.props)
   }
 
   componentDidMount() {
     let categoryId = this.props.match.params.categoryId;
-    let companyId = this.props.match.params.companyId;
+    let companyId = this.props.companyId;
     // fetch all articles for the given category and company
     axios.get(`/${companyId}/categories/${categoryId}/articlesdata`)
       .then(result => {
+        console.log(result)
         this.setState({
           articles: result.data
         });
@@ -63,4 +65,4 @@ class ArticlesPage extends React.Component {
   }
 }
 
-export default ArticlesPage;
+export default withRouter(ArticlesPage);

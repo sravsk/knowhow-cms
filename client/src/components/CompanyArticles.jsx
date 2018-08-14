@@ -14,17 +14,13 @@ class CompanyArticles extends React.Component {
 
   componentDidMount() {
     // get info about logged in user
-    axios.get('/user')
-      .then(result => {
-        let companyId = result.data.companyId;
-        // get all articles for given companyId
-        axios.get(`/${companyId}/articlesdata`)
-          .then(result => {
-            this.setState({
-              articles: result.data
-            });
-          })
-      })
+    let companyId = this.props.companyId
+      axios.get(`/${companyId}/articlesdata`)
+        .then(result => {
+          this.setState({
+            articles: result.data
+          });
+        })
   }
 
   render() {
@@ -49,4 +45,3 @@ class CompanyArticles extends React.Component {
 }
 
 export default CompanyArticles;
-

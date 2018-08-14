@@ -226,16 +226,17 @@ app.post('/loginuser', (req, res) => {
         let hash = user.password;
         let comparePassword = req.body.password;
         let name = user.name;
+        let hashedCompanyId = hashids.encode(user.companyId)
         bcrypt.compare(comparePassword, hash, (err, result) => {
           if (result) { // valid user
-            let userInfo = { user: user.name, companyId: user.companyId, role: user.role };
+            let userInfo = { user: user.name, companyId: hashedCompanyId, role: user.role, company: foundCompany };
             // make passport store userInfo (name, companyId and role) in req.user
             req.login(userInfo, (err) => {
               if (err) {
                 console.log(err);
                 res.sendStatus(404);
               } else {
-                let response = { user: user.name, companyId: user.companyId, role: user.role, company: foundCompany, found: true };
+                let response = { user: user.name, companyId: hashedCompanyId, role: user.role, company: foundCompany, found: true };
                 res.send(response);
               }
             });
@@ -327,7 +328,7 @@ app.post('/deletecategory', authMiddleware(), (req, res) => {
 
 // get all categories for a given company id
 app.get('/:companyId/categoriesdata', authMiddleware(), (req, res) => {
-  let companyId = req.params.companyId;
+  let companyId = hashids.decode(req.params.companyId);
   db.fetchCategoriesByCompany(companyId, (categories) => {
     res.send(categories);
   })
@@ -335,7 +336,7 @@ app.get('/:companyId/categoriesdata', authMiddleware(), (req, res) => {
 
 // get all articles for a given company id and category id
 app.get('/:companyId/categories/:categoryId/articlesdata', authMiddleware(), (req, res) => {
-  let companyId = req.params.companyId;
+  let companyId = hashids.decode(req.params.companyId);
   let categoryId = req.params.categoryId;
   db.fetchArticles({companyId, categoryId}, (articles) => {
     res.send(articles);
@@ -344,7 +345,8 @@ app.get('/:companyId/categories/:categoryId/articlesdata', authMiddleware(), (re
 
 // get all articles for a given company id
 app.get('/:companyId/articlesdata', authMiddleware(), (req, res) => {
-  let companyId = req.params.companyId;
+  let companyId = hashids.decode(req.params.companyId);
+  console.log(companyId)
   db.fetchCompanyArticles({companyId}, (articles) => {
     res.send(articles);
   });
@@ -352,7 +354,7 @@ app.get('/:companyId/articlesdata', authMiddleware(), (req, res) => {
 
 app.post('/article', authMiddleware(), (req, res) => {
   let data = req.body;
-  let companyId = req.session.passport.user.companyId;
+  let companyId = hashids.decode(req.session.passport.user.companyId);
   //update if exists
   if(req.body.id) {
     elasticsearch.updateArticle(JSON.stringify(req.body), (done) => {
