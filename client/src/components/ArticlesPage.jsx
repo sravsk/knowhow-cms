@@ -13,7 +13,6 @@ class ArticlesPage extends React.Component {
       pageOfItems: []
     };
     this.onChangePage = this.onChangePage.bind(this);
-    console.log(this.props)
   }
 
   componentDidMount() {
