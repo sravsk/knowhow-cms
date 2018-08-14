@@ -78,6 +78,9 @@ class Home extends React.Component {
         companyId={this.props.companyId}
         company={this.props.company}
         role={this.props.role}
+        messages={this.props.messages}
+        socket={this.props.socket}
+        blinkyChatButton={this.props.blinkyChatButton}
         />
     } else if (this.state.showSettings) {
       var info = <Settings role={this.props.role}/>
@@ -94,7 +97,7 @@ class Home extends React.Component {
             <div style={{position: 'fixed', margin: '2em'}}>
               <Button fluid style={{ 'color': '#2185d0'}} onClick={this.showArticles.bind(this)}>Articles</Button><br/>
               <Button fluid style={{ 'color': '#2185d0'}} onClick={this.showCategories.bind(this)}>Categories</Button><br/>
-              <Button fluid style={{ 'color': '#2185d0'}} onClick={this.showChat.bind(this)}>Chat</Button><br/>
+              <Button fluid style={{ 'color': '#2185d0'}} className={this.props.blinkyChatButton} onClick={this.showChat.bind(this)}>Chat</Button><br/>
               <Button fluid style={{ 'color': '#2185d0'}} onClick={this.showSettings.bind(this)}>Settings</Button>
             </div>
           </Grid.Column>

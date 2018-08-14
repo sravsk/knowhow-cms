@@ -7,14 +7,14 @@ import Message from './Message.jsx';
 class Chat extends React.Component {
 	constructor(props) {
     super(props);
-    this.socket = null;
+    //this.socket = null;
 		this.state = {
 			users : [],
-			messages : [],
 			message : '',
 			user: '',
 			isLoggedIn : false,
-			showUser : 'customer-name'
+			showUser : 'customer-name',
+			messages : this.props.messages
 		}
   }
 
@@ -38,11 +38,9 @@ class Chat extends React.Component {
     }
 
 	initializeChat(){
-		//expose a standalone build of socket io client by socket.io server 
-		this.socket = socketIOClient('ws://localhost:5000');
-		this.socket.on('message', (message) => {
+		this.props.socket.on('message', (message) => {
 			this.setState({
-				messages : this.state.messages.concat([message])
+				messages : this.props.messages.concat([message])
 			})
 		})
 	}
@@ -75,9 +73,9 @@ class Chat extends React.Component {
 
 	sendMessage(message, e){
 		this.setState({
-			messages : this.state.messages.concat({message : message })
+			messages : this.props.messages.concat({message : message })
 		})
-		this.socket.emit('message', {
+		this.props.socket.emit('message', {
 			message : message
 		})
 	}
