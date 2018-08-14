@@ -8,6 +8,7 @@
 <body>
   <div id="app"></div>
   <script type="text/javascript" src="/bundle.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 </body>
 <footer>
@@ -16,6 +17,10 @@
   <!-- companyId = 1, hash = 'NGp3aq8Qq8kQZKrM' -->
   <script>EmbeddableWidget.mount('NGp3aq8Qq8kQZKrM');</script>
   <script src="http://localhost:5000/chat-service.js"></script>
-  <script>EmbeddableChatService.mount();</script>
+  <script>EmbeddableChatService.mount({
+  	app_id : 'NGp3aq8Qq8kQZKrM',
+  	name : $('#app .right span')[0].innerText
+  });
+ </script>
 </footer>
 </html>
