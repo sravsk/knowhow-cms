@@ -96,7 +96,7 @@ class NavBar extends React.Component {
               <Link to='/home'><Header as='h1' style={{ 'color': '#61dafb' }}>Know-how</Header></Link>
             </Menu.Item>
             <Menu.Item  position='right'>
-              <p>Hello {this.props.user}</p>
+              <p>Hello <span>{this.props.user}</span></p>
             </Menu.Item>
             <Menu.Item>
               <Search
