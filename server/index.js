@@ -13,7 +13,6 @@ const db = require('../db/helpers.js');
 const apidb = require('../db/apiHelpers.js');
 const sessionStore = require('../db/Models/Session.js');
 const sendmail = require('../services/sendmail.js');
-// const elasticsearch = require('../services/elasticsearch.js');
 const config = require('../config.js');
 const AWS = require('aws-sdk');
 const axios = require('axios');
@@ -359,11 +358,6 @@ app.post('/article', authMiddleware(), (req, res) => {
   let companyId = hashids.decode(req.session.passport.user.companyId);
   //update if exists
   if(req.body.id) {
-    // elasticsearch.updateArticle(JSON.stringify(req.body), (done) => {
-    //   if (done) {
-    //     db.updateArticle(JSON.stringify(req.body), () => res.end(`${req.body.title} has been updated`));
-    //   }
-    // });
     axios.patch(`${esUrl}/api/updatearticle`, req.body)
     .then(result => {
       if (result.data) {
@@ -372,11 +366,6 @@ app.post('/article', authMiddleware(), (req, res) => {
     })
   } else {
     db.addArticle(data.categoryId, data, companyId, (response) => {
-      // elasticsearch.addArticle(JSON.stringify(response), (done) => {
-      //   if (done) {
-      //     res.end('success')
-      //   }
-      // });
       axios.post(`${esUrl}/api/addarticle`, response)
       .then(result => {
         res.send(result.data);
@@ -387,11 +376,6 @@ app.post('/article', authMiddleware(), (req, res) => {
 
 
 app.post('/deleteArticle', authMiddleware(), (req, res) => {
-  // elasticsearch.deleteArticle(req.body.articleId, (done) => {
-  //   if (done) {
-  //     db.deleteArticle(req.body.articleId, () => res.redirect('/home'));
-  //   }
-  // });
   axios.delete(`${esUrl}/api/deletearticle/${req.body.articleId}`)
   .then(result => {
     if (result.data) {
@@ -404,9 +388,6 @@ app.post('/deleteArticle', authMiddleware(), (req, res) => {
 app.get('/search', authMiddleware(), (req, res) => {
   let term = req.query.term;
   let companyId = req.user.companyId;
-  // elasticsearch.queryTerm(term, companyId, 0, (results) => {
-  //   res.send(results);
-  // })
   companyId = hashids.decode(companyId)[0];
   let url = `${esUrl}/api/search?term=${term}&companyId=${companyId}`
   axios.get(url)
@@ -544,9 +525,6 @@ app.get('/api/:hashedCompanyId/search', (req, res) => {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   let term = req.query.term;
   let companyId = hashids.decode(req.params.hashedCompanyId)[0];
-  // elasticsearch.queryTerm(term, companyId, 0, (results) => {
-  //   res.send(results);
-  // })
   let url = `${esUrl}/api/search?term=${term}&companyId=${companyId}`
   axios.get(url)
   .then(response => {
