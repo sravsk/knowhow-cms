@@ -29,7 +29,7 @@ const db = new Sequelize(`mysql://${DBUSERNAME}:${DBPASSWORD}@${DBHOST}:${DBPORT
 //     protocol: 'mysql',
 //     logging:  true
 //   })
-//
+
 // } else {
 //   var db = new Sequelize('knowhow', 'root', '', {
 //     host: 'localhost',
