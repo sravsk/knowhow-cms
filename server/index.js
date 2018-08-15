@@ -407,6 +407,7 @@ app.get('/search', authMiddleware(), (req, res) => {
   // elasticsearch.queryTerm(term, companyId, 0, (results) => {
   //   res.send(results);
   // })
+  companyId = hashids.decode(companyId)[0];
   let url = `${esUrl}/api/search?term=${term}&companyId=${companyId}`
   axios.get(url)
   .then(response => {
