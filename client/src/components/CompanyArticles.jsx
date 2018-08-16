@@ -10,28 +10,32 @@ class CompanyArticles extends React.Component {
     this.state = {
       articles: []
     }
+    console.log(props)
   }
 
   componentDidMount() {
-    // // get info about logged in user
-    // let companyId = this.props.companyId
-    //   axios.get(`/${companyId}/articlesdata`)
-    //     .then(result => {
-    //       this.setState({
-    //         articles: result.data
-    //       });
-    //     })
-    axios.get('/user')
+    // get info about logged in user
+    if (this.props.companyId) {
+      let companyId = this.props.companyId
+      axios.get(`/${companyId}/articlesdata`)
       .then(result => {
-        let companyId = result.data.companyId;
-        // get all articles for given companyId
-        axios.get(`/${companyId}/articlesdata`)
-          .then(result => {
-            this.setState({
-              articles: result.data
-            });
-          })
+        this.setState({
+          articles: result.data
+        });
       })
+    } 
+  }
+
+  componentDidUpdate() {
+    // get info about logged in user
+    // console.log('component updated');
+    let companyId = this.props.companyId
+      axios.get(`/${companyId}/articlesdata`)
+        .then(result => {
+          this.setState({
+            articles: result.data
+          });
+        })
   }
 
   render() {
