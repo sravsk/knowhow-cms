@@ -50,9 +50,7 @@ class NavBar extends React.Component {
     });
     axios.get(`/search?term=${value}`)
       .then(searchResults => {
-        var searchResults = searchResults.data.hits;
-        var results = searchResults.map(item => item._source);
-        var results = results.map(result => {result.key = result.id; return result });
+        var results = searchResults.data.map(result => {result.key = result.id; return result });
         this.setState ({
           isLoading: false,
           results: results
@@ -98,7 +96,7 @@ class NavBar extends React.Component {
               <Link to='/home'><Header as='h1' style={{ 'color': '#61dafb' }}>Know-how</Header></Link>
             </Menu.Item>
             <Menu.Item  position='right'>
-              <p>Hello {this.props.user}</p>
+              <p>Hello <span>{this.props.user}</span></p>
             </Menu.Item>
             <Menu.Item>
               <Search

@@ -21,16 +21,20 @@ import InviteUser from '../components/InviteUser.jsx';
 import SignupWithCode from '../components/SignupWithCode.jsx';
 import ForgotPassword from '../components/ForgotPassword.jsx';
 import ResetPassword from '../components/ResetPassword.jsx';
+import socketIOClient from 'socket.io-client';
 
 
 class AppRouter extends React.Component{
   constructor(props) {
     super(props)
+    this.socket = null;
     this.state = {
       user: '',
       companyId: '',
       company: '',
-      role: ''
+      role: '',
+      blinkyChatButton : 'chat-button',
+      messages : []
     }
     this.updateInfo = this.updateInfo.bind(this)
   }
@@ -41,6 +45,20 @@ class AppRouter extends React.Component{
       companyId: obj.companyId,
       company: obj.company,
       role: obj.role
+    })
+  }
+  componentDidMount(){
+    this.initializeChat()
+  }
+
+  initializeChat(){
+    //expose a standalone build of socket io client by socket.io server 
+    this.socket = socketIOClient('ws://localhost:5000');
+    this.socket.on('message', (message) => {
+      this.setState({
+        blinkyChatButton : 'blinky-chat-button',
+        messages : this.state.messages.concat([message])
+      })
     })
   }
 
@@ -70,6 +88,9 @@ class AppRouter extends React.Component{
                 companyId={this.state.companyId}
                 company={this.state.company}
                 role={this.state.role}
+                blinkyChatButton = {this.state.blinkyChatButton}
+                messages={this.state.messages}
+                socket = {this.socket}
               />
             )}} />
 
