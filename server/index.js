@@ -13,9 +13,10 @@ const db = require('../db/helpers.js');
 const apidb = require('../db/apiHelpers.js');
 const sessionStore = require('../db/Models/Session.js');
 const sendmail = require('../services/sendmail.js');
-const elasticsearch = require('../services/elasticsearch.js');
 const config = require('../config.js');
 const AWS = require('aws-sdk');
+const axios = require('axios');
+const esUrl = 'http://localhost:8080';
 
 const s3 = new AWS.S3({
   accessKeyId: config.S3.accessKeyId,
@@ -200,6 +201,7 @@ app.post('/inviteuser', admin(), (req, res) => {
   bcrypt.hash(code, salt, (err, hash) => {
     if (hash) {
       // save companyId, email, hash and role in invitations table
+      companyId = hashids.decode(companyId)[0];
       db.addInvite({companyId, email, hash, role}, (saved) => {
         if (saved) {
           // send invitation email containing role and generated code
@@ -226,16 +228,17 @@ app.post('/loginuser', (req, res) => {
         let hash = user.password;
         let comparePassword = req.body.password;
         let name = user.name;
+        let hashedCompanyId = hashids.encode(user.companyId)
         bcrypt.compare(comparePassword, hash, (err, result) => {
           if (result) { // valid user
-            let userInfo = { user: user.name, companyId: user.companyId, role: user.role };
+            let userInfo = { user: user.name, companyId: hashedCompanyId, role: user.role, company: foundCompany };
             // make passport store userInfo (name, companyId and role) in req.user
             req.login(userInfo, (err) => {
               if (err) {
                 console.log(err);
                 res.sendStatus(404);
               } else {
-                let response = { user: user.name, companyId: user.companyId, role: user.role, company: foundCompany, found: true };
+                let response = { user: user.name, companyId: hashedCompanyId, role: user.role, company: foundCompany, found: true };
                 res.send(response);
               }
             });
@@ -327,7 +330,7 @@ app.post('/deletecategory', authMiddleware(), (req, res) => {
 
 // get all categories for a given company id
 app.get('/:companyId/categoriesdata', authMiddleware(), (req, res) => {
-  let companyId = req.params.companyId;
+  let companyId = hashids.decode(req.params.companyId);
   db.fetchCategoriesByCompany(companyId, (categories) => {
     res.send(categories);
   })
@@ -335,7 +338,7 @@ app.get('/:companyId/categoriesdata', authMiddleware(), (req, res) => {
 
 // get all articles for a given company id and category id
 app.get('/:companyId/categories/:categoryId/articlesdata', authMiddleware(), (req, res) => {
-  let companyId = req.params.companyId;
+  let companyId = hashids.decode(req.params.companyId);
   let categoryId = req.params.categoryId;
   db.fetchArticles({companyId, categoryId}, (articles) => {
     res.send(articles);
@@ -344,7 +347,8 @@ app.get('/:companyId/categories/:categoryId/articlesdata', authMiddleware(), (re
 
 // get all articles for a given company id
 app.get('/:companyId/articlesdata', authMiddleware(), (req, res) => {
-  let companyId = req.params.companyId;
+  let companyId = hashids.decode(req.params.companyId);
+  console.log(companyId)
   db.fetchCompanyArticles({companyId}, (articles) => {
     res.send(articles);
   });
@@ -352,18 +356,46 @@ app.get('/:companyId/articlesdata', authMiddleware(), (req, res) => {
 
 app.post('/article', authMiddleware(), (req, res) => {
   let data = req.body;
-  let companyId = req.session.passport.user.companyId;
+  let companyId = hashids.decode(req.session.passport.user.companyId);
   //update if exists
   if(req.body.id) {
-    elasticsearch.updateArticle(JSON.stringify(req.body));
-    db.updateArticle(JSON.stringify(req.body), () => res.end(`${req.body.title} has been updated`));
+    axios.patch(`${esUrl}/api/updatearticle`, req.body)
+    .then(result => {
+      if (result.data) {
+        db.updateArticle(JSON.stringify(req.body), () => res.end(`${req.body.title} has been updated`));
+      }
+    })
   } else {
     db.addArticle(data.categoryId, data, companyId, (response) => {
-      elasticsearch.addArticle(JSON.stringify(response));
-      res.end('success')
+      axios.post(`${esUrl}/api/addarticle`, response)
+      .then(result => {
+        res.send(result.data);
+      })
     })
   }
+});
 
+
+app.post('/deleteArticle', authMiddleware(), (req, res) => {
+  axios.delete(`${esUrl}/api/deletearticle/${req.body.articleId}`)
+  .then(result => {
+    if (result.data) {
+      db.deleteArticle(req.body.articleId, () => res.redirect('/home'));
+    }
+  })
+})
+
+// get articles containing a given search term
+app.get('/search', authMiddleware(), (req, res) => {
+  let term = req.query.term;
+  let companyId = req.user.companyId;
+  companyId = hashids.decode(companyId)[0];
+  let url = `${esUrl}/api/search?term=${term}&companyId=${companyId}`
+  axios.get(url)
+  .then(response => {
+    let results = response.data;
+    res.send(results)
+  });
 });
 
 app.post('/uploadimage', authMiddleware(), (req, res) => {
@@ -384,20 +416,6 @@ app.get('/company', authMiddleware(), (req, res) => {
     res.send(data[0].name);
   })
 })
-
-app.post('/deleteArticle', authMiddleware(), (req, res) => {
-  elasticsearch.deleteArticle(req.body.articleId);
-  db.deleteArticle(req.body.articleId, () => res.redirect('/home'));
-})
-
-// get articles containing a given search term
-app.get('/search', authMiddleware(), (req, res) => {
-  let term = req.query.term;
-  let companyId = req.user.companyId;
-  elasticsearch.queryTerm(term, companyId, 0, (results) => {
-    res.send(results);
-  })
-});
 
 // to get name and companyId of logged in user
 app.get('/user', (req, res) => {
@@ -508,9 +526,12 @@ app.get('/api/:hashedCompanyId/search', (req, res) => {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   let term = req.query.term;
   let companyId = hashids.decode(req.params.hashedCompanyId)[0];
-  elasticsearch.queryTerm(term, companyId, 0, (results) => {
-    res.send(results);
-  })
+  let url = `${esUrl}/api/search?term=${term}&companyId=${companyId}`
+  axios.get(url)
+  .then(response => {
+    let results = response.data;
+    res.send(results)
+  });
 });
 
 

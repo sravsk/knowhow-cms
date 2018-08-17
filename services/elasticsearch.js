@@ -1,24 +1,33 @@
-var elasticsearch = require('elasticsearch');
+const esconfig = require('../config.js').ES;
 
-// elasticsearch variables - index and type values are from logstash.conf
+// elasticsearch variables - index and type
 const index = 'articles';
 const type = 'documents';
 
 const port = 9200;
-const host = process.env.ES_host || 'localhost';
 
-// create an instance of Elasticsearch client
-var client = new elasticsearch.Client({
-  host: {host, port},
-  apiVersion: '6.3',
-  // connectionClass: CustomESHTTPConnector,
-  // keepAlive: true,
-  // log: 'trace'
-  log: 'error'
+// create an elasticsearch client for your Amazon ES
+// let client = new require('elasticsearch').Client({
+//   hosts: [esconfig.url],
+//   connectionClass: require('http-aws-es'),
+//   // log: 'trace'
+// });
+
+// let AWS = require('aws-sdk');
+// AWS.config.update({
+//   credentials: new AWS.Credentials(esconfig.accessKeyId, esconfig.secretAccessKey),
+//   region: esconfig.region
+// });
+
+// create an instance of Elasticsearch client on localhost
+var client = new require('elasticsearch').Client({
+  host: `localhost:${port}`,
+  apiVersion: '6.2',
+  log: 'trace'
+  // log: 'error'
 });
 
 client.ping({
-  // ping usually has a 3000ms timeout
   requestTimeout: 3000
 }, function (error) {
   if (error) {
@@ -28,8 +37,22 @@ client.ping({
   }
 });
 
-// const { count } = await client.count();
-// console.log('====== count ======', count)
+// if index doesn't exist, create it
+const makeIndex = () => {
+  client.indices.exists({
+    index: index
+  }).then(result => {
+      if (!result) {
+       client.indices.create({
+        index: index
+      }).then((err, response) => {
+        console.log(err, response);
+      })
+    }
+  });
+};
+
+makeIndex();
 
 // search function for all articles with a given search term and companyId
 const queryTerm = (term, companyId, offset, callback) => {
@@ -50,22 +73,21 @@ const queryTerm = (term, companyId, offset, callback) => {
           }
         },
         filter: [{
-          term: {
-            companyid: companyId
-          }
+          term: { companyid: companyId }
         }]
       }
     },
-    size: 10000
+    size: 100
   };
   client.search({index, type, body})
-    .then(results => {
-      callback(results.hits);
+    .then(response => {
+      const results = response.hits.hits.map(item => item._source);
+      callback(results);
     });
 };
 
 // delete an article from elasticsearch index
-const deleteArticle = (articleId) => {
+const deleteArticle = (articleId, callback) => {
   client.deleteByQuery({
     index: index,
     type: type,
@@ -75,12 +97,13 @@ const deleteArticle = (articleId) => {
       }
     }
   }, function (error, response) {
-      // console.log(err, response);
+      // console.log(error, response);
+      callback(!error);
   });
 };
 
 // update an article in elasticsearch index
-const updateArticle = (article) => {
+const updateArticle = (article, callback) => {
   var article = JSON.parse(article);
   var id = article.id;
   var title = article.title;
@@ -97,12 +120,13 @@ const updateArticle = (article) => {
       "query": { "term": { id: id } },
       "script": theScript
     }
-  }, function(err, res) {
-    // console.log('in update article', err, res);
+  }, function(error, response) {
+    // console.log('in update article', error, response);
+    callback(!error);
   });
 };
 
-const addArticle = (article) => {
+const addArticle = (article, callback) => {
   var article = JSON.parse(article);
   client.index({
     index: index,
@@ -116,12 +140,14 @@ const addArticle = (article) => {
       categoryid: article.categoryId,
       companyid: article.companyId
     }
- }, function(err, resp, status) {
-    // console.log('in add article', err, resp);
+ }, function(error, response) {
+    // console.log('in add article', error, response);
+    callback(!error);
  });
 };
 
 module.exports = {
+  client: client,
   queryTerm: queryTerm,
   deleteArticle: deleteArticle,
   updateArticle: updateArticle,

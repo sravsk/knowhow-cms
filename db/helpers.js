@@ -218,6 +218,9 @@ var dbHelpers = {
       where: {
         companyId: companyId
       },
+      order: [
+        ['id', 'DESC']
+      ],
       attributes: ['id', 'name', 'description', 'companyId']
     })
     .then(results => {
@@ -281,6 +284,9 @@ var dbHelpers = {
         companyId: companyId,
         categoryId: categoryId
       },
+      order: [
+        ['id', 'DESC']
+      ],
       attributes: ['id', 'title', 'description', 'content', 'categoryId', 'companyId']
     })
     .then(results => {
@@ -294,6 +300,9 @@ var dbHelpers = {
       where: {
         companyId: companyId
       },
+      order: [
+        ['id', 'DESC']
+      ],
       attributes: ['id', 'title', 'description', 'content', 'categoryId', 'companyId']
     })
     .then(results => {

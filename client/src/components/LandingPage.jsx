@@ -1,7 +1,6 @@
 import React from 'react';
 import { Container, Header } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import NavBar from './NavBar.jsx';
 
 class LandingPage extends React.Component {
   constructor(props) {

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Segment, Form, Button, Input, Dropdown, Grid, Header, Container } from 'semantic-ui-react';
 import Editor from './Editor.jsx';
-import NavBar from './NavBar.jsx';
 import ReactQuill from 'react-quill';
 import Delta from 'quill-delta';
 import config from '../../../config.js';
@@ -58,20 +57,17 @@ class NewArticle extends React.Component{
         id: this.props.location.state.id,
       })
     }
-    axios.get('/user').then(res => {
-      let compId = res.data.companyId;
-      axios.get(`/${compId}/categoriesdata`).then(res2 => {
-        var cleaned = []
-        res2.data.forEach(catOption => {
-          let scrubbed = {
-            text: catOption.name,
-            value: catOption.id,
-            description: catOption.description
-          }
-          cleaned.push(scrubbed);
-        })
-        this.setState({categories: cleaned})
+    axios.get(`/${this.props.companyId}/categoriesdata`).then(res2 => {
+      var cleaned = []
+      res2.data.forEach(catOption => {
+        let scrubbed = {
+          text: catOption.name,
+          value: catOption.id,
+          description: catOption.description
+        }
+        cleaned.push(scrubbed);
       })
+      this.setState({categories: cleaned})
     })
   }
 
@@ -151,7 +147,7 @@ class NewArticle extends React.Component{
     };
     axios.post('/article',obj).then(res => {
       alert(res.data);
-    });
+    }).then(() => this.props.history.push('/home'));
   }
 
   render() {

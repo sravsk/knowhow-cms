@@ -16,18 +16,30 @@ class NavBar extends React.Component {
       isLoading: false,
       results: [],
       onLandingPage: false,
-      article: null,
     };
     this.handleResultSelect = this.handleResultSelect.bind(this);
     this.handleSearchChange = this.handleSearchChange.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
   }
 
+  componentWillMount() {
+    if(this.props.user === '') {
+      axios.get('/user')
+      .then(data => {
+        if (data.data !== '') {
+          this.props.updateUserInfo(data.data)
+        }
+      })
+    }
+  }
 
   handleResultSelect(e, { result }) {
     this.setState({
       value: result.title,
-      article: result
+    });
+    this.props.history.push({
+      pathname: `/articles/${result.id}`,
+      state: { article: result }
     });
   }
 
@@ -38,8 +50,7 @@ class NavBar extends React.Component {
     });
     axios.get(`/search?term=${value}`)
       .then(searchResults => {
-        var searchResults = searchResults.data.hits;
-        var results = searchResults.map(item => item._source);
+        var results = searchResults.data.map(result => {result.key = result.id; return result });
         this.setState ({
           isLoading: false,
           results: results
@@ -54,20 +65,10 @@ class NavBar extends React.Component {
         if (result.data === 'logged out') {
           this.props.history.push('/');
         }
-      })
+      });
   }
 
   render () {
-    if (this.state.article) {
-      // go to article selected from search results
-      var article = this.state.article;
-      return (
-        <Redirect to={{
-          pathname: `/articles/${article.id}`,
-          state: { article: article }
-        }} />
-      );
-    }
     // show login and signup buttons if user is not logged in
     // show logout button if user is logged in
     if (this.props.user === '') {
@@ -78,6 +79,7 @@ class NavBar extends React.Component {
             <Link to='/home'><Header as='h1' style={{ 'color': '#61dafb' }}>Know-how</Header></Link>
           </Menu.Item>
           <Menu.Item position='right'>
+           <span></span>
            <Button primary><Link className='nav-button' to='/signup'>Sign up</Link></Button>
           </Menu.Item>
           <Menu.Item>
@@ -95,7 +97,7 @@ class NavBar extends React.Component {
               <Link to='/home'><Header as='h1' style={{ 'color': '#61dafb' }}>Know-how</Header></Link>
             </Menu.Item>
             <Menu.Item  position='right'>
-              <p>Hello {this.props.user}</p>
+              <p>Hello <span>{this.props.user}</span></p>
             </Menu.Item>
             <Menu.Item>
               <Search

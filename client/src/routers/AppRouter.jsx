@@ -21,20 +21,37 @@ import InviteUser from '../components/InviteUser.jsx';
 import SignupWithCode from '../components/SignupWithCode.jsx';
 import ForgotPassword from '../components/ForgotPassword.jsx';
 import ResetPassword from '../components/ResetPassword.jsx';
+import socketIOClient from 'socket.io-client';
 
 
 class AppRouter extends React.Component{
   constructor(props) {
     super(props)
+    this.socket = null;
     this.state = {
       user: '',
       companyId: '',
       company: '',
-      role: ''
+      role: '',
+      blinkyChatButton : 'chat-button',
+      messages : [],
+      uid : localStorage.getItem('uid') ? localStorage.getItem('uid') : this.generateUID()
     }
     this.updateInfo = this.updateInfo.bind(this)
-    console.log(this.props)
   }
+
+  // generate a random string, use it to set uid key on local storage
+  // can identify users accessing chat app from different browser tabs
+  generateUID(){
+    let text = '';
+    let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (let i = 0; i < 15; i++){
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    localStorage.setItem('uid', text);
+    return text;
+  }
+
 
   updateInfo(obj) {
     this.setState({
@@ -42,6 +59,22 @@ class AppRouter extends React.Component{
       companyId: obj.companyId,
       company: obj.company,
       role: obj.role
+    })
+  }
+  componentDidMount(){
+    this.initializeChat()
+  }
+
+  initializeChat(){
+    //expose a standalone build of socket io client by socket.io server 
+    this.socket = socketIOClient('ws://localhost:5000', {
+      query : 'user='+this.state.user+'&uid='+this.state.uid
+    });
+    this.socket.on('message', (message) => {
+      this.setState({
+        blinkyChatButton : 'blinky-chat-button',
+        messages : this.state.messages.concat([message])
+      })
     })
   }
 
@@ -56,10 +89,8 @@ class AppRouter extends React.Component{
           />
           <Switch>
             <Route exact path='/' component={LandingPage} />
-            <Route exact path='/articles' component={ArticlesPage} />
             <Route exact path='/editor' component={Editor} />
             <Route exact path='/addcategory' component={NewCategory} />
-            <Route exact path='/:companyId/categories/:categoryId/articles' component={ArticlesPage} />
             <Route exact path='/articles/:articleId' component={ArticleContent} />
             <Route exact path='/devadminpage' component={devAdminPage} />
             <Route exact path='/inviteuser' component={InviteUser} />
@@ -73,6 +104,9 @@ class AppRouter extends React.Component{
                 companyId={this.state.companyId}
                 company={this.state.company}
                 role={this.state.role}
+                blinkyChatButton = {this.state.blinkyChatButton}
+                messages={this.state.messages}
+                socket = {this.socket}
               />
             )}} />
 
@@ -88,6 +122,24 @@ class AppRouter extends React.Component{
               />
             )}} />
 
+            <Route exact path='/articles' render={(props) => {return (
+              <ArticlesPage
+                user={this.state.user}
+                companyId={this.state.companyId}
+                company={this.state.company}
+                role={this.state.role}
+              />
+            )}} />
+
+            <Route exact path='/:companyId/categories/:categoryId/articles' render={(props) => {return (
+              <ArticlesPage
+                user={this.state.user}
+                companyId={this.state.companyId}
+                company={this.state.company}
+                role={this.state.role}
+              />
+            )}} />
+            
             <Route exact path='/categories' render={(props) => {return (
               <CategoriesPage
                 user={this.state.user}
