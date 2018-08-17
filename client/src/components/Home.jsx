@@ -81,6 +81,7 @@ class Home extends React.Component {
         messages={this.props.messages}
         socket={this.props.socket}
         blinkyChatButton={this.props.blinkyChatButton}
+        uid = {this.props.uid}
         />
     } else if (this.state.showSettings) {
       var info = <Settings role={this.props.role}/>
