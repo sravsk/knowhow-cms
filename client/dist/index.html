@@ -17,9 +17,17 @@
   <!-- companyId = 1, hash = 'NGp3aq8Qq8kQZKrM' -->
   <script>EmbeddableWidget.mount('NGp3aq8Qq8kQZKrM');</script>
   <script src="http://localhost:5000/chat-service.js"></script>
-  <script>EmbeddableChatService.mount({
-  	app_id : 'NGp3aq8Qq8kQZKrM',
-  	name : $('#app .right span')[0].innerText
+  <script type="text/javascript">
+  	$(document).ready(function() {
+  		var login = $('#app .right span')[0].innerText;
+	  	if(login.length !== undefined) {
+	  		EmbeddableChatService.mount({
+	  			app_id : 'NGp3aq8Qq8kQZKrM',
+	  			name : $('#app .right span')[0].innerText
+	  		})
+	  	} else { 
+	  		EmbeddableChatService.mount();
+	  	}
   });
  </script>
 </footer>

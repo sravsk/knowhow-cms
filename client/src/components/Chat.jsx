@@ -3,44 +3,31 @@ import { Grid, Header, Container, Button, Segment, Comment, Form} from 'semantic
 import socketIOClient from 'socket.io-client';
 import axios from 'axios';
 import Message from './Message.jsx';
+import Messages from './Messages.jsx';
 
 class Chat extends React.Component {
 	constructor(props) {
     super(props);
-    //this.socket = null;
 		this.state = {
 			users : [],
 			message : '',
-			user: '',
-			isLoggedIn : false,
+			user: this.props.user,
 			showUser : 'customer-name',
-			messages : this.props.messages
+			messages : this.props.messages,
+			uid : this.props.uid
 		}
   }
 
   componentDidMount(){
 		this.initializeChat();
-		this.checkUser();
 	}
 
-	checkUser(){
-		axios.get('/user')
-	      .then(result => {
-	        if (result.data) {
-	          let name = result.data.user;
-	          let companyId = result.data.companyId;
-	          this.setState({
-	            isLoggedIn: true,
-	            user: name
-	          });
-	        }
-	     })
-    }
 
 	initializeChat(){
+		localStorage.setItem('user', this.state.user);
 		this.props.socket.on('message', (message) => {
 			this.setState({
-				messages : this.props.messages.concat([message])
+				messages : this.state.messages.concat([message])
 			})
 		})
 	}
@@ -68,22 +55,25 @@ class Chat extends React.Component {
 			} else {
 				alert('Please enter a message');
 			}
-		}
+		 }
 	}
 
 	sendMessage(message, e){
 		this.setState({
-			messages : this.props.messages.concat({message : message })
+			messages : this.state.messages.concat({
+				user : this.state.user,
+				uid : localStorage.getItem('uid'),
+				message : message
+			})
 		})
 		this.props.socket.emit('message', {
+			user : this.state.user,
+		  uid : localStorage.getItem('uid'),
 			message : message
 		})
 	}
 
 	render(){
-		let renderMessages = this.state.messages.map((message, i) => {
-      return (<Segment raised key={i}><Message user={this.state.user} message={message} /></Segment>);
-    })
     const isTyping = this.state.user;
 		let user;
 		if(isTyping) {
@@ -99,7 +89,7 @@ class Chat extends React.Component {
         <Grid  style = {{ marginLeft: '2vw', marginRight: '2vw', 'border': 'none' }}>
           <Grid.Row>
           	<Comment.Group style={{ width: '100%', 'minHeight': '70vh', 'border': 'none' }}>
-	           {renderMessages}
+	           <Messages messages={this.state.messages} sendMessage={this.sendMessage.bind(this)} user={this.state.user} uid={this.state.uid}></Messages>
 		           <Form reply>
 				        <Form.Input 
 				          autoComplete="off" 
