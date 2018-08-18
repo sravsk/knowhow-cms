@@ -19,7 +19,8 @@ const db = new Sequelize(`mysql://${DBUSERNAME}:${DBPASSWORD}@${DBHOST}:${DBPORT
   dialect: 'mysql',
   // dialectOptions: {
   //   ssl: 'Amazon RDS'
-  // }
+  // },
+  logging: false
 })
 
 

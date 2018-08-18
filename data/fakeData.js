@@ -8,7 +8,7 @@ const company = 'Send Grid';
 const domain = 'sendgrid.com';
 
 let companyId = 4;
-let categoryId = 12;
+let categoryId = 10;
 
 // console.log(faker.name.findName())
 // console.log(faker.internet.email())
@@ -20,6 +20,9 @@ let categoryId = 12;
 const generateData = (length) => {
   let data = [];
   for (let i = 0; i < length; i++) {
+    // if ((i % 1000) === 0) {
+    //   console.log('COUNT', i+1)
+    // }
     let article = {
       title: randomWords({ min: 1, max: 6 }).join(' '),
       description: randomWords({ min: 3, max: 10 }).join(' '),
