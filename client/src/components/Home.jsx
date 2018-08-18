@@ -84,7 +84,11 @@ class Home extends React.Component {
         uid = {this.props.uid}
         />
     } else if (this.state.showSettings) {
-      var info = <Settings role={this.props.role}/>
+      var info = <Settings 
+      role={this.props.role}
+      companyId={this.props.companyId}
+      company={this.props.company}
+      />
     }
     return (
       <Segment raised style={{ 'marginTop': '8vh' }}>
