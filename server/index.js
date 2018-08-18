@@ -311,6 +311,7 @@ app.post('/addCategory', authMiddleware(), (req, res) => {
   let name = req.body.categoryName;
   let description = req.body.categoryDescription;
   let companyId = req.user.companyId;
+  companyId = hashids.decode(companyId);
   db.addCategory({name, description, companyId}, (created) => {
     res.send(created);
   });
