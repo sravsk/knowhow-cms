@@ -322,6 +322,16 @@ var dbHelpers = {
     })
   },
 
+  fetchAllArticles: async () => {
+    let results = await Article.findAll({
+      order: [
+        ['id', 'DESC']
+      ],
+      attributes: ['id', 'title', 'description', 'content', 'categoryId', 'companyId']
+    })
+    return results.map(item => item.dataValues);
+  },
+
   //////////////////////////////
   //    TEST DATA FUNCTIONS   //
   //////////////////////////////
