@@ -11,31 +11,39 @@ class CompanyArticles extends React.Component {
       articles: []
     }
     console.log(props)
+    this.onChangePage = this.onChangePage.bind(this);
   }
 
   componentDidMount() {
     // get info about logged in user
     if (this.props.companyId) {
       let companyId = this.props.companyId
-      axios.get(`/${companyId}/articlesdata`)
+      axios.get(`/${companyId}/articlesdata/${this.props.currentPage}`)
       .then(result => {
         this.setState({
           articles: result.data
         });
       })
-    } 
+    }
   }
 
   componentDidUpdate() {
     // get info about logged in user
     // console.log('component updated');
     let companyId = this.props.companyId
-      axios.get(`/${companyId}/articlesdata`)
+      axios.get(`/${companyId}/articlesdata/${this.props.currentPage}`)
         .then(result => {
           this.setState({
             articles: result.data
           });
         })
+  }
+
+  onChangePage(pageOfItems) {
+    // update state with new page of items
+    this.setState({
+      pageOfItems: pageOfItems
+    });
   }
 
   render() {

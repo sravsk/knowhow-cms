@@ -1,7 +1,7 @@
 import React from 'react';
 import Editor from './Editor.jsx';
 import { Link } from 'react-router-dom';
-import { Container, Grid, Button, Header, Segment } from 'semantic-ui-react';
+import { Container, Grid, Button, Header, Segment, Pagination } from 'semantic-ui-react';
 import axios from 'axios';
 import CompanyArticles from './CompanyArticles.jsx';
 import CategoriesPage from './CategoriesPage.jsx';
@@ -17,7 +17,41 @@ class Home extends React.Component {
       company: '',
       role: '',
       showChat : false,
-      showSettings: false
+      showSettings: false,
+      currentPage: 1,
+      totalPages: 10
+    }
+    this.pageClick = this.pageClick.bind(this);
+  }
+
+  componentDidMount() {
+    //get the count(*) articles from server, divide by ten, set state of total pages
+  }
+
+  pageClick(e) {
+    console.log('e.target.value from pageClick: ', e.target.innerHTML)
+    switch(e.target.innerHTML) {
+      case '«':
+        this.setState({currentPage: 1})
+        console.log('you have a beginning arrow!');
+        break;
+      case '⟨':
+        this.setState({currentPage: this.state.currentPage - 1})
+        console.log('you have a back arrow!');
+        break;
+      case '...':
+        console.log('elipsis');
+        break;
+      case '⟩':
+        this.setState({currentPage: this.state.currentPage + 1})
+        console.log('you have a next arrow!');
+        break;
+      case '»':
+        this.setState({currentPage: this.state.totalPages})
+        console.log('you have a last arrow!');
+        break;
+      default:
+        this.setState({currentPage: parseInt(e.target.innerHTML)});
     }
   }
 
@@ -60,6 +94,7 @@ class Home extends React.Component {
   render () {
     if (this.state.showArticles) {
       var info = <CompanyArticles
+        currentPage={this.state.currentPage}
         user={this.props.user}
         companyId={this.props.companyId}
         company={this.props.company}
@@ -84,7 +119,7 @@ class Home extends React.Component {
         uid = {this.props.uid}
         />
     } else if (this.state.showSettings) {
-      var info = <Settings 
+      var info = <Settings
       role={this.props.role}
       companyId={this.props.companyId}
       company={this.props.company}
@@ -110,6 +145,7 @@ class Home extends React.Component {
             {info}
           </Grid.Column>
         </Grid>
+        <Pagination defaultActivePage={1} totalPages={this.state.totalPages} onClick={this.pageClick} />
       </Segment>
     );
   }
