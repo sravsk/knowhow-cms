@@ -7,8 +7,8 @@ const randomWords = require('random-words');
 const company = 'Send Grid';
 const domain = 'sendgrid.com';
 
-let companyId = 4;
-let categoryId = 10;
+let companyId = 5;
+let categoryId = 15;
 
 // console.log(faker.name.findName())
 // console.log(faker.internet.email())

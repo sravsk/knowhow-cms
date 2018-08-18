@@ -8,9 +8,8 @@ const generateData = require('./fakeData').generateData
 const companyId = require('./fakeData').companyId;
 const categoryId = require('./fakeData').categoryId;
 
-// console.log('CURRENT DATE', new Date().toLocaleString())
-
 const data = generateData(100000)
+console.log('DATE', new Date().toLocaleString())
 
 // function to insert data into mysql articles table
 const insertDataMySQL = async (data) => {
@@ -26,7 +25,7 @@ const insertDataMySQL = async (data) => {
     await articleItem.setCategory(category);
     await articleItem.setCompany(company);
   }
-  // console.log('DATE LATER', new Date().toLocaleString())
+  console.log('DATE LATER', new Date().toLocaleString())
 };
 
 insertDataMySQL(data)

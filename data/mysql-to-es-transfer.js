@@ -5,10 +5,11 @@ const fetchAllArticles = require('../db/helpers').fetchAllArticles;
 const index = 'articles';
 const type = 'documents';
 
-// console.log('DATE1', new Date().toLocaleString())
+console.log('DATE1', new Date().toLocaleString())
 
 const insertDataMySQLtoES = async () => {
   let results = await fetchAllArticles();
+  console.log('results', results.length)
   // index data in batches of 10k
   let i = 0;
   let len = results.length;
@@ -27,5 +28,5 @@ const insertDataMySQLtoES = async () => {
   }
 };
 
-// insertDataMySQLtoES()
+insertDataMySQLtoES()
 
