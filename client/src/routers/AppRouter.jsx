@@ -34,10 +34,24 @@ class AppRouter extends React.Component{
       company: '',
       role: '',
       blinkyChatButton : 'chat-button',
-      messages : []
+      messages : [],
+      uid : localStorage.getItem('uid') ? localStorage.getItem('uid') : this.generateUID()
     }
     this.updateInfo = this.updateInfo.bind(this)
   }
+
+  // generate a random string, use it to set uid key on local storage
+  // can identify users accessing chat app from different browser tabs
+  generateUID(){
+    let text = '';
+    let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (let i = 0; i < 15; i++){
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    localStorage.setItem('uid', text);
+    return text;
+  }
+
 
   updateInfo(obj) {
     this.setState({
@@ -53,7 +67,9 @@ class AppRouter extends React.Component{
 
   initializeChat(){
     //expose a standalone build of socket io client by socket.io server 
-    this.socket = socketIOClient('ws://localhost:5000');
+    this.socket = socketIOClient('ws://localhost:5000', {
+      query : 'user='+this.state.user+'&uid='+this.state.uid
+    });
     this.socket.on('message', (message) => {
       this.setState({
         blinkyChatButton : 'blinky-chat-button',

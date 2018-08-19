@@ -201,6 +201,7 @@ app.post('/inviteuser', admin(), (req, res) => {
   bcrypt.hash(code, salt, (err, hash) => {
     if (hash) {
       // save companyId, email, hash and role in invitations table
+      companyId = hashids.decode(companyId)[0];
       db.addInvite({companyId, email, hash, role}, (saved) => {
         if (saved) {
           // send invitation email containing role and generated code
@@ -309,7 +310,8 @@ app.post('/resetpwd', (req, res) => {
 app.post('/addCategory', authMiddleware(), (req, res) => {
   let name = req.body.categoryName;
   let description = req.body.categoryDescription;
-  let companyId = hashids.decode(req.user.companyId);
+  let companyId = req.user.companyId;
+  companyId = hashids.decode(companyId);
   db.addCategory({name, description, companyId}, (created) => {
     res.send(created);
   });
