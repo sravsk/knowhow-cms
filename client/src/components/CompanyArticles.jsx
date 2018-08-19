@@ -32,13 +32,15 @@ class CompanyArticles extends React.Component {
   componentDidUpdate() {
     // get info about logged in user
     // console.log('component updated');
-    let companyId = this.props.companyId
+    if (this.state.articles.length === 0) {
+      let companyId = this.props.companyId
       axios.get(`/${companyId}/articlesdata/${this.state.currentPage}`)
-        .then(result => {
-          this.setState({
-            articles: result.data
-          });
-        })
+      .then(result => {
+        this.setState({
+          articles: result.data
+        });
+      })
+    }
   }
 
   getPage() {
