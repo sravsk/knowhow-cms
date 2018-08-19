@@ -309,7 +309,7 @@ app.post('/resetpwd', (req, res) => {
 app.post('/addCategory', authMiddleware(), (req, res) => {
   let name = req.body.categoryName;
   let description = req.body.categoryDescription;
-  let companyId = req.user.companyId;
+  let companyId = hashids.decode(req.user.companyId);
   db.addCategory({name, description, companyId}, (created) => {
     res.send(created);
   });
@@ -346,6 +346,7 @@ app.get('/:companyId/categories/:categoryId/articlesdata', authMiddleware(), (re
 
 // get all articles for a given company id
 app.get('/:companyId/articlesdata', authMiddleware(), (req, res) => {
+  console.log(req.params);
   let companyId = hashids.decode(req.params.companyId);
   console.log(companyId)
   db.fetchCompanyArticles({companyId}, (articles) => {
