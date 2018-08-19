@@ -348,6 +348,7 @@ app.get('/:companyId/categories/:categoryId/articlesdata', authMiddleware(), (re
 
 // get all articles for a given company id
 app.get('/:companyId/articlesdata', authMiddleware(), (req, res) => {
+  console.log(req.params);
   let companyId = hashids.decode(req.params.companyId);
   console.log(companyId)
   db.fetchCompanyArticles({companyId}, (articles) => {
