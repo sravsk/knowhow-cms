@@ -298,6 +298,8 @@ var dbHelpers = {
   fetchCompanyArticles: ({companyId}, cb) => {
     Article.findAll({
       where: {
+        //id is ((req.params.pg * 10) - 10, (req.params.pg * 10))
+        //with page before and after lazy load (ready), first and last also
         companyId: companyId
       },
       order: [
