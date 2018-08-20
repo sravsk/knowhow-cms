@@ -1,7 +1,7 @@
 import React from 'react';
 import Editor from './Editor.jsx';
 import { Link } from 'react-router-dom';
-import { Container, Grid, Button, Header, Segment } from 'semantic-ui-react';
+import { Container, Grid, Button, Header, Segment, Pagination } from 'semantic-ui-react';
 import axios from 'axios';
 import CompanyArticles from './CompanyArticles.jsx';
 import CategoriesPage from './CategoriesPage.jsx';
@@ -17,7 +17,7 @@ class Home extends React.Component {
       company: '',
       role: '',
       showChat : false,
-      showSettings: false
+      showSettings: false,
     }
   }
 
@@ -60,6 +60,7 @@ class Home extends React.Component {
   render () {
     if (this.state.showArticles) {
       var info = <CompanyArticles
+        currentPage={this.state.currentPage}
         user={this.props.user}
         companyId={this.props.companyId}
         company={this.props.company}
@@ -84,7 +85,7 @@ class Home extends React.Component {
         uid = {this.props.uid}
         />
     } else if (this.state.showSettings) {
-      var info = <Settings 
+      var info = <Settings
       role={this.props.role}
       companyId={this.props.companyId}
       company={this.props.company}

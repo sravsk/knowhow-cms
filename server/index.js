@@ -347,12 +347,14 @@ app.get('/:companyId/categories/:categoryId/articlesdata', authMiddleware(), (re
 });
 
 // get all articles for a given company id
-app.get('/:companyId/articlesdata', authMiddleware(), (req, res) => {
-  console.log(req.params);
+app.get('/:companyId/articlesdata/:pg', authMiddleware(), (req, res) => {
   let companyId = hashids.decode(req.params.companyId);
   console.log(companyId)
   db.fetchCompanyArticles({companyId}, (articles) => {
-    res.send(articles);
+    console.log('Array.isArray(articles)')
+    console.log(Array.isArray(articles))
+    let page = articles.slice((req.params.pg * 10) - 10, (req.params.pg * 10));
+    res.send(page);
   });
 });
 
