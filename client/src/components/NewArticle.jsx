@@ -3,7 +3,7 @@ import { Segment, Form, Button, Input, Dropdown, Grid, Header, Container } from 
 import Editor from './Editor.jsx';
 import ReactQuill from 'react-quill';
 import Delta from 'quill-delta';
-import config from '../../../config.js';
+//import config from '../../../config.js';
 import axios from 'axios';
 import { withRouter } from "react-router-dom";
 
@@ -108,7 +108,8 @@ class NewArticle extends React.Component{
   }
 
   replaceUri(match, p1, p2, p3, offset, string) {
-    let bucket = config.S3.Bucket;
+    //let bucket = config.S3.Bucket;
+    let bucket = 'houskertest'
     let image = this.state.image
     let regex = /^data:.+\/(.+);base64,(.*)$/;
     let matches = p2.match(regex);
