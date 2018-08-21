@@ -294,6 +294,114 @@ var dbHelpers = {
     })
   },
 
+  fetchCompanyArticlesFirstLastPg: (limit, {companyId}, cb) => {
+    let countAndPages = {};
+    Article.count()
+    .then(c => {
+      countAndPages.count = c;
+      Article.findAll({
+        limit: parseInt(limit),
+        offset: Math.ceil(c / limit),
+        where: {
+          companyId: companyId
+        },
+        order: [
+          ['id', 'DESC']
+        ],
+        attributes: ['id', 'title', 'description', 'content', 'categoryId', 'companyId']
+      })
+      .then(lastPage => {
+        countAndPages.lastPage = lastPage;
+        Article.findAll({
+          limit: parseInt(limit),
+          offset: 0,
+          where: {
+            companyId: companyId
+          },
+          order: [
+            ['id', 'DESC']
+          ],
+          attributes: ['id', 'title', 'description', 'content', 'categoryId', 'companyId']
+        })
+        .then(firstPage => {
+          countAndPages.firstPage = firstPage;
+          Article.findAll({
+            limit: parseInt(limit),
+            offset: limit -1 ,
+            where: {
+              companyId: companyId
+            },
+            order: [
+              ['id', 'DESC']
+            ],
+            attributes: ['id', 'title', 'description', 'content', 'categoryId', 'companyId']
+          })
+          .then(nextPage => {
+            countAndPages.nextPage = nextPage;
+            cb(countAndPages);
+          })
+        })
+      })
+    })
+  },
+
+  fetchCompanyArticlesPage: (page, limit, totalPages, {companyId}, cb) => {
+    let offset = limit * (page - 1) || 0;
+    let pages = {};
+    Article.findAll({
+      limit: parseInt(limit),
+      offset: offset,
+      where: {
+        companyId: companyId
+      },
+      order: [
+        ['id', 'DESC']
+      ],
+      attributes: ['id', 'title', 'description', 'content', 'categoryId', 'companyId']
+    })
+    .then((currentPage) => {
+      pages.currentPage = currentPage;
+      if(page > 1) {
+        return Article.findAll({
+          limit: parseInt(limit),
+          offset: offset - limit,
+          where: {
+            companyId: companyId
+          },
+          order: [
+            ['id', 'DESC']
+          ],
+          attributes: ['id', 'title', 'description', 'content', 'categoryId', 'companyId']
+        })
+      } else {
+        return null;
+      }
+    })
+    .then(previousPage => {
+      pages.previousPage = previousPage;
+      if(page < parseInt(totalPages)) {
+        return Article.findAll({
+          limit: parseInt(limit),
+          offset: offset + parseInt(limit),
+          where: {
+            companyId: companyId
+          },
+          order: [
+            ['id', 'DESC']
+          ],
+          attributes: ['id', 'title', 'description', 'content', 'categoryId', 'companyId']
+        })
+      } else {
+        return null;
+      }
+    })
+    .then(nextPage => {
+      pages.nextPage = nextPage;
+      cb(pages);
+    })
+
+  },
+
   // fetch all articles for a given companyId
   fetchCompanyArticles: ({companyId}, cb) => {
     Article.findAll({

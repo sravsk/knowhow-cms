@@ -66,7 +66,7 @@ class AppRouter extends React.Component{
   }
 
   initializeChat(){
-    //expose a standalone build of socket io client by socket.io server 
+    //expose a standalone build of socket io client by socket.io server
     this.socket = socketIOClient('ws://localhost:5000', {
       query : 'user='+this.state.user+'&uid='+this.state.uid
     });
@@ -98,7 +98,7 @@ class AppRouter extends React.Component{
             <Route exact path='/forgotpassword' component={ForgotPassword} />
             <Route exact path='/resetpassword' component={ResetPassword} />
 
-            <Route exact path='/home' render={(props) => {return (
+            {this.state.companyId && <Route exact path='/home' render={(props) => {return (
               <Home
                 user={this.state.user}
                 companyId={this.state.companyId}
@@ -108,7 +108,7 @@ class AppRouter extends React.Component{
                 messages={this.state.messages}
                 socket = {this.socket}
               />
-            )}} />
+            )}} />}
 
             <Route exact path='/login' render={(props) => {return (
               <LoginPage
@@ -139,7 +139,7 @@ class AppRouter extends React.Component{
                 role={this.state.role}
               />
             )}} />
-            
+
             <Route exact path='/categories' render={(props) => {return (
               <CategoriesPage
                 user={this.state.user}

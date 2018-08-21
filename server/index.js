@@ -346,15 +346,18 @@ app.get('/:companyId/categories/:categoryId/articlesdata', authMiddleware(), (re
   });
 });
 
-// get all articles for a given company id
-app.get('/:companyId/articlesdata/:pg', authMiddleware(), (req, res) => {
+app.get('/:companyId/articlesfirstlastpg/:per', authMiddleware(), (req, res) => {
   let companyId = hashids.decode(req.params.companyId);
-  console.log(companyId)
-  db.fetchCompanyArticles({companyId}, (articles) => {
-    console.log('Array.isArray(articles)')
-    console.log(Array.isArray(articles))
-    let page = articles.slice((req.params.pg * 10) - 10, (req.params.pg * 10));
-    res.send(page);
+  db.fetchCompanyArticlesFirstLastPg(req.params.per, {companyId}, (results) => {
+    res.send(results);
+  });
+});
+
+// get all articles for a given company id
+app.get('/:companyId/articlesdata/:pg/:per/:total', authMiddleware(), (req, res) => {
+  let companyId = hashids.decode(req.params.companyId);
+  db.fetchCompanyArticlesPage(req.params.pg, req.params.per, req.params.total, {companyId}, (pages) => {
+    res.send(pages);
   });
 });
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import Editor from './Editor.jsx';
 import { Link } from 'react-router-dom';
-import { Container, Grid, Button, Header, Segment, Pagination } from 'semantic-ui-react';
+import { Container, Grid, Button, Header, Segment } from 'semantic-ui-react';
 import axios from 'axios';
 import CompanyArticles from './CompanyArticles.jsx';
 import CategoriesPage from './CategoriesPage.jsx';
@@ -60,7 +60,6 @@ class Home extends React.Component {
   render () {
     if (this.state.showArticles) {
       var info = <CompanyArticles
-        currentPage={this.state.currentPage}
         user={this.props.user}
         companyId={this.props.companyId}
         company={this.props.company}
