@@ -8,24 +8,17 @@ const generateData = require('./fakeData').generateData
 const companyId = require('./fakeData').companyId;
 const categoryId = require('./fakeData').categoryId;
 
+// console.log('DATE', new Date().toLocaleString())
 const data = generateData(100000)
-console.log('DATE', new Date().toLocaleString())
+// console.log('DATE', new Date().toLocaleString(), data.length)
 
-// function to insert data into mysql articles table
-const insertDataMySQL = async (data) => {
-  for (let i = 0; i < data.length; i++) {
-    let item = data[i];
-    let company = await Company.findOne({ where: { id: companyId } });
-    let category = await Category.findOne({ where: {id: categoryId } })
-    let articleItem = await Article.create({
-      title: item.title,
-      description: item.description,
-      content: item.content,
-    });
-    await articleItem.setCategory(category);
-    await articleItem.setCompany(company);
-  }
-  console.log('DATE LATER', new Date().toLocaleString())
+// function to bulk insert data into mysql articles table
+const insertDataMySQL = (data) => {
+  Article.bulkCreate(data)
+    .then(result => {
+      // console.log(result);
+      console.log(`${data.length} records created`);
+    })
 };
 
 insertDataMySQL(data)
