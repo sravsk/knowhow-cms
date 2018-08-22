@@ -296,7 +296,11 @@ var dbHelpers = {
 
   fetchCompanyArticlesFirstLastPg: (limit, {companyId}, cb) => {
     let countAndPages = {};
-    Article.count()
+    Article.count({
+      where: {
+        companyId: companyId
+      }
+    })
     .then(c => {
       countAndPages.count = c;
       Article.findAll({
