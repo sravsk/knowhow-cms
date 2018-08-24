@@ -1,31 +1,26 @@
+const fs = require('fs');
+
 const Article = require('../db/Models/Article');
 const Company = require('../db/Models/Company');
 const Category = require('../db/Models/Category');
 const associations = require('../db/associations');
 associations();
 
-const generateData = require('./fakeData').generateData
-const companyId = require('./fakeData').companyId;
-const categoryId = require('./fakeData').categoryId;
+const connection = require('../db');
 
-const data = generateData(100000)
-console.log('DATE', new Date().toLocaleString())
-
-// function to insert data into mysql articles table
-const insertDataMySQL = async (data) => {
-  for (let i = 0; i < data.length; i++) {
-    let item = data[i];
-    let company = await Company.findOne({ where: { id: companyId } });
-    let category = await Category.findOne({ where: {id: categoryId } })
-    let articleItem = await Article.create({
-      title: item.title,
-      description: item.description,
-      content: item.content,
-    });
-    await articleItem.setCategory(category);
-    await articleItem.setCompany(company);
-  }
-  console.log('DATE LATER', new Date().toLocaleString())
+const insertDataMySQL = () => {
+  let queryString = 'LOAD DATA LOCAL INFILE "./articles.txt" INTO TABLE articles CHARACTER SET UTF8 FIELDS TERMINATED BY "," LINES TERMINATED BY "\n" (title, description, content, companyId, categoryId);'
+  connection.query(queryString)
+  .then(result => {
+    console.log('result', result);
+  })
+  .catch(err => {
+    console.log('error', err);
+  });
 };
 
-insertDataMySQL(data)
+insertDataMySQL();
+
+
+
+
