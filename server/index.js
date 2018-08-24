@@ -361,6 +361,13 @@ app.get('/:companyId/articlesdata/:pg/:per/:total', authMiddleware(), (req, res)
   });
 });
 
+// app.get('/:companyId/articlesdata/', authMiddleware(), (req, res) => {
+//   let companyId = hashids.decode(req.params.companyId);
+//   db.fetchCompanyArticles({companyId}, (pages) => {
+//     res.send(pages);
+//   });
+// });
+
 app.post('/article', authMiddleware(), (req, res) => {
   let data = req.body;
   let companyId = hashids.decode(req.session.passport.user.companyId);
@@ -488,6 +495,11 @@ app.get('/api/:hashedcompanyId/categoriesdata', wrap(async(req, res) => {
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     let CompanyId = hashids.decode(req.params.hashedcompanyId);
     let categories = await apidb.fetchCategoriesByCompany(CompanyId);
+    let hashedCategories = categories.map(category => {
+      category.dataValues.id = hashids.encode(category.dataValues.id);
+      category.dataValues.companyId = hashids.encode(category.dataValues.id);
+      return category;
+    })
     res.json(categories);
   } catch(err) {
     res.status(500).json({ error: error.toString() });
@@ -497,6 +509,7 @@ app.get('/api/:hashedcompanyId/categoriesdata', wrap(async(req, res) => {
 // get all articles for a given company id and category id
 app.get('/api/:hashedcompanyId/categories/:hashedcategoryId/articlesdata', wrap(async(req, res) => {
   try{
+    console.log("THE API FOR /api/:hashedcompanyId/categories/:hashedcategoryId/articlesdata is being called!")
     //enable CORS for this route
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, HEAD');
