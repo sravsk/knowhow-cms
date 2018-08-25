@@ -1,44 +1,88 @@
 import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import { Grid, Header, Container, Button, Segment } from 'semantic-ui-react';
+import { Grid, Header, Container, Button, Segment, Pagination } from 'semantic-ui-react';
 import axios from 'axios';
 import ArticleItem from './ArticleItem.jsx';
-import Pagination from './Pagination.jsx';
 
 class ArticlesPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      articles: [],
-      pageOfItems: []
+      firstArticles: [],
+      lastArticles: [],
+      previousArticles: [],
+      nextArticles: [],
+      currentArticles: [],
+      perPage: 10,
+      currentPage: 1,
+      totalPages: 10
     };
-    this.onChangePage = this.onChangePage.bind(this);
+    this.pageClick = this.pageClick.bind(this);
+    this.getCurrentPage = this.getCurrentPage.bind(this);
+    this.getFirstLastAndCount = this.getFirstLastAndCount.bind(this);
   }
 
   componentDidMount() {
-    let categoryId = this.props.match.params.categoryId;
-    let companyId = this.props.companyId;
-    // fetch all articles for the given category and company
-    axios.get(`/${companyId}/categories/${categoryId}/articlesdata`)
-      .then(result => {
-        console.log(result)
-        this.setState({
-          articles: result.data
-        });
-      })
+    this.getFirstLastAndCount();
   }
 
-  onChangePage(pageOfItems) {
-    // update state with new page of items
-    this.setState({
-      pageOfItems: pageOfItems
-    });
+    getFirstLastAndCount() {
+      console.log('this.props.companyId: ', this.props.companyId)
+      console.log('this.state.perPage: ', this.state.perPage)
+    axios.get(`/${this.props.companyId}/articlesfirstlastpg/${this.state.perPage}`)
+    .then(result => {
+      this.setState({
+        totalPages: Math.ceil(result.data.count / this.state.perPage),
+        currentArticles: result.data.firstPage,
+        nextArticles: result.data.nextPage,
+        firstArticles: result.data.firstPage,
+        lastArticles: result.data.lastPage
+      });
+    })
+  }
+
+  getCurrentPage(last) {
+    let companyId = this.props.companyId
+    axios.get(`/${companyId}/articlesdata/${this.state.currentPage}/${this.state.perPage}/${this.state.totalPages}`)
+    .then(result => {
+      if(this.state.currentPage < this.state.totalPages || this.state.currentPage > 1 && !last) {
+        this.setState({currentArticles: result.data.currentPage})
+      }
+      this.setState({
+        previousArticles: result.data.previousPage,
+        nextArticles: result.data.nextPage
+      });
+    })
+  }
+
+  pageClick(e) {
+    switch(e.target.innerHTML) {
+      case '«':
+        this.setState({currentPage: 1, currentArticles: this.state.firstArticles}, this.getCurrentPage);
+        break;
+      case '⟨':
+        this.setState({currentPage: this.state.currentPage - 1}, this.getCurrentPage);
+        break;
+      case '...':
+        break;
+      case '⟩':
+        if(this.state.currentPage !== this.state.totalPages) {
+          this.setState({currentPage: this.state.currentPage + 1, currentArticles: this.state.nextArticles}, this.getCurrentPage);
+        }
+        break;
+      case '»':
+        if(this.state.currentPage !== this.state.totalPages) {
+          this.setState({currentPage: this.state.totalPages, currentArticles: this.state.lastArticles}, () => this.getCurrentPage('last'))
+        }
+        break;
+      default:
+        if(parseInt(e.target.innerHTML) !== this.state.currentPage) {
+          this.setState({currentPage: parseInt(e.target.innerHTML)}, this.getCurrentPage);
+        }
+    }
   }
 
   render() {
-    let renderArticles = this.state.pageOfItems.map(article => {
-      return (<Segment key={article.id}><ArticleItem article={article} /></Segment>);
-    })
     return (
       <Segment raised>
         <Grid style = {{ marginLeft: '2vw', marginRight: '2vw' }} >
@@ -52,12 +96,12 @@ class ArticlesPage extends React.Component {
           </Grid.Row>
           <Grid.Row>
             <Segment.Group style={{ width: '100%', 'minHeight': '70vh' }} >
-              {renderArticles}
+              {this.state.currentArticles.map(article => (<Segment raised key={article.id}><ArticleItem article={article} /></Segment>))}
             </Segment.Group>
           </Grid.Row>
           <Grid.Row>
-            <Pagination items={this.state.articles} onChangePage={this.onChangePage} />
-          </Grid.Row>
+            <Pagination defaultActivePage={1} totalPages={this.state.totalPages} onClick={this.pageClick} />
+        </Grid.Row>
         </Grid>
       </Segment>
     );
