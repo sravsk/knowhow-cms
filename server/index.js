@@ -361,13 +361,6 @@ app.get('/:companyId/articlesdata/:pg/:per/:total', authMiddleware(), (req, res)
   });
 });
 
-// app.get('/:companyId/articlesdata/', authMiddleware(), (req, res) => {
-//   let companyId = hashids.decode(req.params.companyId);
-//   db.fetchCompanyArticles({companyId}, (pages) => {
-//     res.send(pages);
-//   });
-// });
-
 app.post('/article', authMiddleware(), (req, res) => {
   let data = req.body;
   let companyId = hashids.decode(req.session.passport.user.companyId);

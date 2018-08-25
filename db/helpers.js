@@ -406,24 +406,6 @@ var dbHelpers = {
 
   },
 
-  // fetch all articles for a given companyId
-  // fetchCompanyArticles: ({companyId}, cb) => {
-  //   Article.findAll({
-  //     where: {
-  //       //id is ((req.params.pg * 10) - 10, (req.params.pg * 10))
-  //       //with page before and after lazy load (ready), first and last also
-  //       companyId: companyId
-  //     },
-  //     order: [
-  //       ['id', 'DESC']
-  //     ],
-  //     attributes: ['id', 'title', 'description', 'content', 'categoryId', 'companyId']
-  //   })
-  //   .then(results => {
-  //     cb(results);
-  //   })
-  // },
-
   fetchOneArticle: (id, cb) => {
     Article.findAll({
       where: {
@@ -434,16 +416,6 @@ var dbHelpers = {
     .then(results => {
       cb(results);
     })
-  },
-
-  fetchAllArticles: async () => {
-    let results = await Article.findAll({
-      order: [
-        ['id', 'DESC']
-      ],
-      attributes: ['id', 'title', 'description', 'content', 'categoryId', 'companyId']
-    })
-    return results.map(item => item.dataValues);
   },
 
   //////////////////////////////
