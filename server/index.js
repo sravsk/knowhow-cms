@@ -16,7 +16,8 @@ const sendmail = require('../services/sendmail.js');
 const config = require('../config.js');
 const AWS = require('aws-sdk');
 const axios = require('axios');
-const esUrl = 'http://localhost:8080';
+// const esUrl = 'http://localhost:8080';
+const esUrl = 'http://ec2-18-233-153-214.compute-1.amazonaws.com:8080';
 
 const s3 = new AWS.S3({
   accessKeyId: config.S3.accessKeyId,
