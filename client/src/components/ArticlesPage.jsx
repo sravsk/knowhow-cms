@@ -27,8 +27,6 @@ class ArticlesPage extends React.Component {
   }
 
     getFirstLastAndCount() {
-      console.log('this.props.companyId: ', this.props.companyId)
-      console.log('this.state.perPage: ', this.state.perPage)
     axios.get(`/${this.props.companyId}/articlesfirstlastpg/${this.state.perPage}`)
     .then(result => {
       this.setState({
