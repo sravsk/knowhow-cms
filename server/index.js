@@ -339,27 +339,39 @@ app.get('/:companyId/categoriesdata', authMiddleware(), (req, res) => {
 });
 
 // get all articles for a given company id and category id
-app.get('/:companyId/categories/:categoryId/articlesdata', authMiddleware(), (req, res) => {
-  let companyId = hashids.decode(req.params.companyId);
-  let categoryId = req.params.categoryId;
-  db.fetchArticles({companyId, categoryId}, (articles) => {
-    res.send(articles);
-  });
-});
+// app.get('/:companyId/categories/:categoryId/articlesdata', authMiddleware(), (req, res) => {
+//   let companyId = hashids.decode(req.params.companyId);
+//   let categoryId = req.params.categoryId;
+//   db.fetchArticles({companyId, categoryId}, (articles) => {
+//     res.send(articles);
+//   });
+// });
 
-app.get('/:companyId/articlesfirstlastpg/:per', authMiddleware(), (req, res) => {
+app.get('/:companyId/articlesfirstlastpg/:per/:categoryId?', authMiddleware(), (req, res) => {
   let companyId = hashids.decode(req.params.companyId);
-  db.fetchCompanyArticlesFirstLastPg(req.params.per, {companyId}, (results) => {
-    res.send(results);
-  });
+  if(req.params.categoryId) {
+    db.fetchCategoryArticlesFirstLastPg(req.params.per, req.params.categoryId, {companyId}, (results) => {
+      res.send(results);
+    })
+  } else {
+    db.fetchCompanyArticlesFirstLastPg(req.params.per, {companyId}, (results) => {
+      res.send(results);
+    });
+  }
 });
 
 // get all articles for a given company id
-app.get('/:companyId/articlesdata/:pg/:per/:total', authMiddleware(), (req, res) => {
+app.get('/:companyId/articlesdata/:pg/:per/:total/:categoryId?', authMiddleware(), (req, res) => {
   let companyId = hashids.decode(req.params.companyId);
-  db.fetchCompanyArticlesPage(req.params.pg, req.params.per, req.params.total, {companyId}, (pages) => {
-    res.send(pages);
-  });
+  if(req.params.categoryId) {
+    db.fetchCategoryArticlesPage(req.params.pg, req.params.per, req.params.total, req.params.categoryId, {companyId}, (results) => {
+      res.send(results);
+    })
+  } else {
+    db.fetchCompanyArticlesPage(req.params.pg, req.params.per, req.params.total, {companyId}, (pages) => {
+      res.send(pages);
+    });
+  }
 });
 
 app.post('/article', authMiddleware(), (req, res) => {

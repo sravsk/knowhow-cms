@@ -27,7 +27,7 @@ class ArticlesPage extends React.Component {
   }
 
     getFirstLastAndCount() {
-    axios.get(`/${this.props.companyId}/articlesfirstlastpg/${this.state.perPage}`)
+    axios.get(`/${this.props.companyId}/articlesfirstlastpg/${this.state.perPage}/${this.props.match.params.categoryId}`)
     .then(result => {
       this.setState({
         totalPages: Math.ceil(result.data.count / this.state.perPage),
