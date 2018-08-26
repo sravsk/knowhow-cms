@@ -131,14 +131,14 @@ class AppRouter extends React.Component{
               />
             )}} />
 
-            <Route exact path='/:companyId/categories/:categoryId/articles' render={(props) => {return (
+            {this.state.companyId && <Route exact path='/:companyId/categories/:categoryId/articles' render={(props) => {return (
               <ArticlesPage
                 user={this.state.user}
                 companyId={this.state.companyId}
                 company={this.state.company}
                 role={this.state.role}
               />
-            )}} />
+            )}} />}
 
             <Route exact path='/categories' render={(props) => {return (
               <CategoriesPage

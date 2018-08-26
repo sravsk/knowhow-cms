@@ -278,21 +278,140 @@ var dbHelpers = {
   },
 
   // fetch all articles for a given companyId and categoryId
-  fetchArticles: ({companyId, categoryId}, cb) => {
-    Article.findAll({
+  // fetchArticles: ({companyId, categoryId}, cb) => {
+  //   Article.findAll({
+  //     where: {
+  //       companyId: companyId,
+  //       categoryId: categoryId
+  //     },
+  //     order: [
+  //       ['id', 'DESC']
+  //     ],
+  //     attributes: ['id', 'title', 'description', 'content', 'categoryId', 'companyId']
+  //   })
+  //   .then(results => {
+  //     cb(results);
+  //   })
+  // },
+
+  fetchCategoryArticlesFirstLastPg: (limit, categoryId, {companyId}, cb) => {
+    let countAndPages = {};
+    Article.count({
       where: {
         companyId: companyId,
-        categoryId: categoryId
+        categoryId: parseInt(categoryId)
+      }
+    })
+    .then(c => {
+      countAndPages.count = c;
+      Article.findAll({
+        limit: parseInt(limit),
+        offset: Math.ceil(c / limit),
+        where: {
+          companyId: companyId,
+          categoryId: parseInt(categoryId)
+        },
+        order: [
+          ['id', 'DESC']
+        ],
+        attributes: ['id', 'title', 'description', 'content', 'categoryId', 'companyId']
+      })
+      .then(lastPage => {
+        countAndPages.lastPage = lastPage;
+        Article.findAll({
+          limit: parseInt(limit),
+          offset: 0,
+          where: {
+            companyId: companyId,
+            categoryId: parseInt(categoryId)
+          },
+          order: [
+            ['id', 'DESC']
+          ],
+          attributes: ['id', 'title', 'description', 'content', 'categoryId', 'companyId']
+        })
+        .then(firstPage => {
+          countAndPages.firstPage = firstPage;
+          Article.findAll({
+            limit: parseInt(limit),
+            offset: limit -1 ,
+            where: {
+              companyId: companyId,
+              categoryId: parseInt(categoryId)
+            },
+            order: [
+              ['id', 'DESC']
+            ],
+            attributes: ['id', 'title', 'description', 'content', 'categoryId', 'companyId']
+          })
+          .then(nextPage => {
+            countAndPages.nextPage = nextPage;
+            cb(countAndPages);
+          })
+        })
+      })
+    })
+  },
+
+  fetchCategoryArticlesPage: (page, limit, totalPages, categoryId, {companyId}, cb) => {
+    let offset = limit * (page - 1) || 0;
+    let pages = {};
+    Article.findAll({
+      limit: parseInt(limit),
+      offset: offset,
+      where: {
+        companyId: companyId,
+        categoryId: parseInt(categoryId)
       },
       order: [
         ['id', 'DESC']
       ],
       attributes: ['id', 'title', 'description', 'content', 'categoryId', 'companyId']
     })
-    .then(results => {
-      cb(results);
+    .then((currentPage) => {
+      pages.currentPage = currentPage;
+      if(page > 1) {
+        return Article.findAll({
+          limit: parseInt(limit),
+          offset: offset - limit,
+          where: {
+            companyId: companyId,
+            categoryId: parseInt(categoryId)
+          },
+          order: [
+            ['id', 'DESC']
+          ],
+          attributes: ['id', 'title', 'description', 'content', 'categoryId', 'companyId']
+        })
+      } else {
+        return null;
+      }
+    })
+    .then(previousPage => {
+      pages.previousPage = previousPage;
+      if(page < parseInt(totalPages)) {
+        return Article.findAll({
+          limit: parseInt(limit),
+          offset: offset + parseInt(limit),
+          where: {
+            companyId: companyId,
+            categoryId: parseInt(categoryId)
+          },
+          order: [
+            ['id', 'DESC']
+          ],
+          attributes: ['id', 'title', 'description', 'content', 'categoryId', 'companyId']
+        })
+      } else {
+        return null;
+      }
+    })
+    .then(nextPage => {
+      pages.nextPage = nextPage;
+      cb(pages);
     })
   },
+
 
   fetchCompanyArticlesFirstLastPg: (limit, {companyId}, cb) => {
     let countAndPages = {};
@@ -403,7 +522,6 @@ var dbHelpers = {
       pages.nextPage = nextPage;
       cb(pages);
     })
-
   },
 
   fetchOneArticle: (id, cb) => {
