@@ -25,9 +25,9 @@ class NavBar extends React.Component {
   componentWillMount() {
     if(this.props.user === '') {
       axios.get('/user')
-      .then(data => {
-        if (data.data !== '') {
-          this.props.updateUserInfo(data.data)
+      .then(result => {
+        if (result.data !== '') {
+          this.props.updateUserInfo(result.data)
         }
       })
     }

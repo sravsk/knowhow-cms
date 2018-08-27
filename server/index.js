@@ -188,7 +188,7 @@ app.post('/signupuserwithcode', (req, res) => {
 });
 
 app.post('/inviteuser', admin(), (req, res) => {
-  var companyId = req.user.companyId;
+  var hashedCompanyId = req.user.hashedCompanyId;
   var role = req.body.role;
   var email = req.body.email;
   // generate a random string composed of 8 chars from A-Z, a-z, 0-9
@@ -202,7 +202,7 @@ app.post('/inviteuser', admin(), (req, res) => {
   bcrypt.hash(code, salt, (err, hash) => {
     if (hash) {
       // save companyId, email, hash and role in invitations table
-      companyId = hashids.decode(companyId)[0];
+      let companyId = hashids.decode(hashedCompanyId)[0];
       db.addInvite({companyId, email, hash, role}, (saved) => {
         if (saved) {
           // send invitation email containing role and generated code
@@ -232,14 +232,14 @@ app.post('/loginuser', (req, res) => {
         let hashedCompanyId = hashids.encode(user.companyId)
         bcrypt.compare(comparePassword, hash, (err, result) => {
           if (result) { // valid user
-            let userInfo = { user: user.name, companyId: hashedCompanyId, role: user.role, company: foundCompany };
-            // make passport store userInfo (name, companyId and role) in req.user
+            let userInfo = { user: user.name, hashedCompanyId: hashedCompanyId, role: user.role, company: foundCompany };
+            // make passport store userInfo (user's name, hashedCompanyId, role and company name) in req.user
             req.login(userInfo, (err) => {
               if (err) {
                 console.log(err);
                 res.sendStatus(404);
               } else {
-                let response = { user: user.name, companyId: hashedCompanyId, role: user.role, company: foundCompany, found: true };
+                let response = { user: user.name, hashedCompanyId: hashedCompanyId, role: user.role, company: foundCompany, found: true };
                 res.send(response);
               }
             });
@@ -311,8 +311,7 @@ app.post('/resetpwd', (req, res) => {
 app.post('/addCategory', authMiddleware(), (req, res) => {
   let name = req.body.categoryName;
   let description = req.body.categoryDescription;
-  let companyId = req.user.companyId;
-  companyId = hashids.decode(companyId);
+  let companyId = hashids.decode(req.user.hashedCompanyId);
   db.addCategory({name, description, companyId}, (created) => {
     res.send(created);
   });
@@ -365,7 +364,7 @@ app.get('/:companyId/articlesdata/:pg/:per/:total/:categoryId?', authMiddleware(
 
 app.post('/article', authMiddleware(), (req, res) => {
   let data = req.body;
-  let companyId = hashids.decode(req.session.passport.user.companyId);
+  let companyId = hashids.decode(req.user.hashedCompanyId);
   //update if exists
   if(req.body.id) {
     axios.patch(`${esUrl}/api/updatearticle`, req.body)
@@ -397,8 +396,7 @@ app.post('/deleteArticle', authMiddleware(), (req, res) => {
 // get articles containing a given search term
 app.get('/search', authMiddleware(), (req, res) => {
   let term = req.query.term;
-  let companyId = req.user.companyId;
-  companyId = hashids.decode(companyId)[0];
+  let companyId = hashids.decode(req.user.hashedCompanyId)[0];
   let url = `${esUrl}/api/search?term=${term}&companyId=${companyId}`
   axios.get(url)
   .then(response => {
@@ -419,14 +417,7 @@ app.post('/uploadimage', authMiddleware(), (req, res) => {
   });
 });
 
-app.get('/company', authMiddleware(), (req, res) => {
-  let companyId = req.user.companyId;
-  db.fetchCompanyData(companyId, (data) => {
-    res.send(data[0].name);
-  })
-})
-
-// to get name and companyId of logged in user
+// to get name, hashedCompanyId, role and company name of logged in user
 app.get('/user', (req, res) => {
   res.send(req.user);
 });
