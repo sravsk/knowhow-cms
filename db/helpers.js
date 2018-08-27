@@ -52,9 +52,9 @@ var dbHelpers = {
               })
               .then(user => {
                 let userInfo = {
-                  name: user.name,
-                  companyId: user.companyId,
-                  role: user.role
+                  user: user.name,
+                  role: user.role,
+                  companyId: companyId
                 }
                 cb(true, userInfo, null);
               })
@@ -159,7 +159,7 @@ var dbHelpers = {
   addCompany: (obj) => {},
 
   fetchCompanyData: (companyId, cb) => {
-    Company.findAll({
+    Company.findOne({
       where: {
         id: companyId
       },

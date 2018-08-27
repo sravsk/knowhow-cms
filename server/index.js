@@ -132,7 +132,10 @@ app.post('/signupuser', (req, res) => {
             res.send(data);
           } else if (isUserCreated) {
             // login comes from passport and creates a session and a cookie for the user
-            // make passport store userInfo in req.user
+            // make passport store userInfo (user's name, hashedCompanyId, role and company name) in req.user
+            userInfo.company = req.body.company;
+            userInfo.hashedCompanyId = hashids.encode(userInfo.companyId);
+            delete userInfo.companyId;
             req.login(userInfo, (err) => {
               if (err) {
                 console.log(err);
@@ -167,16 +170,19 @@ app.post('/signupuserwithcode', (req, res) => {
           bcrypt.hash(password, saltRounds, (err, hashedPassword) => {
             if (hashedPassword) {
               db.addUserWithCode({ email: email, name: name, password: hashedPassword, role: role, companyId: companyId }, (userCreated) => {
-                // make passport store userInfo (name, companyId and role) in req.user
-                var userInfo = { name: name, companyId: companyId, role: role };
-                req.login(userInfo, (err) => {
-                  if (err) {
-                    console.log(err);
-                    res.sendStatus(404);
-                  } else {
-                    let data = { signup: true, name: name, companyId: companyId, role: role };
-                    res.send(data);
-                  }
+                // make passport store userInfo (user's name, hashedCompanyId, role and company name) in req.user
+                db.fetchCompanyData(companyId, (companyInfo) => {
+                  let company = company.name;
+                  var userInfo = { user: name, hashedCompanyId: hashids.encode(companyId), role: role, company: company };
+                  req.login(userInfo, (err) => {
+                    if (err) {
+                      console.log(err);
+                      res.sendStatus(404);
+                    } else {
+                      let data = { signup: true, name: name, companyId: companyId, role: role };
+                      res.send(data);
+                    }
+                  });
                 });
               });
             }
@@ -229,7 +235,7 @@ app.post('/loginuser', (req, res) => {
         let hash = user.password;
         let comparePassword = req.body.password;
         let name = user.name;
-        let hashedCompanyId = hashids.encode(user.companyId)
+        let hashedCompanyId = hashids.encode(user.companyId);
         bcrypt.compare(comparePassword, hash, (err, result) => {
           if (result) { // valid user
             let userInfo = { user: user.name, hashedCompanyId: hashedCompanyId, role: user.role, company: foundCompany };
