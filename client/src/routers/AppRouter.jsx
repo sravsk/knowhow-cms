@@ -22,6 +22,7 @@ import SignupWithCode from '../components/SignupWithCode.jsx';
 import ForgotPassword from '../components/ForgotPassword.jsx';
 import ResetPassword from '../components/ResetPassword.jsx';
 import socketIOClient from 'socket.io-client';
+import axios from 'axios';
 
 
 class AppRouter extends React.Component{
@@ -35,7 +36,8 @@ class AppRouter extends React.Component{
       role: '',
       blinkyChatButton : 'chat-button',
       messages : [],
-      uid : localStorage.getItem('uid') ? localStorage.getItem('uid') : this.generateUID()
+      uid : localStorage.getItem('uid') ? localStorage.getItem('uid') : this.generateUID(),
+      appid : localStorage.getItem('appid')
     }
     this.updateInfo = this.updateInfo.bind(this)
   }
@@ -61,19 +63,32 @@ class AppRouter extends React.Component{
       role: obj.role
     })
   }
-  componentDidMount(){
-    this.initializeChat()
+  componentWillMount() {
+      axios.get('/user')
+      .then(data => {
+        if (data.data !== '') {
+          this.updateInfo(data.data)
+          this.initializeChat()
+        }
+      })
   }
 
   initializeChat(){
     //expose a standalone build of socket io client by socket.io server
     this.socket = socketIOClient('ws://localhost:5000', {
-      query : 'user='+this.state.user+'&uid='+this.state.uid
+      query : 'user='+this.state.user+'&uid='+this.state.uid+'&appid='+localStorage.getItem('appid')
+    });
+    var substring = "appid="
+    var params = this.socket.query.split(substring).pop();
+    this.socket.emit('join', params, (err) => {
+      if(err) {
+        alert(err)
+      }
     });
     this.socket.on('message', (message) => {
       this.setState({
-        blinkyChatButton : 'blinky-chat-button',
-        messages : this.state.messages.concat([message])
+          blinkyChatButton : 'blinky-chat-button',
+          messages : this.state.messages.concat([message])
       })
     })
   }
@@ -107,6 +122,8 @@ class AppRouter extends React.Component{
                 blinkyChatButton = {this.state.blinkyChatButton}
                 messages={this.state.messages}
                 socket = {this.socket}
+                appid={this.state.companyId}
+
               />
             )}} />}
 

@@ -14,7 +14,8 @@ class Chat extends React.Component {
 			user: this.props.user,
 			showUser : 'customer-name',
 			messages : this.props.messages,
-			uid : this.props.uid
+			uid : this.props.uid,
+			appid : this.props.appid
 		}
   }
 
@@ -25,6 +26,7 @@ class Chat extends React.Component {
 
 	initializeChat(){
 		localStorage.setItem('user', this.state.user);
+		localStorage.setItem('appid', this.state.appid)
 		this.props.socket.on('message', (message) => {
 			this.setState({
 				messages : this.state.messages.concat([message])
@@ -59,17 +61,11 @@ class Chat extends React.Component {
 	}
 
 	sendMessage(message, e){
-		this.setState({
-			messages : this.state.messages.concat({
-				user : this.state.user,
-				uid : localStorage.getItem('uid'),
-				message : message
-			})
-		})
 		this.props.socket.emit('message', {
 			user : this.state.user,
 		  uid : localStorage.getItem('uid'),
-			message : message
+			message : message,
+			appid : this.state.appid
 		})
 	}
 
