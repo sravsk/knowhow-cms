@@ -82,6 +82,7 @@ class Home extends React.Component {
         socket={this.props.socket}
         blinkyChatButton={this.props.blinkyChatButton}
         uid = {this.props.uid}
+        appid = {this.props.appid}
         />
     } else if (this.state.showSettings) {
       var info = <Settings
