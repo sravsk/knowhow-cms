@@ -108,7 +108,6 @@ class AppRouter extends React.Component{
             <Route exact path='/articles/:articleId' component={ArticleContent} />
             <Route exact path='/devadminpage' component={devAdminPage} />
             <Route exact path='/inviteuser' component={InviteUser} />
-            <Route exact path='/signupwithcode' component={SignupWithCode} />
             <Route exact path='/forgotpassword' component={ForgotPassword} />
             <Route exact path='/resetpassword' component={ResetPassword} />
 
@@ -134,6 +133,12 @@ class AppRouter extends React.Component{
 
             <Route exact path='/signup' render={(props) => {return (
               <SignupPage
+                updateInfo={this.updateInfo}
+              />
+            )}} />
+
+            <Route exact path='/signupwithcode' render={(props) => {return (
+              <SignupWithCode
                 updateInfo={this.updateInfo}
               />
             )}} />

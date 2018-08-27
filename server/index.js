@@ -172,14 +172,14 @@ app.post('/signupuserwithcode', (req, res) => {
               db.addUserWithCode({ email: email, name: name, password: hashedPassword, role: role, companyId: companyId }, (userCreated) => {
                 // make passport store userInfo (user's name, hashedCompanyId, role and company name) in req.user
                 db.fetchCompanyData(companyId, (companyInfo) => {
-                  let company = company.name;
+                  let company = companyInfo.name;
                   var userInfo = { user: name, hashedCompanyId: hashids.encode(companyId), role: role, company: company };
                   req.login(userInfo, (err) => {
                     if (err) {
                       console.log(err);
                       res.sendStatus(404);
                     } else {
-                      let data = { signup: true, name: name, companyId: companyId, role: role };
+                      let data = { signup: true, user: name, hashedCompanyId: hashids.encode(companyId), role: role, company: company };
                       res.send(data);
                     }
                   });
