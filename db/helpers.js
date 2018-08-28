@@ -52,9 +52,9 @@ var dbHelpers = {
               })
               .then(user => {
                 let userInfo = {
-                  name: user.name,
-                  companyId: user.companyId,
-                  role: user.role
+                  user: user.name,
+                  role: user.role,
+                  companyId: companyId
                 }
                 cb(true, userInfo, null);
               })
@@ -159,7 +159,7 @@ var dbHelpers = {
   addCompany: (obj) => {},
 
   fetchCompanyData: (companyId, cb) => {
-    Company.findAll({
+    Company.findOne({
       where: {
         id: companyId
       },
@@ -276,23 +276,6 @@ var dbHelpers = {
     })
     .then(response => cb(response))
   },
-
-  // fetch all articles for a given companyId and categoryId
-  // fetchArticles: ({companyId, categoryId}, cb) => {
-  //   Article.findAll({
-  //     where: {
-  //       companyId: companyId,
-  //       categoryId: categoryId
-  //     },
-  //     order: [
-  //       ['id', 'DESC']
-  //     ],
-  //     attributes: ['id', 'title', 'description', 'content', 'categoryId', 'companyId']
-  //   })
-  //   .then(results => {
-  //     cb(results);
-  //   })
-  // },
 
   fetchCategoryArticlesFirstLastPg: (limit, categoryId, {companyId}, cb) => {
     let countAndPages = {};

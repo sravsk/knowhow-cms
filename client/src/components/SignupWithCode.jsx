@@ -34,7 +34,7 @@ class SignupWithCode extends React.Component {
       axios.post(`/signupuserwithcode?name=${this.state.name}&password=${this.state.password}&code=${this.state.code}`)
       .then(result => {
         if (result.data.signup) {
-          // result.data has properties name, companyId and role
+          this.props.updateInfo(result.data);
           alert('You have been signed up');
           this.setState({
             onHome: true

@@ -24,7 +24,6 @@ import ResetPassword from '../components/ResetPassword.jsx';
 import socketIOClient from 'socket.io-client';
 import axios from 'axios';
 
-
 class AppRouter extends React.Component{
   constructor(props) {
     super(props)
@@ -54,20 +53,20 @@ class AppRouter extends React.Component{
     return text;
   }
 
-
   updateInfo(obj) {
     this.setState({
       user: obj.user,
-      companyId: obj.companyId,
+      companyId: obj.hashedCompanyId,
       company: obj.company,
       role: obj.role
     })
   }
+
   componentWillMount() {
       axios.get('/user')
-      .then(data => {
-        if (data.data !== '') {
-          this.updateInfo(data.data)
+      .then(result => {
+        if (result.data !== '') {
+          this.updateInfo(result.data)
           this.initializeChat()
         }
       })
@@ -109,7 +108,6 @@ class AppRouter extends React.Component{
             <Route exact path='/articles/:articleId' component={ArticleContent} />
             <Route exact path='/devadminpage' component={devAdminPage} />
             <Route exact path='/inviteuser' component={InviteUser} />
-            <Route exact path='/signupwithcode' component={SignupWithCode} />
             <Route exact path='/forgotpassword' component={ForgotPassword} />
             <Route exact path='/resetpassword' component={ResetPassword} />
 
@@ -135,6 +133,12 @@ class AppRouter extends React.Component{
 
             <Route exact path='/signup' render={(props) => {return (
               <SignupPage
+                updateInfo={this.updateInfo}
+              />
+            )}} />
+
+            <Route exact path='/signupwithcode' render={(props) => {return (
+              <SignupWithCode
                 updateInfo={this.updateInfo}
               />
             )}} />
