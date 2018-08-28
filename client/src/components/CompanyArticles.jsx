@@ -94,7 +94,7 @@ class CompanyArticles extends React.Component {
           </Grid.Row>
           <Grid.Row>
             <div className='table'>
-              <Pagination onClick={this.pageClick} />
+              <Pagination defaultActivePage={1} totalPages={this.state.totalPages} onClick={this.pageClick} />
             </div>
           </Grid.Row>
         </Grid>
