@@ -29,11 +29,13 @@ class LoginPage extends React.Component {
       };
       axios.post('/loginuser', data)
       .then(result => {
+        console.log("result", result)
         if (result.data === 'no user') {
           alert(`User with email ${this.state.email} does not exist. Sign up.`);
         } else if (result.data.found) {
           // correct username and password
           this.props.updateInfo(result.data);
+          console.log("result after updating", result)
           alert(`${result.data.user} is logged in`);
           // redirect to home
           this.setState({
