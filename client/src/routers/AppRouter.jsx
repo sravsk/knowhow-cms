@@ -74,7 +74,7 @@ class AppRouter extends React.Component{
 
   initializeChat(){
     //expose a standalone build of socket io client by socket.io server
-    this.socket = socketIOClient('ws://localhost:5000', {
+    this.socket = socketIOClient('ws://ec2-54-215-238-252.us-west-1.compute.amazonaws.com:5000/', {
       query : 'user='+this.state.user+'&uid='+this.state.uid+'&appid='+localStorage.getItem('appid')
     });
     var substring = "appid="
