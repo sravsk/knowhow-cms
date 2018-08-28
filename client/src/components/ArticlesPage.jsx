@@ -98,7 +98,9 @@ class ArticlesPage extends React.Component {
             </Segment.Group>
           </Grid.Row>
           <Grid.Row>
-            <Pagination defaultActivePage={1} totalPages={this.state.totalPages} onClick={this.pageClick} />
+            <div className='table'>
+              <Pagination defaultActivePage={1} totalPages={this.state.totalPages} onClick={this.pageClick} />
+            </div>
         </Grid.Row>
         </Grid>
       </Segment>

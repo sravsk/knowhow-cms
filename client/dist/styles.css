@@ -55,23 +55,6 @@ a:hover {
   text-decoration: underline;
 }
 
-.pagination li{
-  list-style-type: none;
-  display: inline;
-  margin: 0 0.5vw;
-}
-
-.pagination {
-  text-align: center;
-  padding: 1vh;
-  border: 0.04em solid;
-  border-radius: 0.5em;
-}
-
-.pagination ul {
-   margin: auto;
-}
-
 .table {
   display: table;
   margin: 0 auto;
@@ -102,7 +85,7 @@ a:hover {
   color:#fff !important;
   border:none;
   border-radius:5px;
-  
+
   animation-name: flash;
   animation-duration: 1s;
   animation-timing-function: linear;
@@ -121,21 +104,21 @@ a:hover {
   -moz-animation-iteration-count: infinite;
 }
 
-@keyframes flash {  
+@keyframes flash {
     0% { opacity: 1.0; }
     50% { opacity: 0.5; }
     100% { opacity: 1.0; }
 }
 
 //Firefox 1+
-@-webkit-keyframes flash {  
+@-webkit-keyframes flash {
     0% { opacity: 1.0; }
     50% { opacity: 0.5; }
     100% { opacity: 1.0; }
 }
 
 //Safari 3-4
-@-moz-keyframes flash {  
+@-moz-keyframes flash {
     0% { opacity: 1.0; }
     50% { opacity: 0.5; }
     100% { opacity: 1.0; }
