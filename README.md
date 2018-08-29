@@ -20,22 +20,25 @@
 
 ## Usage
 
-> Create a config.js file in the root directory.
+> Create a .env file in the root directory.
 
 > Create a DB instance on Amazon RDS (or create a local MySQL database).
 
 > Go to sendgrid.com, sign up for an account and generate an API key.
 
-Add the following code in the config.js file.
+Add the following code in the .env file.
 
-module.exports = {
-  DBNAME: 'database-name',
-  DBUSERNAME: 'db-username',
-  DBPASSWORD: 'db-password',
-  DBHOST: 'amazonrds-db-hostname or localhost',
-  DBPORT: 'port-number(3306)',
-  SENDGRID_API_KEY: 'sendgrid-api-key',
-};
+DBNAME=database-name
+DBUSERNAME=database-username
+DBPASSWORD=database-password
+DBHOST=amazonrds-db-hostname or localhost
+DBPORT=3306
+SENDGRID_API_KEY=sendgrid-api-key
+S3accessKeyId =S3-access-keyId
+S3secretAccessKey=S3-secret-access-key
+S3Bucket=S3-bucket
+S3apiVersion=S3-version
+S3key=S3-key
 
 ## Requirements
 

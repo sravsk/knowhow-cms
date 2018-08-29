@@ -31,7 +31,6 @@ resources
 
 package-lock.json
 
-config.js
 .env
 
 .DS_Store
