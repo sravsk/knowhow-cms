@@ -15,8 +15,7 @@ const sessionStore = require('../db/Models/Session.js');
 const sendmail = require('../services/sendmail.js');
 const AWS = require('aws-sdk');
 const axios = require('axios');
-// const esUrl = 'http://localhost:8080';
-const esUrl = 'http://ec2-18-233-153-214.compute-1.amazonaws.com:8080';
+const esUrl = 'http://ec2-34-207-197-218.compute-1.amazonaws.com:8080';
 
 const s3 = new AWS.S3({
   accessKeyId: process.env.S3accessKeyId,
@@ -64,7 +63,6 @@ passport.deserializeUser((name, done) => {
 // middleware to check if user is logged in
 var authMiddleware = function () {
   return (req, res, next) => {
-    // console.log(`req.session.passport.user: ${req.session.passport}`);
     if (req.isAuthenticated()) {
       return next();
     }
@@ -202,7 +200,6 @@ app.post('/inviteuser', admin(), (req, res) => {
   for (var i = 0; i < 8; i++) {
     code += possible.charAt(Math.floor(Math.random() * possible.length));
   }
-
   // hash the generated random code using a salt
   bcrypt.hash(code, salt, (err, hash) => {
     if (hash) {
