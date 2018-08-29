@@ -1,5 +1,9 @@
 const Sequelize = require('sequelize');
 
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').load();
+};
+
 const DBNAME = process.env.DBNAME
 const DBUSERNAME = process.env.DBUSERNAME
 const DBPASSWORD = process.env.DBPASSWORD
