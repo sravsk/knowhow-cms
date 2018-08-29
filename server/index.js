@@ -13,17 +13,16 @@ const db = require('../db/helpers.js');
 const apidb = require('../db/apiHelpers.js');
 const sessionStore = require('../db/Models/Session.js');
 const sendmail = require('../services/sendmail.js');
-const config = require('../config.js');
 const AWS = require('aws-sdk');
 const axios = require('axios');
 // const esUrl = 'http://localhost:8080';
 const esUrl = 'http://ec2-18-233-153-214.compute-1.amazonaws.com:8080';
 
 const s3 = new AWS.S3({
-  accessKeyId: config.S3.accessKeyId,
-  secretAccessKey: config.S3.secretAccessKey,
-  Bucket: config.S3.Bucket,
-  apiVersion: config.S3.apiVersion,
+  accessKeyId: process.env.S3accessKeyId,
+  secretAccessKey: process.env.S3secretAccessKey,
+  Bucket: process.env.S3Bucket,
+  apiVersion: process.env.S3apiVersion,
 });
 
 const Hashids = require('hashids');
@@ -414,7 +413,7 @@ app.get('/search', authMiddleware(), (req, res) => {
 app.post('/uploadimage', authMiddleware(), (req, res) => {
   let buffer = new Buffer(req.body.data, 'base64');
   s3.putObject({
-    Bucket: config.S3.Bucket,
+    Bucket: process.env.S3Bucket,
     Key: `${req.body.imageKey}`,
     Body: buffer,
     ACL: 'public-read'

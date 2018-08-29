@@ -1,10 +1,10 @@
 const Sequelize = require('sequelize');
 
-const DBNAME = process.env.DBNAME || require('../config.js').DBNAME
-const DBUSERNAME = process.env.DBUSERNAME || require('../config.js').DBUSERNAME
-const DBPASSWORD = process.env.DBPASSWORD || require('../config.js').DBPASSWORD
-const DBHOST = process.env.DBHOST || require('../config.js').DBHOST
-const DBPORT = process.env.DBPORT || require('../config.js').DBPORT
+const DBNAME = process.env.DBNAME
+const DBUSERNAME = process.env.DBUSERNAME
+const DBPASSWORD = process.env.DBPASSWORD
+const DBHOST = process.env.DBHOST
+const DBPORT = process.env.DBPORT
 
 // var db = new Sequelize(DBNAME, DBUSERNAME, DBPASSWORD, {
 //   host: DBHOST,
