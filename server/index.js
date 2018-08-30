@@ -16,6 +16,7 @@ const sendmail = require('../services/sendmail.js');
 const AWS = require('aws-sdk');
 const axios = require('axios');
 const esUrl = 'http://ec2-34-207-197-218.compute-1.amazonaws.com:8080';
+const cmsUrl = 'http://ec2-54-153-34-178.us-west-1.compute.amazonaws.com:3000';
 
 const s3 = new AWS.S3({
   accessKeyId: process.env.S3accessKeyId,
@@ -210,9 +211,8 @@ app.post('/inviteuser', admin(), (req, res) => {
           // send invitation email containing role and generated code
           var to = req.body.email;
           var subject = 'Invitation to join Know-how';
-          // TODO - after deploying app, send a clickable link in email
-          // TODO - add some basic info about know-how in the invitation email
-          var html = `<p>Enter the following code to sign up on Know-how</p>
+          // send a clickable link with url for deployed app
+          var html = `<p>You have been invited to join Know-how.</p><p> To sign up, go to <a href='${cmsUrl}/signupwithcode'>${cmsUrl}/signupwithcode</a> and enter the following code.</p>
           <strong>code : ${code}</strong>`;
           sendmail(to, subject, html);
           res.send('Invitation sent');
@@ -271,8 +271,8 @@ app.post('/forgotpwd', (req, res) => {
               // send code in email and ask user to enter code at myapp.com/resetpassword to choose a new password
               var to = email;
               var subject = 'Know-how password change request';
-              // TODO - send appropriate link after deploying app
-              var html = `<h1>Change your password</h1><p>We have received a password change request for your Know-how account.</p><p>If you did not ask to change your password, then you can ignore this email and your password will not be changed.</p><p>If you want to change your password, go to myapp.com/resetpassword and enter the following code: ${code}</p><p>The code with only work once to reset your password.</p>`
+              // send link with deployed app url
+              var html = `<h1>Change your password</h1><p>We have received a password change request for your Know-how account.</p><p>If you did not ask to change your password, then you can ignore this email and your password will not be changed.</p><p>If you want to change your password, go to <a href='${cmsUrl}/resetpassword'>${cmsUrl}/resetpassword</a> and enter the following code: ${code}</p><p>The code with only work once to reset your password.</p>`
               sendmail(to, subject, html);
             }
           });
