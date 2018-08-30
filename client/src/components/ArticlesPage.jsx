@@ -41,7 +41,7 @@ class ArticlesPage extends React.Component {
 
   getCurrentPage(last) {
     let companyId = this.props.companyId;
-    axios.get(`/${companyId}/articlesdata/${this.state.currentPage}/${this.state.perPage}/${this.state.totalPages}`)
+    axios.get(`/${companyId}/articlesdata/${this.state.currentPage}/${this.state.perPage}/${this.state.totalPages}/${this.props.match.params.categoryId}`)
     .then(result => {
       if(this.state.currentPage < this.state.totalPages || this.state.currentPage > 1 && !last) {
         this.setState({currentArticles: result.data.currentPage})

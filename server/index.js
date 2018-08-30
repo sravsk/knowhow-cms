@@ -340,8 +340,9 @@ app.get('/:companyId/categoriesdata', authMiddleware(), (req, res) => {
 
 app.get('/:companyId/articlesfirstlastpg/:per/:categoryId?', authMiddleware(), (req, res) => {
   let companyId = hashids.decode(req.params.companyId);
-  if(req.params.categoryId) {
-    db.fetchCategoryArticlesFirstLastPg(req.params.per, req.params.categoryId, {companyId}, (results) => {
+  if (req.params.categoryId) {
+    let categoryId = hashids.decode(req.params.categoryId);
+    db.fetchCategoryArticlesFirstLastPg(req.params.per, categoryId, {companyId}, (results) => {
       res.send(results);
     })
   } else {
@@ -353,8 +354,9 @@ app.get('/:companyId/articlesfirstlastpg/:per/:categoryId?', authMiddleware(), (
 
 app.get('/:companyId/articlesdata/:pg/:per/:total/:categoryId?', authMiddleware(), (req, res) => {
   let companyId = hashids.decode(req.params.companyId);
-  if(req.params.categoryId) {
-    db.fetchCategoryArticlesPage(req.params.pg, req.params.per, req.params.total, req.params.categoryId, {companyId}, (results) => {
+  if (req.params.categoryId) {
+    let categoryId = hashids.decode(req.params.categoryId);
+    db.fetchCategoryArticlesPage(req.params.pg, req.params.per, req.params.total, categoryId, {companyId}, (results) => {
       res.send(results);
     })
   } else {
