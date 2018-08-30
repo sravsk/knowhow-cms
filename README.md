@@ -42,11 +42,11 @@ S3key=S3-key
 
 ## Requirements
 
-> Node
-> MySQL
-> React
-> Sequelize
-> Express
+- ReactJS
+- Node
+- Express
+- MySQL
+- Sequelize
 
 ## Development
 
@@ -54,7 +54,19 @@ S3key=S3-key
 
 From within the root directory:
 
+```
 npm install
+```
+
+To start the server, run
+```
+npm run dev-start
+```
+
+In another terminal, run
+```
+npm run dev-react
+```
 
 ### Roadmap
 

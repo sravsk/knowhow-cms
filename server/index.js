@@ -212,7 +212,7 @@ app.post('/inviteuser', admin(), (req, res) => {
           var to = req.body.email;
           var subject = 'Invitation to join Know-how';
           // send a clickable link with url for deployed app
-          var html = `<p>You have been invited to join <strong>Know-how</strong> to manage <strong>${req.user.company}'s</strong> knowledge base as <strong>'${req.body.role}'</strong> user.</p><p> To sign up, go to <a href='${cmsUrl}/signupwithcode'>${cmsUrl}/signupwithcode</a> and enter the following code.</p>
+          var html = `<h1>Sign up for Know-how</h1><p>You have been invited to join <strong>Know-how</strong> to manage <strong>${req.user.company}'s</strong> knowledge base as <strong>'${req.body.role}'</strong> user.</p><p> To sign up, go to <a href='${cmsUrl}/signupwithcode'>${cmsUrl}/signupwithcode</a> and enter the following code.</p>
           <strong>code : ${code}</strong>`;
           sendmail(to, subject, html);
           res.send('Invitation sent');
