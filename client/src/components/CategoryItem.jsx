@@ -2,17 +2,21 @@ import React from 'react';
 import { Segment, Grid, Item, Button, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
+const Hashids = require('hashids');
+const hashids = new Hashids('knowhow-api', 16);
+
 class CategoryItem extends React.Component {
   constructor(props) {
     super(props);
   }
 
   render() {
+    let hashedCategoryId = hashids.encode(this.props.category.id);
     return (
       <Item className='background item'>
         <Item.Header style={{ fontSize: '1.2em', paddingBottom: '0.5em' }} >
           <Link to={{
-            pathname: `/${this.props.companyId}/categories/${this.props.category.id}/articles`,
+            pathname: `/${this.props.companyId}/categories/${hashedCategoryId}/articles`,
             state: {
               categoryName: this.props.category.name
             }
