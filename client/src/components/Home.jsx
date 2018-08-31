@@ -100,7 +100,7 @@ class Home extends React.Component {
         <Grid celled>
           <Grid.Column width={3} className='background'>
             <br/><br/>
-            <div style={{position: 'fixed', margin: '2em'}}>
+            <div style={{position: 'fixed', marginLeft: '2vw'}}>
               <Button fluid style={{ 'color': '#2185d0'}} onClick={this.showArticles.bind(this)}>Articles</Button><br/>
               <Button fluid style={{ 'color': '#2185d0'}} onClick={this.showCategories.bind(this)}>Categories</Button><br/>
               <Button fluid style={{ 'color': '#2185d0'}} className={this.props.blinkyChatButton} onClick={this.showChat.bind(this)}>Chat</Button><br/>
