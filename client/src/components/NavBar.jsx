@@ -5,6 +5,8 @@ import axios from 'axios';
 import _ from 'lodash';
 import ArticleItem from './ArticleItem.jsx';
 
+const Hashids = require('hashids');
+const hashids = new Hashids('knowhow-api', 16);
 
 class NavBar extends React.Component {
   constructor(props) {
@@ -37,8 +39,9 @@ class NavBar extends React.Component {
     this.setState({
       value: result.title,
     });
+    let articleId = hashids.encode(result.id);
     this.props.history.push({
-      pathname: `/articles/${result.id}`,
+      pathname: `/articles/${articleId}`,
       state: { article: result }
     });
   }

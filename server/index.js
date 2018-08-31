@@ -272,7 +272,7 @@ app.post('/forgotpwd', (req, res) => {
               var to = email;
               var subject = 'Know-how password change request';
               // send link with deployed app url
-              var html = `<h1>Change your password</h1><p>We have received a password change request for your Know-how account.</p><p>If you did not ask to change your password, then you can ignore this email and your password will not be changed.</p><p>If you want to change your password, go to <a href='${cmsUrl}/resetpassword'>${cmsUrl}/resetpassword</a> and enter the following code: ${code}</p><p>The code with only work once to reset your password.</p>`
+              var html = `<h1>Change your password</h1><p>We have received a password change request for your Know-how account.</p><p>If you did not ask to change your password, then you can ignore this email and your password will not be changed.</p><p>If you want to change your password, go to <a href='${cmsUrl}/resetpassword'>${cmsUrl}/resetpassword</a> and enter the following <strong>code : ${code}</strong></p><p>The code with only work once to reset your password.</p>`
               sendmail(to, subject, html);
             }
           });
