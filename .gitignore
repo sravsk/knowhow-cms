@@ -33,6 +33,9 @@ package-lock.json
 
 .env
 
+#Google Analytics Service Credentials for API Calls
+service-account-credentials.json
+
 .DS_Store
 
 # resources

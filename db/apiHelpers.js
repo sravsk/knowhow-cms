@@ -6,6 +6,8 @@ const Category = require('./Models/Category');
 const Article = require('./Models/Article');
 const Invitation = require('./Models/Invitation');
 const Passwordreset = require('./Models/Passwordreset');
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op
 
 const fetchCompanyId = async(companyKey) => {
   const companyId = await Company.findAll({
@@ -65,6 +67,37 @@ const fetchArticles = async(companyId, categoryId) => {
   return articles;
 }
 
+const fetchTopArticles = async(companyId, articleIds) => {
+  const articles = await Article.findAll({
+      where: {
+        companyId: companyId,
+        id: articleIds
+      },
+      order: [
+        ['id', 'DESC']
+      ],
+      attributes: ['id', 'title', 'description', 'content', 'categoryId', 'companyId']
+    })
+  return articles;
+}
+
+const fetchFillerArticles = async(companyId, articleIds) => {
+  const articles = await Article.findAll({
+      where: {
+        companyId: companyId,
+        id: {
+          [Op.notIn]: articleIds
+        }
+      },
+      limit: (20 - articleIds.length),
+      order: [
+        ['id', 'DESC']
+      ],
+      attributes: ['id', 'title', 'description', 'content', 'categoryId', 'companyId']
+    })
+  return articles;
+}
+
 const fetchCompanyArticles = async(companyId) => {
   const articles = await Article.findAll({
       where: {
@@ -84,6 +117,8 @@ module.exports = {
 	fetchCategoriesByCompany,
 	fetchCompanyData,
   fetchOneArticle,
+  fetchTopArticles,
+  fetchFillerArticles,
   fetchArticles,
   fetchCompanyArticles
 };

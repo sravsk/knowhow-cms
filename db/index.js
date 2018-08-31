@@ -1,4 +1,5 @@
 const Sequelize = require('sequelize');
+const Op = Sequelize.Op
 
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').load();

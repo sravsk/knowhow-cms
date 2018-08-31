@@ -8,6 +8,7 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const expressValidator = require('express-validator');
 const randomstring = require('randomstring');
+const {auth} = require('google-auth-library');
 
 const db = require('../db/helpers.js');
 const apidb = require('../db/apiHelpers.js');
@@ -513,19 +514,43 @@ app.get('/api/:hashedcompanyId/categories/:hashedcategoryId/articlesdata', wrap(
   }
 }));
 
-// get all articles for a given company id
+// get all top articles for a given company id
 app.get('/api/:hashedcompanyId/articlesdata', wrap(async(req, res) => {
+
+async function main() {
+  const client = await auth.getClient({
+    scopes: [
+      'https://www.googleapis.com/auth/analytics',
+      'https://www.googleapis.com/auth/analytics.readonly'
+    ]
+  });
+  //View ID from Google Analytics Console
+  const viewId = 180562621
+  const url = `https://www.googleapis.com/analytics/v3/data/ga?ids=ga%3A${viewId}&start-date=30daysAgo&end-date=2018-08-28&metrics=ga%3Apageviews&dimensions=ga%3ApagePath&sort=-ga%3Apageviews`;
+  const res = await client.request({ url });
+  let articleIds = res.data.rows.filter(row => parseInt(row[0].slice(1))).map(articlePath => parseInt(articlePath[0].slice(1)))
+  let CompanyId = hashids.decode(req.params.hashedcompanyId);
+  let topArticles = await apidb.fetchTopArticles(CompanyId, articleIds)
+  if(articleIds.length < 20) {
+    let fillerArticles = await apidb.fetchFillerArticles(CompanyId, articleIds);
+    fillerArticles.forEach(filler => topArticles.push(filler))
+  }
+  return topArticles;
+}
+main()
+.then(top => {
   try{
     //enable CORS for this route
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, HEAD');
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     let CompanyId = hashids.decode(req.params.hashedcompanyId);
-    let articles = await apidb.fetchCompanyArticles(CompanyId);
-    res.json(articles);
+    res.json(top)
   } catch(err) {
     res.status(500).json({ error: err.toString() });
   }
+})
+.catch(console.error);
 }));
 
 // get articles containing a given search term
