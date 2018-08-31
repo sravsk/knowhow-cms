@@ -37,7 +37,7 @@ class NavBar extends React.Component {
 
   handleResultSelect(e, { result }) {
     this.setState({
-      value: result.title,
+      value: ''
     });
     let articleId = hashids.encode(result.id);
     this.props.history.push({
