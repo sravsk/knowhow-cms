@@ -155,9 +155,6 @@ var dbHelpers = {
   //    COMPANIES    //
   /////////////////////
 
-  // creating a company
-  addCompany: (obj) => {},
-
   fetchCompanyData: (companyId, cb) => {
     Company.findOne({
       where: {

@@ -19,7 +19,6 @@ class NewCategory extends React.Component {
         categoryName: this.props.location.data.name,
         id: this.props.location.data.id
       })
-      // console.log(this.props.location.data);
     }
   }
 
@@ -35,7 +34,6 @@ class NewCategory extends React.Component {
       name: this.state.categoryName,
       description: this.state.categoryDescription
     }
-
     axios.post('/updatecategory', data).then(() => this.props.history.push('/home'));
   }
 

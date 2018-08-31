@@ -30,7 +30,6 @@ class SignupPage extends React.Component {
     else if (this.state.password !== this.state.passwordMatch) {
       alert('Passwords do not match. Try again.');
     } else {
-      // all fields have values and passwords match
       var data = {
         name: this.state.name,
         email: this.state.email,
@@ -79,6 +78,7 @@ class SignupPage extends React.Component {
         `}</style>
         <Grid
           textAlign='center'
+          style={{ height: '75%' }}
           verticalAlign='middle'
         >
           <Grid.Column style={{ maxWidth: 500 }}>

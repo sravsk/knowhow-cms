@@ -21,7 +21,6 @@ class ResetPassword extends React.Component {
   }
 
   resetPassword() {
-    // check if passwords match, if yes
     if (this.state.password !== this.state.passwordMatch) {
       alert('Passwords do not match. Try again');
     } else {
@@ -31,8 +30,6 @@ class ResetPassword extends React.Component {
       };
       axios.post('/resetpwd', data)
       .then(result => {
-        // alert saying password has been reset. Ask user to login with new password
-        // redirect user to login page
         if (result.data === 'password changed') {
           alert('Password changed successfully. Login!');
           this.setState({
