@@ -30,7 +30,6 @@ class SignupWithCode extends React.Component {
     } else if (this.state.password.length < 8 || this.state.password.length > 100) {
       alert('Password length must be between 8 and 100 characters');
     } else {
-      // all fields have values and passwords match
       axios.post(`/signupuserwithcode?name=${this.state.name}&password=${this.state.password}&code=${this.state.code}`)
       .then(result => {
         if (result.data.signup) {

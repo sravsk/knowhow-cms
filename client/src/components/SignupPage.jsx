@@ -30,7 +30,6 @@ class SignupPage extends React.Component {
     else if (this.state.password !== this.state.passwordMatch) {
       alert('Passwords do not match. Try again.');
     } else {
-      // all fields have values and passwords match
       var data = {
         name: this.state.name,
         email: this.state.email,

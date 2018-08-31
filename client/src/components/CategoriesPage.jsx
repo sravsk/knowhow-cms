@@ -13,7 +13,6 @@ class CategoriesPage extends React.Component {
   }
 
   componentDidMount() {
-    // get all categories for given companyId
     axios.get(`/${this.props.companyId}/categoriesdata`)
       .then(result => {
         this.setState({
