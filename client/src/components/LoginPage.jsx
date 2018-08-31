@@ -34,7 +34,6 @@ class LoginPage extends React.Component {
         } else if (result.data.found) {
           // correct username and password
           this.props.updateInfo(result.data);
-          alert(`${result.data.user} is logged in`);
           // redirect to home
           this.setState({
             onHome: true
