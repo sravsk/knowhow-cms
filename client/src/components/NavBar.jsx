@@ -72,8 +72,6 @@ class NavBar extends React.Component {
   }
 
   render () {
-    // show login and signup buttons if user is not logged in
-    // show logout button if user is logged in
     if (this.props.user === '') {
       return (
         <Container className='navbar'>
