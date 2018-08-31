@@ -78,7 +78,7 @@ class SignupPage extends React.Component {
         `}</style>
         <Grid
           textAlign='center'
-          style={{ height: '75%' }}
+          style={{ height: '85%' }}
           verticalAlign='middle'
         >
           <Grid.Column style={{ maxWidth: 500 }}>
