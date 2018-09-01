@@ -204,8 +204,11 @@ var dbHelpers = {
     })
     .then(() => {Category.findOne({where: {id: obj.id}})
       .then(category => {category.destroy()})
-      .then(() => Category.findAll({where: {companyId: obj.coId}})
-        .then(categories => {cb(categories);}))
+      .then(() => Category.findAll({
+        where: {companyId: obj.coId},
+        order: [ ['id', 'DESC'] ]
+      })
+      .then(categories => {cb(categories);}))
     })
   },
 
