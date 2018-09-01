@@ -80,6 +80,9 @@ const fetchTopArticles = async(companyId, articleIds, categoryId) => {
 }
 
 const fetchFillerArticles = async(companyId, articleIds, categoryId) => {
+  // console.log('filler companyId: ', companyId)
+  // console.log('filler articleIds: ', articleIds)
+  // console.log('filler categoryId: ', categoryId)
   let limit = 21 - articleIds.length
   let whereCondition = categoryId ? { categoryId: categoryId, companyId: companyId, id: { [Op.notIn]: articleIds } } : { companyId: companyId, id: { [Op.notIn]: articleIds } }
   const articles = await Article.findAll({
