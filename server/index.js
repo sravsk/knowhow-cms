@@ -447,6 +447,7 @@ app.get('/logout', (req, res) => {
 let wrap = fn => (...args) => fn(...args).catch(args[2]);
 
 app.get('/api/:hashedcompanyId', wrap(async (req, res) => {
+  console.log('api is being called')
   try {
     //enable CORS for this route
     res.header('Access-Control-Allow-Origin', '*');
@@ -481,6 +482,7 @@ app.get('/api/:hashedcompanyId/article/:hashedarticleId', wrap(async(req, res) =
 
 // get all categories for a given company id
 app.get('/api/:hashedcompanyId/categoriesdata', wrap(async(req, res) => {
+  console.log('categoriesdata is being called')
   try{
     //enable CORS for this route
     res.header('Access-Control-Allow-Origin', '*');
@@ -511,13 +513,14 @@ app.get('/api/:hashedcompanyId/categories/:hashedcategoryId/articlesdata', wrap(
     //View ID from Google Analytics Console
     const url = `https://www.googleapis.com/analytics/v3/data/ga?ids=ga%3A${viewId}&start-date=30daysAgo&end-date=${today}&metrics=ga%3AtotalEvents&dimensions=ga%3AeventLabel%2Cga%3Adimension2&sort=-ga%3AtotalEvents&filters=ga%3AeventLabel%3D~(${req.params.hashedcategoryId})&max-results=20`;
     const response = await client.request({ url });
-    let articleIds = response.data.rows.map(row => parseInt(row[1]))
+    let articleIds = response.data.rows ? response.data.rows.map(row => parseInt(row[1])) : [];
     let CompanyId = hashids.decode(req.params.hashedcompanyId);
+    // console.log('req.params.hashedcategoryId: ', req.params.hashedcategoryId)
     let CategoryId = hashids.decode(req.params.hashedcategoryId);
     let topArticles = await apidb.fetchTopArticles(CompanyId, articleIds, CategoryId)
     if(articleIds.length <= 20) {
       let fillerArticles = await apidb.fetchFillerArticles(CompanyId, articleIds, CategoryId);
-      fillerArticles.forEach(filler => console.log('filler: ', filler.id))
+      // console.log('fillerArticles: ', fillerArticles)
       fillerArticles.forEach(filler => topArticles.push(filler))
     }
     return topArticles;
@@ -541,6 +544,7 @@ app.get('/api/:hashedcompanyId/categories/:hashedcategoryId/articlesdata', wrap(
 
 // get all top articles for a given company id
 app.get('/api/:hashedcompanyId/articlesdata', wrap(async(req, res) => {
+   console.log('articlesdata is being called')
   async function main() {
     const client = await auth.getClient({
       scopes: [
@@ -551,10 +555,13 @@ app.get('/api/:hashedcompanyId/articlesdata', wrap(async(req, res) => {
     //View ID from Google Analytics Console
     const url = `https://www.googleapis.com/analytics/v3/data/ga?ids=ga%3A${viewId}&start-date=30daysAgo&end-date=${today}&metrics=ga%3AtotalEvents&dimensions=ga%3AeventLabel%2Cga%3Adimension2&sort=-ga%3AtotalEvents&filters=ga%3AeventLabel!~(not%20set)%3Bga%3Adimension2!~(yes)%3Bga%3Adimension2!~(no)&max-results=20`;
     const response = await client.request({ url });
-    let articleIds = response.data.rows.map(row => parseInt(row[1]))
+    console.log('response: ', response)
+    let articleIds = response.data.rows ? response.data.rows.map(row => parseInt(row[1])) : []
+    console.log('articleIds: ', articleIds);
     let CompanyId = hashids.decode(req.params.hashedcompanyId);
     let topArticles = await apidb.fetchTopArticles(CompanyId, articleIds)
     if(articleIds.length < 20) {
+      console.log('inside filler')
       let fillerArticles = await apidb.fetchFillerArticles(CompanyId, articleIds);
       fillerArticles.forEach(filler => topArticles.push(filler))
     }
