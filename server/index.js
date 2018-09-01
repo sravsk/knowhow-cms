@@ -515,8 +515,9 @@ app.get('/api/:hashedcompanyId/categories/:hashedcategoryId/articlesdata', wrap(
     let CompanyId = hashids.decode(req.params.hashedcompanyId);
     let CategoryId = hashids.decode(req.params.hashedcategoryId);
     let topArticles = await apidb.fetchTopArticles(CompanyId, articleIds, CategoryId)
-    if(articleIds.length < 20) {
+    if(articleIds.length <= 20) {
       let fillerArticles = await apidb.fetchFillerArticles(CompanyId, articleIds, CategoryId);
+      fillerArticles.forEach(filler => console.log('filler: ', filler.id))
       fillerArticles.forEach(filler => topArticles.push(filler))
     }
     return topArticles;
@@ -548,10 +549,8 @@ app.get('/api/:hashedcompanyId/articlesdata', wrap(async(req, res) => {
       ]
     });
     //View ID from Google Analytics Console
-    const url = `https://www.googleapis.com/analytics/v3/data/ga?ids=ga%3A${viewId}&start-date=30daysAgo&end-date=${today}&metrics=ga%3AtotalEvents&dimensions=ga%3AeventLabel%2Cga%3Adimension2&sort=-ga%3AtotalEvents&filters=ga%3AeventLabel!~(not%20set)&max-results=20`;
+    const url = `https://www.googleapis.com/analytics/v3/data/ga?ids=ga%3A${viewId}&start-date=30daysAgo&end-date=${today}&metrics=ga%3AtotalEvents&dimensions=ga%3AeventLabel%2Cga%3Adimension2&sort=-ga%3AtotalEvents&filters=ga%3AeventLabel!~(not%20set)%3Bga%3Adimension2!~(yes)%3Bga%3Adimension2!~(no)&max-results=20`;
     const response = await client.request({ url });
-    console.log('response: ')
-    console.log(response.data.rows)
     let articleIds = response.data.rows.map(row => parseInt(row[1]))
     let CompanyId = hashids.decode(req.params.hashedcompanyId);
     let topArticles = await apidb.fetchTopArticles(CompanyId, articleIds)
