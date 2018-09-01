@@ -445,6 +445,7 @@ app.get('/logout', (req, res) => {
 let wrap = fn => (...args) => fn(...args).catch(args[2]);
 
 app.get('/api/:hashedcompanyId', wrap(async (req, res) => {
+  console.log('api is being called')
   try {
     //enable CORS for this route
     res.header('Access-Control-Allow-Origin', '*');
@@ -479,6 +480,7 @@ app.get('/api/:hashedcompanyId/article/:hashedarticleId', wrap(async(req, res) =
 
 // get all categories for a given company id
 app.get('/api/:hashedcompanyId/categoriesdata', wrap(async(req, res) => {
+  console.log('categoriesdata is being called')
   try{
     //enable CORS for this route
     res.header('Access-Control-Allow-Origin', '*');
@@ -511,6 +513,7 @@ app.get('/api/:hashedcompanyId/categories/:hashedcategoryId/articlesdata', wrap(
     res.json(articles);
   } catch(err) {
     res.status(500).json({ error: err.toString() });
+
   }
 }));
 
