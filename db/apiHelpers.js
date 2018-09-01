@@ -33,13 +33,13 @@ const fetchCategoriesByCompany = async(companyId) => {
 };
 
 const fetchCompanyData = async(companyId) => {
-	const data = await Company.findAll({
-		where: {
-			id : companyId
-		},
-		attributes: ['id', 'name', 'domain']
-	})
-	return data;
+  const data = await Company.findAll({
+    where: {
+      id : companyId
+    },
+    attributes: ['id', 'name', 'domain']
+  })
+  return data;
 };
 
 const fetchOneArticle = async(companyId, articleId) => {
@@ -67,10 +67,12 @@ const fetchArticles = async(companyId, categoryId) => {
   return articles;
 }
 
-const fetchTopArticles = async(companyId, articleIds, categoryId) => {
-  let whereCondition = categoryId ? { categoryId: categoryId, companyId: companyId, id: articleIds } : { companyId: companyId, id: articleIds }
+const fetchTopArticles = async(companyId, articleIds) => {
   const articles = await Article.findAll({
-      where: whereCondition,
+      where: {
+        companyId: companyId,
+        id: articleIds
+      },
       order: [
         ['id', 'DESC']
       ],
@@ -79,15 +81,15 @@ const fetchTopArticles = async(companyId, articleIds, categoryId) => {
   return articles;
 }
 
-const fetchFillerArticles = async(companyId, articleIds, categoryId) => {
-  // console.log('filler companyId: ', companyId)
-  // console.log('filler articleIds: ', articleIds)
-  // console.log('filler categoryId: ', categoryId)
-  let limit = 21 - articleIds.length
-  let whereCondition = categoryId ? { categoryId: categoryId, companyId: companyId, id: { [Op.notIn]: articleIds } } : { companyId: companyId, id: { [Op.notIn]: articleIds } }
+const fetchFillerArticles = async(companyId, articleIds) => {
   const articles = await Article.findAll({
-      where: whereCondition,
-      limit: limit,
+      where: {
+        companyId: companyId,
+        id: {
+          [Op.notIn]: articleIds
+        }
+      },
+      limit: (20 - articleIds.length),
       order: [
         ['id', 'DESC']
       ],
@@ -111,9 +113,9 @@ const fetchCompanyArticles = async(companyId) => {
 
 
 module.exports = {
-	fetchCompanyId,
-	fetchCategoriesByCompany,
-	fetchCompanyData,
+  fetchCompanyId,
+  fetchCategoriesByCompany,
+  fetchCompanyData,
   fetchOneArticle,
   fetchTopArticles,
   fetchFillerArticles,
